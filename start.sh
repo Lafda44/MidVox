@@ -41,7 +41,7 @@ exit(1)
 done
 
 # Start Next.js dashboard on Render's public PORT
-cd ../dashboard
+cd dashboard
 echo "Starting dashboard on port $PORT..."
 npx next start -p $PORT &
 DASHBOARD_PID=$!
