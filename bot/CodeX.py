@@ -34,6 +34,7 @@ from utils.Tools import *
 from utils.config import *
 from utils.emoji import SUCCESS, ERROR, TICK, CROSS, REACTION_TEST_EMOJIS
 from utils.sync_emojis import run_sync
+from utils.mongo import MongoManager
 
 import jishaku
 import cogs
@@ -343,7 +344,19 @@ async def main():
     async with client:
         os.system("clear")
         await client.load_extension("jishaku")
-        
+
+        # Connect to MongoDB if MONGO_URI is set
+        mongo_uri = os.getenv("MONGO_URI")
+        if mongo_uri:
+            try:
+                mongo = MongoManager()
+                await mongo.connect(mongo_uri)
+                client.mongo = mongo
+                print("\033[32m◈ MongoDB: Connected\033[0m")
+            except Exception as e:
+                print(f"\033[33m◈ MongoDB: Failed to connect — {e}\033[0m")
+                print("\033[33m◈ AntiSpamPlus will use SQLite fallback\033[0m")
+
         max_retries = 5
         for attempt in range(max_retries):
             try:
