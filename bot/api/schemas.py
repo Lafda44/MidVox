@@ -344,3 +344,34 @@ class AdminConfig(BaseModel):
 class AdminConfigUpdate(BaseModel):
     maintenance_mode: Optional[bool] = None
     global_notification: Optional[str] = None
+
+class AntiSpamPlusConfig(BaseModel):
+    guild_id: int
+    delete_messages: bool = False
+    delete_delay: int = 8
+    re_limit: int = 5
+    re_window: int = 30
+    re_cooldown: int = 20
+    re_delay: float = 0.35
+    timeout_duration: int = 1
+    target_users: List[int] = []
+    blocked_commands: List[str] = []
+    excluded_channels: List[int] = []
+    target_channels: List[int] = []
+
+class AntiSpamPlusUpdate(BaseModel):
+    delete_messages: Optional[bool] = None
+    delete_delay: Optional[int] = None
+    re_limit: Optional[int] = None
+    re_window: Optional[int] = None
+    re_cooldown: Optional[int] = None
+    re_delay: Optional[float] = None
+    timeout_duration: Optional[int] = None
+    add_target_user: Optional[int] = None
+    remove_target_user: Optional[int] = None
+    add_blocked_command: Optional[str] = None
+    remove_blocked_command: Optional[str] = None
+    add_excluded_channel: Optional[int] = None
+    remove_excluded_channel: Optional[int] = None
+    add_target_channel: Optional[int] = None
+    remove_target_channel: Optional[int] = None

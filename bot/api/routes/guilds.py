@@ -27,7 +27,8 @@ from api.schemas import (
     CustomRoleConfig, CustomRoleUpdate, AutoReactConfig, AutoReactUpdate, AutoReactTrigger,
     InvcConfig, InvcUpdate,
     RRConfig, RRUpdate, ReactionRoleEntry,
-    InviteStat, InvitesLeaderboard
+    InviteStat, InvitesLeaderboard,
+    AntiSpamPlusConfig, AntiSpamPlusUpdate
 )
 from typing import TYPE_CHECKING, List, Optional
 import math
@@ -1376,10 +1377,63 @@ async def patch_guild_rr(guild_id: int, data: RRUpdate):
     
     if data.remove_role_message_id is not None and data.remove_role_emoji is not None:
         msg_id = int(data.remove_role_message_id)
-        await db.execute("DELETE FROM reaction_roles WHERE guild_id = ? AND message_id = ? AND emoji = ?",
-                         (guild_id, msg_id, data.remove_role_emoji))
-    
+await db.execute("DELETE FROM reaction_roles WHERE guild_id = ? AND message_id = ? AND emoji = ?",
+                     (guild_id, msg_id, data.remove_role_emoji))
+
     await db.commit()
     return {"status": "success"}
+
+
+@router.get("/{guild_id}/antispamplus", response_model=AntiSpamPlusConfig, summary="Get AntiSpamPlus config")
+async def get_guild_antispamplus(guild_id: int, bot: "zyrox" = Depends(get_bot)):
+    cog = bot.get_cog("AntiSpamPlus")
+    if not cog:
+        raise HTTPException(status_code=503, detail="AntiSpamPlus service unavailable")
+    return await cog.get_config(guild_id)
+
+@router.patch("/{guild_id}/antispamplus", summary="Update AntiSpamPlus config")
+async def patch_guild_antispamplus(guild_id: int, data: AntiSpamPlusUpdate, bot: "zyrox" = Depends(get_bot)):
+    cog = bot.get_cog("AntiSpamPlus")
+    if not cog:
+        raise HTTPException(status_code=503, detail="AntiSpamPlus service unavailable")
+
+    payload = data.dict(exclude_unset=True)
+    update_data = {}
+
+    if payload.get("delete_messages") is not None:
+        update_data["delete_messages"] = payload["delete_messages"]
+    if payload.get("delete_delay") is not None:
+        update_data["delete_delay"] = payload["delete_delay"]
+    if payload.get("re_limit") is not None:
+        update_data["re_limit"] = payload["re_limit"]
+    if payload.get("re_window") is not None:
+        update_data["re_window"] = payload["re_window"]
+    if payload.get("re_cooldown") is not None:
+        update_data["re_cooldown"] = payload["re_cooldown"]
+    if payload.get("re_delay") is not None:
+        update_data["re_delay"] = payload["re_delay"]
+    if payload.get("timeout_duration") is not None:
+        update_data["timeout_duration"] = payload["timeout_duration"]
+
+    result = await cog.update_config(guild_id, update_data)
+
+    if payload.get("add_target_user"):
+        await cog.add_target_user(guild_id, payload["add_target_user"])
+    if payload.get("remove_target_user"):
+        await cog.remove_target_user(guild_id, payload["remove_target_user"])
+    if payload.get("add_blocked_command"):
+        await cog.add_blocked_command(guild_id, payload["add_blocked_command"])
+    if payload.get("remove_blocked_command"):
+        await cog.remove_blocked_command(guild_id, payload["remove_blocked_command"])
+    if payload.get("add_excluded_channel"):
+        await cog.add_excluded_channel(guild_id, payload["add_excluded_channel"])
+    if payload.get("remove_excluded_channel"):
+        await cog.remove_excluded_channel(guild_id, payload["remove_excluded_channel"])
+    if payload.get("add_target_channel"):
+        await cog.add_target_channel(guild_id, payload["add_target_channel"])
+    if payload.get("remove_target_channel"):
+        await cog.remove_target_channel(guild_id, payload["remove_target_channel"])
+
+    return await cog.get_config(guild_id)
 
 

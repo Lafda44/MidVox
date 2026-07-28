@@ -232,6 +232,14 @@ export const api = {
       body: JSON.stringify(data),
     }),
 
+  // AntiSpamPlus
+  getAntiSpamPlus: (guildId: string) => request<any>(`/guilds/${guildId}/antispamplus`),
+  updateAntiSpamPlus: (guildId: string, data: any) =>
+    request<any>(`/guilds/${guildId}/antispamplus`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
   // Admin
   getAdminStats: () => request<AdminStats>("/admin/stats"),
   getAdminConfig: () => request<AdminConfig>("/admin/config"),
