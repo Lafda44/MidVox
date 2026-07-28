@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Ban, Save, RefreshCcw, Trash2, Plus, Info, MessageSquare, SmilePlus, UserX, Command, Hash, Users } from "lucide-react";
+import { Ban, Save, RefreshCcw, Trash2, Plus, Info, MessageSquare, SmilePlus, UserX, Command, Hash, Users, Loader } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { SyncEmojiButton } from "./sync-emoji-button";
 
 interface AntiSpamPlusFormProps {
   initialConfig: any;
@@ -311,6 +312,16 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
             <li>• Excluded channels are never affected.</li>
             <li>• Reaction spam triggers a timeout + cleanup.</li>
           </ul>
+        </div>
+
+        {/* Sync Emoji Button */}
+        <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6">
+          <div className="flex items-center gap-2 mb-3">
+            <SmilePlus className="h-4 w-4 text-yellow-400" />
+            <h3 className="text-sm font-bold text-white">Emoji Sync</h3>
+          </div>
+          <p className="text-xs text-slate-500 mb-4">Sync custom emojis so they show correctly in bot messages.</p>
+          <SyncEmojiButton />
         </div>
       </div>
     </div>

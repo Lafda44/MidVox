@@ -18,6 +18,8 @@ from api.schemas import AdminStats, AdminNodeStatus, AdminConfig, AdminConfigUpd
 from typing import TYPE_CHECKING, List
 import os
 import aiosqlite
+import asyncio
+import sys
 
 if TYPE_CHECKING:
     from core.zyrox import zyrox
@@ -126,3 +128,15 @@ async def patch_admin_config(data: AdminConfigUpdate):
             await db.execute("UPDATE config SET value = ? WHERE key = 'global_notification'", (data.global_notification,))
         await db.commit()
     return {"status": "success"}
+
+@router.post("/sync-emojis")
+async def sync_emojis(bot: "zyrox" = Depends(get_bot)):
+    token = os.getenv("TOKEN") or os.getenv("BOT_TOKEN")
+    if not token:
+        raise HTTPException(status_code=500, detail="No bot token available")
+    try:
+        from utils.sync_emojis import run_sync
+        await run_sync(token)
+        return {"status": "synced", "detail": "Emoji IDs updated. Restart bot to apply."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Emoji sync failed: {e}")

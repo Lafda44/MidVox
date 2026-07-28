@@ -105,6 +105,25 @@ async def on_ready():
     # Sync application emojis on startup
     await run_sync(TOKEN)
 
+    # Backup SQLite databases to MongoDB
+    if hasattr(client, "mongo") and client.mongo:
+        try:
+            await client.mongo.backup_sqlite()
+            print("\033[32m◈ SQLite databases backed up to MongoDB\033[0m")
+        except Exception as e:
+            print(f"\033[33m◈ SQLite backup failed: {e}\033[0m")
+
+    async def periodic_backup():
+        while True:
+            await asyncio.sleep(300)
+            if hasattr(client, "mongo") and client.mongo:
+                try:
+                    await client.mongo.backup_sqlite()
+                except:
+                    pass
+
+    client.loop.create_task(periodic_backup())
+
     async def sync_commands():
         try:
             synced = await client.tree.sync()
@@ -353,6 +372,13 @@ async def main():
                 await mongo.connect(mongo_uri)
                 client.mongo = mongo
                 print("\033[32m◈ MongoDB: Connected\033[0m")
+
+                # Restore SQLite databases from MongoDB backup
+                try:
+                    await mongo.restore_sqlite()
+                    print("\033[32m◈ SQLite databases restored from MongoDB\033[0m")
+                except Exception as e:
+                    print(f"\033[33m◈ SQLite restore failed (first deploy?): {e}\033[0m")
             except Exception as e:
                 print(f"\033[33m◈ MongoDB: Failed to connect — {e}\033[0m")
                 print("\033[33m◈ AntiSpamPlus will use SQLite fallback\033[0m")
@@ -367,6 +393,13 @@ async def main():
                     wait_time = min((2 ** attempt) + random.random(), 60)
                     print(f"Rate limited. Retrying in {wait_time:.2f} seconds...")
                     await asyncio.sleep(wait_time)
+
+        # Backup SQLite on shutdown
+        if hasattr(client, "mongo") and client.mongo:
+            try:
+                await client.mongo.backup_sqlite()
+            except:
+                pass
                 else:
                     raise
         else:
