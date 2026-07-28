@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import aiosqlite
 import asyncio
+import os
 import time
 from datetime import timedelta
 from collections import defaultdict, deque
@@ -63,20 +64,42 @@ class AntiSpamPlus(commands.Cog):
         return default
 
     async def _set_fields(self, guild_id, data):
+        doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
+        if not doc:
+            await self.mongo.antispamplus_config.insert_one({
+                "_id": str(guild_id),
+                "guild_id": guild_id,
+                **CONFIG_DEFAULTS,
+                "target_users": [],
+                "blocked_commands": [],
+                "excluded_channels": [],
+                "target_channels": [],
+            })
         update = {"$set": {}}
         for k in CONFIG_DEFAULTS:
             if k in data:
                 update["$set"][k] = data[k]
         if update["$set"]:
+            update["$set"]["guild_id"] = guild_id
             await self.mongo.antispamplus_config.update_one(
-                {"_id": str(guild_id)}, update, upsert=True
+                {"_id": str(guild_id)}, update
             )
 
     async def _push_array(self, guild_id, field, value):
+        doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
+        if not doc:
+            await self.mongo.antispamplus_config.insert_one({
+                "_id": str(guild_id),
+                "guild_id": guild_id,
+                **CONFIG_DEFAULTS,
+                "target_users": [],
+                "blocked_commands": [],
+                "excluded_channels": [],
+                "target_channels": [],
+            })
         await self.mongo.antispamplus_config.update_one(
             {"_id": str(guild_id)},
-            {"$addToSet": {field: value}},
-            upsert=True,
+            {"$addToSet": {field: value}}
         )
 
     async def _pull_array(self, guild_id, field, value):
@@ -85,6 +108,10 @@ class AntiSpamPlus(commands.Cog):
         )
 
     # ── SQLite helpers (fallback) ────────────────────────────────────────
+
+    def _sqlite_conn(self):
+        os.makedirs("db", exist_ok=True)
+        return aiosqlite.connect("db/antispamplus.db")
 
     async def _ensure_sqlite_tables(self, db):
         tables = [
@@ -118,7 +145,7 @@ class AntiSpamPlus(commands.Cog):
             doc = await self._get_doc(guild_id)
             return _doc_to_config(doc)
 
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await self._ensure_sqlite_tables(db)
 
             cursor = await db.execute(
@@ -180,7 +207,7 @@ class AntiSpamPlus(commands.Cog):
             doc = await self._get_doc(guild_id)
             return _doc_to_config(doc)
 
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await self._ensure_sqlite_tables(db)
             await db.execute(
                 """INSERT OR REPLACE INTO config
@@ -204,7 +231,7 @@ class AntiSpamPlus(commands.Cog):
     async def add_target_user(self, guild_id, user_id):
         if self.mongo:
             return await self._push_array(guild_id, "target_users", user_id)
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await self._ensure_sqlite_tables(db)
             await db.execute(
                 "INSERT OR IGNORE INTO target_users (guild_id, user_id) VALUES (?, ?)",
@@ -215,7 +242,7 @@ class AntiSpamPlus(commands.Cog):
     async def remove_target_user(self, guild_id, user_id):
         if self.mongo:
             return await self._pull_array(guild_id, "target_users", user_id)
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await db.execute(
                 "DELETE FROM target_users WHERE guild_id = ? AND user_id = ?",
                 (guild_id, user_id),
@@ -227,7 +254,7 @@ class AntiSpamPlus(commands.Cog):
             return await self._push_array(
                 guild_id, "blocked_commands", command.lower()
             )
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await db.execute(
                 "INSERT OR IGNORE INTO blocked_commands (guild_id, command) VALUES (?, ?)",
                 (guild_id, command.lower()),
@@ -239,7 +266,7 @@ class AntiSpamPlus(commands.Cog):
             return await self._pull_array(
                 guild_id, "blocked_commands", command.lower()
             )
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await db.execute(
                 "DELETE FROM blocked_commands WHERE guild_id = ? AND command = ?",
                 (guild_id, command.lower()),
@@ -251,7 +278,7 @@ class AntiSpamPlus(commands.Cog):
             return await self._push_array(
                 guild_id, "excluded_channels", channel_id
             )
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await db.execute(
                 "INSERT OR IGNORE INTO excluded_channels (guild_id, channel_id) VALUES (?, ?)",
                 (guild_id, channel_id),
@@ -263,7 +290,7 @@ class AntiSpamPlus(commands.Cog):
             return await self._pull_array(
                 guild_id, "excluded_channels", channel_id
             )
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await db.execute(
                 "DELETE FROM excluded_channels WHERE guild_id = ? AND channel_id = ?",
                 (guild_id, channel_id),
@@ -275,7 +302,7 @@ class AntiSpamPlus(commands.Cog):
             return await self._push_array(
                 guild_id, "target_channels", channel_id
             )
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await db.execute(
                 "INSERT OR IGNORE INTO target_channels (guild_id, channel_id) VALUES (?, ?)",
                 (guild_id, channel_id),
@@ -287,7 +314,7 @@ class AntiSpamPlus(commands.Cog):
             return await self._pull_array(
                 guild_id, "target_channels", channel_id
             )
-        async with aiosqlite.connect("db/antispamplus.db") as db:
+        async with self._sqlite_conn() as db:
             await db.execute(
                 "DELETE FROM target_channels WHERE guild_id = ? AND channel_id = ?",
                 (guild_id, channel_id),
@@ -324,6 +351,7 @@ class AntiSpamPlus(commands.Cog):
             if not should_delete:
                 return
 
+            print(f"[AntiSpamPlus] Deleting msg from {message.author.id} in {message.guild.id} (tu={config['target_users']}, bc={config['blocked_commands']})")
             await asyncio.sleep(config["delete_delay"])
             perms = message.channel.permissions_for(message.guild.me)
             if not perms.manage_messages:
