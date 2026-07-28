@@ -383,16 +383,20 @@ async def main():
                 print(f"\033[33m◈ MongoDB: Failed to connect — {e}\033[0m")
                 print("\033[33m◈ AntiSpamPlus will use SQLite fallback\033[0m")
 
-        max_retries = 5
+max_retries = 5
         for attempt in range(max_retries):
             try:
                 await client.start(TOKEN)
                 break
             except discord.HTTPException as e:
-                if e.status == 429: # Rate limited
+                if e.status == 429:
                     wait_time = min((2 ** attempt) + random.random(), 60)
                     print(f"Rate limited. Retrying in {wait_time:.2f} seconds...")
                     await asyncio.sleep(wait_time)
+                else:
+                    raise
+        else:
+            raise Exception("Bot failed to start after multiple retries due to rate limiting.")
 
         # Backup SQLite on shutdown
         if hasattr(client, "mongo") and client.mongo:
@@ -400,10 +404,6 @@ async def main():
                 await client.mongo.backup_sqlite()
             except:
                 pass
-                else:
-                    raise
-        else:
-            raise Exception("Bot failed to start after multiple retries due to rate limiting.")
 
 if __name__ == "__main__":
     asyncio.run(main())
