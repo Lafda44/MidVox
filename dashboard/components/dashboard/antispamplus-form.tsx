@@ -149,7 +149,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                   {config.target_users?.length === 0 ? (
                     <span className="text-xs text-slate-600 italic">No target users</span>
                   ) : (
-                    config.target_users?.map((uid: number) => (
+                    config.target_users?.map((uid: string) => (
                       <div key={uid} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
                         <span className="text-slate-200 font-mono text-xs">{uid}</span>
                         <button onClick={() => removeTargetUser(uid)} className="text-slate-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
