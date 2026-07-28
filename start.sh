@@ -12,19 +12,24 @@ export API_ENABLED=true
 export API_PORT=5001
 export TUNNEL_ENABLED=false
 echo "Starting bot (API on port 5001)..."
-python CodeX.py &
+python CodeX.py > ../bot.log 2>&1 &
 BOT_PID=$!
 
 # Wait for bot API to be ready (health check)
 echo "Waiting for bot API on port 5001..."
 for i in $(seq 1 30); do
-  if curl -s http://localhost:5001/health > /dev/null 2>&1; then
+  if python -c "import urllib.request; urllib.request.urlopen('http://localhost:5001/health')" > /dev/null 2>&1; then
     echo "Bot API is ready!"
     break
   fi
   echo "  Attempt $i/30..."
   sleep 2
 done
+
+# Check if bot process is still running
+if ! kill -0 $BOT_PID 2>/dev/null; then
+  echo "WARNING: Bot process died. Check bot.log for details."
+fi
 
 # Start Next.js dashboard on Render's public PORT
 cd ../dashboard

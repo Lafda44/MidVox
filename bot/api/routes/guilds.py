@@ -1377,7 +1377,7 @@ async def patch_guild_rr(guild_id: int, data: RRUpdate):
     
     if data.remove_role_message_id is not None and data.remove_role_emoji is not None:
         msg_id = int(data.remove_role_message_id)
-await db.execute("DELETE FROM reaction_roles WHERE guild_id = ? AND message_id = ? AND emoji = ?",
+        await db.execute("DELETE FROM reaction_roles WHERE guild_id = ? AND message_id = ? AND emoji = ?",
                      (guild_id, msg_id, data.remove_role_emoji))
 
     await db.commit()
