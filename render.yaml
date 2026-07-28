@@ -1,37 +1,30 @@
 services:
   - type: web
-    name: midvox-bot
+    name: midvox
     env: python
-    buildCommand: pip install -r bot/requirements.txt
-    startCommand: cd bot && python CodeX.py
+    buildCommand: |
+      pip install -r bot/requirements.txt
+      curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+      apt-get install -y nodejs
+      cd dashboard && npm install && npm run build
+    startCommand: bash start.sh
     envVars:
       - key: TOKEN
         sync: false
       - key: OWNER_IDS
         sync: false
-      - key: LAVALINK_HOST
-        sync: false
-      - key: LAVALINK_PASSWORD
-        sync: false
       - key: API_ENABLED
         value: "true"
       - key: API_PORT
-        value: "8000"
+        value: "5001"
       - key: DASHBOARD_API_KEY
         sync: false
       - key: WEBHOOK_URL
         sync: false
       - key: TUNNEL_ENABLED
         value: "false"
-
-  - type: web
-    name: midvox-dashboard
-    env: node
-    buildCommand: cd dashboard && npm install && npm run build
-    startCommand: cd dashboard && npm start
-    envVars:
       - key: NEXT_PUBLIC_API_URL
-        sync: false
+        value: "/api/v1"
       - key: NEXT_PUBLIC_DASHBOARD_API_KEY
         sync: false
       - key: NEXTAUTH_URL

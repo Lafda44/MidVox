@@ -38,7 +38,7 @@ import {
   AdminConfigUpdate
 } from "@/types/api";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
 const API_KEY = process.env.NEXT_PUBLIC_DASHBOARD_API_KEY;
 
 class ApiError extends Error {
