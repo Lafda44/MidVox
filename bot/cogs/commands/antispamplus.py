@@ -86,7 +86,9 @@ class AntiSpamPlus(commands.Cog):
             )
 
     async def _push_array(self, guild_id, field, value):
+        print(f"[AntiSpamPlus _push_array] guild={guild_id} field={field} value={value} (type={type(value).__name__})")
         doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
+        print(f"[AntiSpamPlus _push_array] guild={guild_id} doc_exists={doc is not None}")
         if not doc:
             await self.mongo.antispamplus_config.insert_one({
                 "_id": str(guild_id),
@@ -97,10 +99,13 @@ class AntiSpamPlus(commands.Cog):
                 "excluded_channels": [],
                 "target_channels": [],
             })
+            print(f"[AntiSpamPlus _push_array] guild={guild_id} created new doc")
         await self.mongo.antispamplus_config.update_one(
             {"_id": str(guild_id)},
             {"$addToSet": {field: value}}
         )
+        after = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
+        print(f"[AntiSpamPlus _push_array] guild={guild_id} after {field}={after.get(field, 'MISSING')}")
 
     async def _pull_array(self, guild_id, field, value):
         await self.mongo.antispamplus_config.update_one(

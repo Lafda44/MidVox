@@ -1401,6 +1401,13 @@ async def patch_guild_antispamplus(guild_id: int, data: AntiSpamPlusUpdate, bot:
         raise HTTPException(status_code=503, detail="AntiSpamPlus service unavailable")
 
     payload = data.dict(exclude_unset=True)
+    print(f"[AntiSpamPlus PATCH] guild={guild_id} payload={payload}")
+
+    # Track which kind of update this is
+    has_config = any(k in payload for k in ("delete_messages", "delete_delay", "re_limit", "re_window", "re_cooldown", "re_delay", "timeout_duration"))
+    has_list = any(k in payload for k in ("add_target_user", "remove_target_user", "add_blocked_command", "remove_blocked_command", "add_excluded_channel", "remove_excluded_channel", "add_target_channel", "remove_target_channel"))
+    print(f"[AntiSpamPlus PATCH] guild={guild_id} has_config={has_config} has_list={has_list}")
+
     update_data = {}
 
     if payload.get("delete_messages") is not None:
@@ -1419,7 +1426,10 @@ async def patch_guild_antispamplus(guild_id: int, data: AntiSpamPlusUpdate, bot:
         update_data["timeout_duration"] = payload["timeout_duration"]
 
     if update_data:
+        print(f"[AntiSpamPlus PATCH] guild={guild_id} calling update_config with {update_data}")
         await cog.update_config(guild_id, update_data)
+    else:
+        print(f"[AntiSpamPlus PATCH] guild={guild_id} skipping update_config (no config fields)")
 
     def _to_int(v):
         try:
@@ -1429,6 +1439,7 @@ async def patch_guild_antispamplus(guild_id: int, data: AntiSpamPlusUpdate, bot:
 
     if payload.get("add_target_user"):
         uid = _to_int(payload["add_target_user"])
+        print(f"[AntiSpamPlus PATCH] guild={guild_id} add_target_user raw={payload['add_target_user']!r} parsed={uid}")
         if uid:
             await cog.add_target_user(guild_id, uid)
     if payload.get("remove_target_user"):
@@ -1456,6 +1467,8 @@ async def patch_guild_antispamplus(guild_id: int, data: AntiSpamPlusUpdate, bot:
         if cid:
             await cog.remove_target_channel(guild_id, cid)
 
-    return await cog.get_config(guild_id)
+    result = await cog.get_config(guild_id)
+    print(f"[AntiSpamPlus PATCH] guild={guild_id} result delete_messages={result.get('delete_messages')} target_users={result.get('target_users')}")
+    return result
 
 
