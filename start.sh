@@ -21,7 +21,7 @@ echo "--- Emoji sync exit code: $? ---"
   while true; do
     cd "$ROOT/bot" || { echo "FATAL: bot/ directory not found at $ROOT/bot"; exit 1; }
     echo "Starting bot (API on port 5001)..."
-    python CodeX.py > "$ROOT/bot.log" 2>&1
+    python CodeX.py 2>&1 | tee "$ROOT/bot.log"
     echo "WARNING: Bot exited (code $?). Restarting in 2s..." >&2
     cd "$ROOT"
     sleep 2
