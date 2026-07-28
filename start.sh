@@ -11,6 +11,7 @@ cd bot
 export API_ENABLED=true
 export API_PORT=5001
 export TUNNEL_ENABLED=false
+export EMOJI_SYNC=false
 echo "Starting bot (API on port 5001)..."
 python CodeX.py > ../bot.log 2>&1 &
 BOT_PID=$!
@@ -18,7 +19,14 @@ BOT_PID=$!
 # Wait for bot API to be ready (health check)
 echo "Waiting for bot API on port 5001..."
 for i in $(seq 1 30); do
-  if python -c "import urllib.request; urllib.request.urlopen('http://localhost:5001/health')" > /dev/null 2>&1; then
+  if python -c "
+import urllib.request, json
+resp = urllib.request.urlopen('http://localhost:5001/health')
+data = json.loads(resp.read())
+if data.get('status') == 'ok':
+    exit(0)
+exit(1)
+" > /dev/null 2>&1; then
     echo "Bot API is ready!"
     break
   fi

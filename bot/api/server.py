@@ -26,7 +26,7 @@ from utils.config import *
 
 
 from api.routes import bot, guilds, admin
-from api.dependencies import verify_api_key, limiter
+from api.dependencies import verify_api_key, limiter, _bot_instance
 from api.db_manager import db_manager
 
 # Configure logging
@@ -117,6 +117,15 @@ def create_app() -> FastAPI:
 
     @app.get("/health", summary="Health Check", description="Performs a health check for container orchestration and uptime monitoring.")
     async def health():
-        return {"status": "ok"}
+        bot = _bot_instance
+        if bot is None:
+            return {"status": "starting", "detail": "Bot instance not yet initialized"}
+        if bot.user is None:
+            return {"status": "starting", "detail": "Bot not yet connected to Discord"}
+        return {
+            "status": "ok",
+            "guild_count": len(bot.guilds),
+            "user_count": sum(g.member_count or 0 for g in bot.guilds),
+        }
 
     return app
