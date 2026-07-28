@@ -31,22 +31,31 @@ export default function GuildsPage() {
       try {
         const guilds = await api.listGuilds();
         setBotGuilds(guilds);
+
+        // Try to fetch user's Discord guilds for admin filter
+        if (session?.accessToken) {
+          try {
+            const res = await fetch("https://discord.com/api/users/@me/guilds", {
+              headers: { Authorization: `Bearer ${session.accessToken}` },
+            });
+            if (res.ok) {
+              const discordGuilds = await res.json();
+              setUserGuilds(discordGuilds);
+            } else {
+              setUserDiscordError("Discord API returned " + res.status);
+              console.warn("Discord API returned", res.status, "- falling back to show all bot guilds");
+            }
+          } catch (e) {
+            setUserDiscordError("Discord API fetch failed");
+            console.warn("Discord API fetch failed - falling back to show all bot guilds", e);
+          }
+        } else {
+          setUserDiscordError("No access token in session");
+          console.warn("No accessToken in session - showing all bot guilds without Discord filter");
+        }
       } catch (err: any) {
         console.error("Failed to fetch bot guilds:", err);
         setBotError(err.message || "Failed to load bot servers.");
-      }
-
-      try {
-        const res = await fetch("https://discord.com/api/users/@me/guilds", {
-          headers: { Authorization: `Bearer ${session.accessToken}` },
-        });
-        if (res.ok) {
-          setUserGuilds(await res.json());
-        } else {
-          setUserDiscordError("Failed to fetch your Discord servers.");
-        }
-      } catch {
-        setUserDiscordError("Error connecting to Discord.");
       }
 
       setLoading(false);
@@ -75,8 +84,10 @@ export default function GuildsPage() {
   });
 
   const adminGuildIds = new Set(adminUserGuilds.map((g: any) => String(g.id)));
-  const guilds = botGuilds.filter((g: any) => adminGuildIds.has(String(g.id)));
-  const error = botError || userDiscordError;
+  const managedGuilds = botGuilds.filter((g: any) => adminGuildIds.has(String(g.id)));
+  // Fallback: if Discord filter yielded nothing but we have bot guilds, show them anyway
+  const guilds = managedGuilds.length > 0 ? managedGuilds : botGuilds;
+  const error = botError;
 
   return (
     <div className="space-y-8">
@@ -106,12 +117,21 @@ export default function GuildsPage() {
           </div>
           <h3 className="text-white font-bold text-xl">No Servers Found</h3>
           <p className="text-slate-400 mt-2 max-w-sm mx-auto">
-            The bot hasn&apos;t joined any servers yet, or you don&apos;t have permission.
+            The bot hasn&apos;t joined any servers yet.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {guilds.map((guild: any) => (
+        <>
+          {userDiscordError && (
+            <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-2xl mb-6 flex items-center gap-3">
+              <ShieldCheck className="h-5 w-5 text-yellow-500 shrink-0" />
+              <p className="text-sm text-slate-300">
+                Could not verify your Discord permissions — showing all guilds the bot is in.
+              </p>
+            </div>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {guilds.map((guild: any) => (
             <div key={guild.id} className="bg-[#141B2D] border border-slate-800 rounded-3xl group hover:border-primary/50 hover:bg-[#202c3f] transition-all duration-300 overflow-hidden shadow-sm hover:shadow-primary/5 shadow-black/20">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-6">
@@ -155,6 +175,7 @@ export default function GuildsPage() {
             </div>
           ))}
         </div>
+      </>
       )}
     </div>
   );
