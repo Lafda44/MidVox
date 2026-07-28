@@ -12,18 +12,18 @@ export EMOJI_SYNC=true
 
 # ── One-time emoji sync (before bot starts, patches emoji.py) ─
 echo "Running one-time emoji sync..."
-cd bot
-timeout 120 python sync_emojis_once.py
+(cd "$(pwd)/bot" && timeout 120 python sync_emojis_once.py)
 echo "--- Emoji sync exit code: $? ---"
-cd ..
 
 # Run bot in a restart loop so if it crashes the API stays up
 (
+  ROOT="$(pwd)"
   while true; do
-    cd bot
+    cd "$ROOT/bot" || { echo "FATAL: bot/ directory not found at $ROOT/bot"; exit 1; }
     echo "Starting bot (API on port 5001)..."
-    python CodeX.py > ../bot.log 2>&1
+    python CodeX.py > "$ROOT/bot.log" 2>&1
     echo "WARNING: Bot exited (code $?). Restarting in 2s..." >&2
+    cd "$ROOT"
     sleep 2
   done
 ) &
