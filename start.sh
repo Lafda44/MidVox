@@ -22,17 +22,10 @@ export EMOJI_SYNC=false
 ) &
 BOT_PID=$!
 
-# Wait for bot API to be ready (health check)
+# Wait for bot API to be ready (just check port is open)
 echo "Waiting for bot API on port 5001..."
 for i in $(seq 1 30); do
-  if python -c "
-import urllib.request, json
-resp = urllib.request.urlopen('http://localhost:5001/health')
-data = json.loads(resp.read())
-if data.get('status') == 'ok':
-    exit(0)
-exit(1)
-" > /dev/null 2>&1; then
+  if python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5001/health')" > /dev/null 2>&1; then
     echo "Bot API is ready!"
     break
   fi

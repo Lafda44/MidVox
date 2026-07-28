@@ -322,7 +322,7 @@ API_ENABLED = os.getenv("API_ENABLED", "true").strip().lower() == "true"
 API_PORT = int(os.getenv("API_PORT", "8000"))
 
 def run_api():
-    uvicorn.run(fastapi_app, host='0.0.0.0', port=API_PORT, log_level="warning")
+    uvicorn.run(fastapi_app, host='127.0.0.1', port=API_PORT, log_level="warning")
 
 def keep_alive():
     if not API_ENABLED:
