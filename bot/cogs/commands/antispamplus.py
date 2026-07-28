@@ -30,10 +30,10 @@ def _doc_to_config(doc):
         "re_cooldown": doc.get("re_cooldown", 20),
         "re_delay": doc.get("re_delay", 0.35),
         "timeout_duration": doc.get("timeout_duration", 1),
-        "target_users": doc.get("target_users", []),
+        "target_users": [str(u) for u in doc.get("target_users", [])],
         "blocked_commands": doc.get("blocked_commands", []),
-        "excluded_channels": doc.get("excluded_channels", []),
-        "target_channels": doc.get("target_channels", []),
+        "excluded_channels": [str(c) for c in doc.get("excluded_channels", [])],
+        "target_channels": [str(c) for c in doc.get("target_channels", [])],
     }
 
 
@@ -44,6 +44,8 @@ class AntiSpamPlus(commands.Cog):
         self.message_reactions = defaultdict(lambda: defaultdict(int))
         self.cooldown = {}
         self.mongo = getattr(bot, "mongo", None)
+        self.warnings = defaultdict(lambda: defaultdict(int))
+        self.last_warning = defaultdict(dict)
 
     # ── MongoDB helpers (single document per guild) ──────────────────────
 
@@ -200,10 +202,10 @@ class AntiSpamPlus(commands.Cog):
                 "re_cooldown": row[5],
                 "re_delay": row[6],
                 "timeout_duration": row[7],
-                "target_users": target_users,
+                "target_users": [str(u) for u in target_users],
                 "blocked_commands": blocked_commands,
-                "excluded_channels": excluded_channels,
-                "target_channels": target_channels,
+                "excluded_channels": [str(c) for c in excluded_channels],
+                "target_channels": [str(c) for c in target_channels],
             }
 
     async def update_config(self, guild_id, data):
@@ -366,6 +368,43 @@ class AntiSpamPlus(commands.Cog):
                 await message.delete()
             except (discord.Forbidden, discord.NotFound, discord.HTTPException):
                 pass
+
+            gid = message.guild.id
+            uid = message.author.id
+
+            now = time.time()
+            last = self.last_warning[gid].get(uid, 0)
+            if now - last > 600:
+                self.warnings[gid][uid] = 0
+
+            self.warnings[gid][uid] += 1
+            self.last_warning[gid][uid] = now
+            strike = self.warnings[gid][uid]
+
+            if strike >= 3:
+                member = message.guild.get_member(uid)
+                if member:
+                    try:
+                        await member.timeout(
+                            discord.utils.utcnow() + timedelta(minutes=config["timeout_duration"])
+                        )
+                    except Exception as e:
+                        print(f"[AntiSpamPlus] Timeout failed for {uid}: {e}")
+                    try:
+                        await member.send(
+                            f"You have been timed out for {config['timeout_duration']} minute(s) for repeated spam in **{message.guild.name}**."
+                        )
+                    except Exception:
+                        pass
+                self.warnings[gid][uid] = 0
+            else:
+                try:
+                    await message.author.send(
+                        f"⚠️ **Warning {strike}/2** — Your message in **{message.guild.name}** was deleted. "
+                        f"1 more strike and you will be timed out."
+                    )
+                except Exception:
+                    pass
 
         except Exception as e:
             print(f"AntiSpamPlus on_message error: {e}")

@@ -52,11 +52,7 @@ def system(msg):  _log("EmojiSync", Fore.MAGENTA, "★", msg)
 
 
 def _restart() -> None:
-    """Replace the current process with a fresh copy of itself."""
-    system(f"Restarting bot to load updated emoji IDs...")
-    # Flush stdout so the message is visible before the process is replaced
-    sys.stdout.flush()
-    os.execv(sys.executable, [sys.executable] + sys.argv)
+    system(f"Bot should restart here to load updated emoji IDs, but skipping to keep API alive.")
 
 
 async def _fetch_emoji_image(session: aiohttp.ClientSession, emoji_id: str, animated: bool):

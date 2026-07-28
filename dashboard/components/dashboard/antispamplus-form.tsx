@@ -61,16 +61,16 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
     }
     try {
       const result = await api.updateAntiSpamPlus(guildId, { add_target_user: newUserId });
-      setConfig(result);
+      setConfig((prev: any) => ({ ...prev, target_users: result.target_users }));
       setNewUserId("");
       toast.success("Target user added");
     } catch { toast.error("Failed to add user"); }
   };
 
-  const removeTargetUser = async (userId: number) => {
+  const removeTargetUser = async (userId: string) => {
     try {
       const result = await api.updateAntiSpamPlus(guildId, { remove_target_user: userId });
-      setConfig(result);
+      setConfig((prev: any) => ({ ...prev, target_users: result.target_users }));
       toast.success("Target user removed");
     } catch { toast.error("Failed to remove user"); }
   };
@@ -82,7 +82,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
     }
     try {
       const result = await api.updateAntiSpamPlus(guildId, { add_blocked_command: newCommand.trim() });
-      setConfig(result);
+      setConfig((prev: any) => ({ ...prev, blocked_commands: result.blocked_commands }));
       setNewCommand("");
       toast.success("Blocked command added");
     } catch { toast.error("Failed to add command"); }
@@ -91,16 +91,16 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
   const removeBlockedCommand = async (cmd: string) => {
     try {
       const result = await api.updateAntiSpamPlus(guildId, { remove_blocked_command: cmd });
-      setConfig(result);
+      setConfig((prev: any) => ({ ...prev, blocked_commands: result.blocked_commands }));
       toast.success("Blocked command removed");
     } catch { toast.error("Failed to remove command"); }
   };
 
-  const handleChannelToggle = async (type: "excluded_channels" | "target_channels", channelId: number, add: boolean) => {
+  const handleChannelToggle = async (type: "excluded_channels" | "target_channels", channelId: string, add: boolean) => {
     try {
       const key = add ? `add_${type === "excluded_channels" ? "excluded" : "target"}_channel` : `remove_${type === "excluded_channels" ? "excluded" : "target"}_channel`;
       const result = await api.updateAntiSpamPlus(guildId, { [key]: channelId });
-      setConfig(result);
+      setConfig((prev: any) => ({ ...prev, [type]: result[type] }));
     } catch { toast.error("Failed to update channel"); }
   };
 
@@ -188,12 +188,12 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                   <div className="p-2 rounded-lg bg-slate-500/10 text-slate-400"><Hash className="h-4 w-4" /></div>
                   <h4 className="font-bold text-white text-sm">Excluded Channels</h4>
                 </div>
-                <Select value="" onValueChange={(val) => handleChannelToggle("excluded_channels", parseInt(val), true)}>
+                <Select value="" onValueChange={(val) => handleChannelToggle("excluded_channels", val, true)}>
                   <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
                     <SelectValue placeholder="Add channel to exclude..." />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
-                    {channels.filter((c: any) => !(config.excluded_channels || []).includes(parseInt(c.id))).map((c: any) => (
+                    {channels.filter((c: any) => !(config.excluded_channels || []).includes(c.id)).map((c: any) => (
                       <SelectItem key={c.id} value={c.id} className="focus:bg-slate-800">#{c.name}</SelectItem>
                     ))}
                   </SelectContent>
@@ -202,8 +202,8 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                   {(config.excluded_channels || []).length === 0 ? (
                     <span className="text-xs text-slate-600 italic">No excluded channels</span>
                   ) : (
-                    config.excluded_channels?.map((chId: number) => {
-                      const ch = channels.find((c: any) => parseInt(c.id) === chId);
+                    config.excluded_channels?.map((chId: string) => {
+                      const ch = channels.find((c: any) => c.id === chId);
                       return (
                         <div key={chId} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
                           <span className="text-slate-200">#{ch?.name || chId}</span>
@@ -252,22 +252,22 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
             {/* Target Channels for Reaction Spam */}
             <div className="space-y-4">
               <h4 className="text-sm font-bold text-white flex items-center gap-2"><Users className="h-4 w-4 text-yellow-400" /> Monitored Channels</h4>
-              <Select value="" onValueChange={(val) => handleChannelToggle("target_channels", parseInt(val), true)}>
-                <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
-                  <SelectValue placeholder="Add channel to monitor..." />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
-                  {channels.filter((c: any) => !(config.target_channels || []).includes(parseInt(c.id))).map((c: any) => (
-                    <SelectItem key={c.id} value={c.id} className="focus:bg-slate-800">#{c.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-slate-900/40 rounded-xl border border-slate-800/50">
-                {(config.target_channels || []).length === 0 ? (
-                  <span className="text-xs text-slate-600 italic">No channels monitored</span>
-                ) : (
-                  config.target_channels?.map((chId: number) => {
-                    const ch = channels.find((c: any) => parseInt(c.id) === chId);
+<Select value="" onValueChange={(val) => handleChannelToggle("target_channels", val, true)}>
+                  <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
+                    <SelectValue placeholder="Add channel to monitor..." />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
+                    {channels.filter((c: any) => !(config.target_channels || []).includes(c.id)).map((c: any) => (
+                      <SelectItem key={c.id} value={c.id} className="focus:bg-slate-800">#{c.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-slate-900/40 rounded-xl border border-slate-800/50">
+                  {(config.target_channels || []).length === 0 ? (
+                    <span className="text-xs text-slate-600 italic">No channels monitored</span>
+                  ) : (
+                    config.target_channels?.map((chId: string) => {
+                      const ch = channels.find((c: any) => c.id === chId);
                     return (
                       <div key={chId} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
                         <span className="text-slate-200">#{ch?.name || chId}</span>

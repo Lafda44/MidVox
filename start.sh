@@ -8,7 +8,14 @@ export PATH="$(dirname "$0")/.node/bin:$PATH"
 export API_ENABLED=true
 export API_PORT=5001
 export TUNNEL_ENABLED=false
-export EMOJI_SYNC=false
+export EMOJI_SYNC=true
+
+# ── One-time emoji sync (before bot starts, no restart) ───────
+echo "Running one-time emoji sync..."
+cd bot
+timeout 120 python sync_emojis_once.py 2>&1 || echo "Emoji sync skipped (non-fatal)"
+cd ..
+echo "--- Emoji sync done ---"
 
 # Run bot in a restart loop so if it crashes the API stays up
 (
