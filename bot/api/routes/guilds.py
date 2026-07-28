@@ -1384,14 +1384,17 @@ async def patch_guild_rr(guild_id: int, data: RRUpdate):
     return {"status": "success"}
 
 
-@router.get("/{guild_id}/antispamplus", response_model=AntiSpamPlusConfig, summary="Get AntiSpamPlus config")
+@router.get("/{guild_id}/antispamplus", summary="Get AntiSpamPlus config")
 async def get_guild_antispamplus(guild_id: int, bot: "zyrox" = Depends(get_bot)):
     cog = bot.get_cog("AntiSpamPlus")
     if not cog:
         raise HTTPException(status_code=503, detail="AntiSpamPlus service unavailable")
     try:
-        return await cog.get_config(guild_id)
+        config = await cog.get_config(guild_id)
+        print(f"[AntiSpamPlus GET] guild={guild_id} raw={config}")
+        return config
     except Exception as e:
+        print(f"[AntiSpamPlus GET] guild={guild_id} error: {e}")
         raise HTTPException(status_code=500, detail=f"AntiSpamPlus config error: {str(e)}")
 
 @router.patch("/{guild_id}/antispamplus", summary="Update AntiSpamPlus config")
