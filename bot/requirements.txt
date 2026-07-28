@@ -15,7 +15,6 @@ collection
 requests
 pathlib
 pymongo
-wavelink>=2.0.0
 httpx
 discord.ext-context
 tasksio
