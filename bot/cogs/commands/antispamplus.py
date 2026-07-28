@@ -22,7 +22,7 @@ CONFIG_DEFAULTS = {
 
 def _doc_to_config(doc):
     return {
-        "guild_id": doc["guild_id"],
+        "guild_id": doc.get("guild_id", int(doc["_id"])),
         "delete_messages": doc.get("delete_messages", False),
         "delete_delay": doc.get("delete_delay", 8),
         "re_limit": doc.get("re_limit", 5),

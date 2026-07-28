@@ -1421,22 +1421,40 @@ async def patch_guild_antispamplus(guild_id: int, data: AntiSpamPlusUpdate, bot:
     if update_data:
         await cog.update_config(guild_id, update_data)
 
+    def _to_int(v):
+        try:
+            return int(v)
+        except (TypeError, ValueError):
+            return None
+
     if payload.get("add_target_user"):
-        await cog.add_target_user(guild_id, payload["add_target_user"])
+        uid = _to_int(payload["add_target_user"])
+        if uid:
+            await cog.add_target_user(guild_id, uid)
     if payload.get("remove_target_user"):
-        await cog.remove_target_user(guild_id, payload["remove_target_user"])
+        uid = _to_int(payload["remove_target_user"])
+        if uid:
+            await cog.remove_target_user(guild_id, uid)
     if payload.get("add_blocked_command"):
         await cog.add_blocked_command(guild_id, payload["add_blocked_command"])
     if payload.get("remove_blocked_command"):
         await cog.remove_blocked_command(guild_id, payload["remove_blocked_command"])
     if payload.get("add_excluded_channel"):
-        await cog.add_excluded_channel(guild_id, payload["add_excluded_channel"])
+        cid = _to_int(payload["add_excluded_channel"])
+        if cid:
+            await cog.add_excluded_channel(guild_id, cid)
     if payload.get("remove_excluded_channel"):
-        await cog.remove_excluded_channel(guild_id, payload["remove_excluded_channel"])
+        cid = _to_int(payload["remove_excluded_channel"])
+        if cid:
+            await cog.remove_excluded_channel(guild_id, cid)
     if payload.get("add_target_channel"):
-        await cog.add_target_channel(guild_id, payload["add_target_channel"])
+        cid = _to_int(payload["add_target_channel"])
+        if cid:
+            await cog.add_target_channel(guild_id, cid)
     if payload.get("remove_target_channel"):
-        await cog.remove_target_channel(guild_id, payload["remove_target_channel"])
+        cid = _to_int(payload["remove_target_channel"])
+        if cid:
+            await cog.remove_target_channel(guild_id, cid)
 
     return await cog.get_config(guild_id)
 

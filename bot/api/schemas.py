@@ -367,11 +367,11 @@ class AntiSpamPlusUpdate(BaseModel):
     re_cooldown: Optional[int] = None
     re_delay: Optional[float] = None
     timeout_duration: Optional[int] = None
-    add_target_user: Optional[int] = None
-    remove_target_user: Optional[int] = None
+    add_target_user: Optional[str] = None
+    remove_target_user: Optional[str] = None
     add_blocked_command: Optional[str] = None
     remove_blocked_command: Optional[str] = None
-    add_excluded_channel: Optional[int] = None
-    remove_excluded_channel: Optional[int] = None
-    add_target_channel: Optional[int] = None
-    remove_target_channel: Optional[int] = None
+    add_excluded_channel: Optional[str] = None
+    remove_excluded_channel: Optional[str] = None
+    add_target_channel: Optional[str] = None
+    remove_target_channel: Optional[str] = None
