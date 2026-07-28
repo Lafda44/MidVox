@@ -38,7 +38,9 @@ import {
   AdminConfigUpdate
 } from "@/types/api";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
+const BASE_URL = typeof window !== "undefined"
+  ? (process.env.NEXT_PUBLIC_API_URL || "/api/v1")
+  : (process.env.API_INTERNAL_URL || "http://localhost:5001/api/v1");
 const API_KEY = process.env.NEXT_PUBLIC_DASHBOARD_API_KEY;
 
 class ApiError extends Error {
