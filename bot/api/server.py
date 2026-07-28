@@ -104,7 +104,7 @@ def create_app() -> FastAPI:
 
     # Register Routers
     app.include_router(bot.router, prefix="/api/v1/bot", tags=["Bot"], dependencies=[Depends(verify_api_key)])
-    app.include_router(guilds.router, prefix="/api/v1/guilds", tags=["Guilds"], dependencies=[Depends(verify_api_key)])
+    app.include_router(guilds.router, prefix="/api/v1/guilds", tags=["Guilds"])
     app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"], dependencies=[Depends(verify_api_key)])
 
     @app.get("/", summary="API Root", description="Returns basic API information and online status.")
