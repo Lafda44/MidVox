@@ -36,7 +36,7 @@ done
 # Start Next.js dashboard on Render's public PORT
 cd dashboard
 echo "Starting dashboard on port $PORT..."
-npx next start -p $PORT &
+npx next start -p $PORT -H 0.0.0.0 &
 DASHBOARD_PID=$!
 
 echo "=== MidVox running ==="
