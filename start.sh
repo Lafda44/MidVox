@@ -1,19 +1,25 @@
 #!/bin/bash
-set -e
 
 echo "=== Starting MidVox ==="
 
 # Add Node.js binary to PATH (extracted during build into .node/)
 export PATH="$(dirname "$0")/.node/bin:$PATH"
 
-# Start bot with API on internal port 5001
-cd bot
 export API_ENABLED=true
 export API_PORT=5001
 export TUNNEL_ENABLED=false
 export EMOJI_SYNC=false
-echo "Starting bot (API on port 5001)..."
-python CodeX.py > ../bot.log 2>&1 &
+
+# Run bot in a restart loop so if it crashes the API stays up
+(
+  while true; do
+    cd bot
+    echo "Starting bot (API on port 5001)..."
+    python CodeX.py > ../bot.log 2>&1
+    echo "WARNING: Bot exited (code $?). Restarting in 2s..." >&2
+    sleep 2
+  done
+) &
 BOT_PID=$!
 
 # Wait for bot API to be ready (health check)
@@ -33,11 +39,6 @@ exit(1)
   echo "  Attempt $i/30..."
   sleep 2
 done
-
-# Check if bot process is still running
-if ! kill -0 $BOT_PID 2>/dev/null; then
-  echo "WARNING: Bot process died. Check bot.log for details."
-fi
 
 # Start Next.js dashboard on Render's public PORT
 cd ../dashboard
