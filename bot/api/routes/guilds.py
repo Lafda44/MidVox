@@ -1418,7 +1418,8 @@ async def patch_guild_antispamplus(guild_id: int, data: AntiSpamPlusUpdate, bot:
     if payload.get("timeout_duration") is not None:
         update_data["timeout_duration"] = payload["timeout_duration"]
 
-    result = await cog.update_config(guild_id, update_data)
+    if update_data:
+        await cog.update_config(guild_id, update_data)
 
     if payload.get("add_target_user"):
         await cog.add_target_user(guild_id, payload["add_target_user"])

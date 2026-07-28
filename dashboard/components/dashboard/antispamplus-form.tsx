@@ -55,12 +55,12 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
   };
 
   const addTargetUser = async () => {
-    if (!newUserId || isNaN(Number(newUserId))) {
+    if (!newUserId || !/^\d+$/.test(newUserId)) {
       toast.error("Enter a valid Discord user ID");
       return;
     }
     try {
-      const result = await api.updateAntiSpamPlus(guildId, { add_target_user: Number(newUserId) });
+      const result = await api.updateAntiSpamPlus(guildId, { add_target_user: newUserId });
       setConfig(result);
       setNewUserId("");
       toast.success("Target user added");
