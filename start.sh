@@ -18,7 +18,7 @@ BOT_PID=$!
 # Wait for bot API to be ready (health check)
 echo "Waiting for bot API on port 5001..."
 for i in $(seq 1 30); do
-  if curl -s http://localhost:5001/api/v1/bot/status > /dev/null 2>&1; then
+  if curl -s http://localhost:5001/health > /dev/null 2>&1; then
     echo "Bot API is ready!"
     break
   fi
