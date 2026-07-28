@@ -4,8 +4,9 @@ services:
     env: python
     buildCommand: |
       pip install -r bot/requirements.txt
-      curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-      apt-get install -y nodejs
+      mkdir -p .node
+      curl -fsSL https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.gz | tar -xzf - -C .node --strip-components=1
+      export PATH="$PWD/.node/bin:$PATH"
       cd dashboard && npm install && npm run build
     startCommand: bash start.sh
     envVars:

@@ -3,6 +3,9 @@ set -e
 
 echo "=== Starting MidVox ==="
 
+# Add Node.js binary to PATH (extracted during build into .node/)
+export PATH="$(dirname "$0")/.node/bin:$PATH"
+
 # Start bot with API on internal port 5001
 cd bot
 export API_ENABLED=true
