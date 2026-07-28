@@ -64,7 +64,7 @@ class AntiSpamPlus(commands.Cog):
                 await db.execute("INSERT INTO config (guild_id) VALUES (?)", (guild_id,))
                 await db.commit()
                 return {
-                    "delete_messages": False, "delete_delay": 8,
+                    "guild_id": guild_id, "delete_messages": False, "delete_delay": 8,
                     "re_limit": 5, "re_window": 30, "re_cooldown": 20,
                     "re_delay": 0.35, "timeout_duration": 1,
                     "target_users": [], "blocked_commands": [],
@@ -81,7 +81,7 @@ class AntiSpamPlus(commands.Cog):
             target_channels = [r[0] for r in await cursor.fetchall()]
 
             return {
-                "delete_messages": bool(row[1]), "delete_delay": row[2],
+                "guild_id": guild_id, "delete_messages": bool(row[1]), "delete_delay": row[2],
                 "re_limit": row[3], "re_window": row[4], "re_cooldown": row[5],
                 "re_delay": row[6], "timeout_duration": row[7],
                 "target_users": target_users, "blocked_commands": blocked_commands,

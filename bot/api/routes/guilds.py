@@ -1389,7 +1389,10 @@ async def get_guild_antispamplus(guild_id: int, bot: "zyrox" = Depends(get_bot))
     cog = bot.get_cog("AntiSpamPlus")
     if not cog:
         raise HTTPException(status_code=503, detail="AntiSpamPlus service unavailable")
-    return await cog.get_config(guild_id)
+    try:
+        return await cog.get_config(guild_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AntiSpamPlus config error: {str(e)}")
 
 @router.patch("/{guild_id}/antispamplus", summary="Update AntiSpamPlus config")
 async def patch_guild_antispamplus(guild_id: int, data: AntiSpamPlusUpdate, bot: "zyrox" = Depends(get_bot)):
