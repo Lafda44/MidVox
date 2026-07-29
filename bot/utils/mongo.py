@@ -48,6 +48,20 @@ class MongoManager:
             upsert=True,
         )
 
+    async def save_emoji_overrides_bulk(self, entries: list):
+        """Save multiple emoji overrides at once."""
+        if not entries:
+            return
+        from pymongo import ReplaceOne
+        ops = [
+            ReplaceOne(
+                {"_id": e["var_name"]},
+                {"_id": e["var_name"], "name": e["name"], "emoji_id": e["emoji_id"], "animated": e.get("animated", False), "manual": True},
+                upsert=True,
+            ) for e in entries
+        ]
+        await self.emoji_overrides.bulk_write(ops)
+
     async def delete_emoji_override(self, var_name: str):
         await self.emoji_overrides.delete_one({"_id": var_name})
 

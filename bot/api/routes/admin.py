@@ -135,11 +135,13 @@ async def sync_emojis(bot: "zyrox" = Depends(get_bot)):
     try:
         from utils.sync_emojis import run_sync
         await run_sync(token)
-        # Save all synced emojis to MongoDB as overrides
+        # Save all synced emojis to MongoDB as overrides (single bulk op)
         if hasattr(bot, "mongo") and bot.mongo:
             entries = _parse_emoji_file()
-            for e in entries:
-                await bot.mongo.save_emoji_override(e.var_name, e.name, e.emoji_id, e.animated)
+            await bot.mongo.save_emoji_overrides_bulk([
+                {"var_name": e.var_name, "name": e.name, "emoji_id": e.emoji_id, "animated": e.animated}
+                for e in entries
+            ])
         _schedule_restart()
         return {"status": "synced", "detail": "Emoji IDs synced. Restarting..."}
     except Exception as e:
@@ -148,7 +150,7 @@ async def sync_emojis(bot: "zyrox" = Depends(get_bot)):
 EMOJI_PY_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "utils", "emoji.py")
 
 def _schedule_restart():
-    threading.Timer(2.0, lambda: os._exit(0)).start()
+    threading.Timer(5.0, lambda: os._exit(0)).start()
 
 class EmojiEntry(BaseModel):
     name: str
