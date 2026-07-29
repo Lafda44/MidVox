@@ -211,3 +211,20 @@ async def delete_emoji(var_name: str):
     with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
         f.write(new_content)
     return {"status": "deleted", "var_name": var_name}
+
+@router.patch("/emojis/{var_name}")
+async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, animated: bool = None):
+    with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+    match = re.search(rf'^({re.escape(var_name)}\s*=\s*"<)(a?)(:(\w+):(\d+))(>"\s*)$', content, re.MULTILINE)
+    if not match:
+        raise HTTPException(404, f"Emoji '{var_name}' not found")
+    prefix, old_animated, _, old_name, old_id, suffix = match.groups()
+    new_animated = ("a" if animated else "") if animated is not None else old_animated
+    new_name = name or old_name
+    new_id = emoji_id or old_id
+    new_line = f'{prefix}{new_animated}:{new_name}:{new_id}{suffix}'
+    content = content[:match.start()] + new_line + content[match.end():]
+    with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
+        f.write(content)
+    return {"status": "updated", "var_name": var_name}

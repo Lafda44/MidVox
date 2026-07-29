@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SmilePlus, RefreshCcw, Plus, Trash2, Loader, Search } from "lucide-react";
+import { SmilePlus, RefreshCcw, Plus, Trash2, Loader, Search, PenLine, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,9 @@ export default function EmojiManagerPage() {
   const [newName, setNewName] = useState("");
   const [newId, setNewId] = useState("");
   const [newAnimated, setNewAnimated] = useState(false);
+  const [editing, setEditing] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editId, setEditId] = useState("");
 
   const fetchEmojis = async () => {
     try {
@@ -64,6 +67,29 @@ export default function EmojiManagerPage() {
       fetchEmojis();
     } catch {
       toast.error("Failed to delete");
+    }
+  };
+
+  const startEdit = (emoji: any) => {
+    setEditing(emoji.var_name);
+    setEditName(emoji.name);
+    setEditId(emoji.emoji_id);
+  };
+
+  const cancelEdit = () => {
+    setEditing(null);
+    setEditName("");
+    setEditId("");
+  };
+
+  const saveEdit = async (varName: string) => {
+    try {
+      await api.request<any>(`/admin/emojis/${encodeURIComponent(varName)}?name=${encodeURIComponent(editName)}&emoji_id=${encodeURIComponent(editId)}`, { method: "PATCH" });
+      toast.success("Emoji updated");
+      setEditing(null);
+      fetchEmojis();
+    } catch {
+      toast.error("Failed to update");
     }
   };
 
@@ -128,19 +154,40 @@ export default function EmojiManagerPage() {
                 onError={(e) => { (e.target as HTMLImageElement).src = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'><text y='20' font-size='20'>❓</text></svg>"; }}
               />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-white truncate">{emoji.var_name}</p>
-              <p className="text-xs text-slate-400 truncate">:{emoji.name}:</p>
-              <p className="text-xs text-slate-500 font-mono truncate">{emoji.emoji_id}</p>
+            {editing === emoji.var_name ? (
+              <div className="flex-1 min-w-0 space-y-2">
+                <Input value={editName} onChange={(e) => setEditName(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))} className="h-8 text-xs bg-slate-900/50 border-slate-700" placeholder="Name" />
+                <Input value={editId} onChange={(e) => setEditId(e.target.value.replace(/\D/g, ""))} className="h-8 text-xs bg-slate-900/50 border-slate-700 font-mono" placeholder="ID" />
+                <div className="flex gap-1">
+                  <Button size="sm" variant="ghost" className="h-7 text-green-400" onClick={() => saveEdit(emoji.var_name)}><Check className="h-3 w-3" /></Button>
+                  <Button size="sm" variant="ghost" className="h-7 text-red-400" onClick={cancelEdit}><X className="h-3 w-3" /></Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-white truncate">{emoji.var_name}</p>
+                <p className="text-xs text-slate-400 truncate">:{emoji.name}:</p>
+                <p className="text-xs text-slate-500 font-mono truncate">{emoji.emoji_id}</p>
+              </div>
+            )}
+            <div className="flex gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-slate-600 hover:text-blue-400 opacity-0 group-hover:opacity-100 transition-all h-8 w-8"
+                onClick={() => startEdit(emoji)}
+              >
+                <PenLine className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all h-8 w-8"
+                onClick={() => handleDelete(emoji.var_name)}
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
-              onClick={() => handleDelete(emoji.var_name)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
           </div>
         ))}
       </div>
