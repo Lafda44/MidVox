@@ -135,13 +135,13 @@ async def sync_emojis(bot: "zyrox" = Depends(get_bot)):
     try:
         from utils.sync_emojis import run_sync
         await run_sync(token)
-        # Save all synced emojis to MongoDB as overrides (single bulk op)
-        if hasattr(bot, "mongo") and bot.mongo:
-            entries = _parse_emoji_file()
-            await bot.mongo.save_emoji_overrides_bulk([
-                {"var_name": e.var_name, "name": e.name, "emoji_id": e.emoji_id, "animated": e.animated}
-                for e in entries
-            ])
+        # Save all synced emojis to local override file
+        from utils.emoji_store import save_all
+        entries = _parse_emoji_file()
+        save_all([
+            {"var_name": e.var_name, "name": e.name, "emoji_id": e.emoji_id, "animated": e.animated}
+            for e in entries
+        ])
         _schedule_restart()
         return {"status": "synced", "detail": "Emoji IDs synced. Restarting..."}
     except Exception as e:
@@ -190,13 +190,10 @@ def _write_emoji_file(entries: List[EmojiEntry]):
 @router.get("/emojis")
 async def list_emojis():
     entries = _parse_emoji_file()
-    if entries:
-        first = entries[0]
-        print(f"[EMOJI DEBUG] GET /emojis: {len(entries)} entries, first={first.var_name}={first.name}:{first.emoji_id}")
     return {"emojis": [e.dict() for e in entries], "total": len(entries)}
 
 @router.post("/emojis")
-async def add_emoji(var_name: str, name: str, emoji_id: str, animated: bool = False, bot: "zyrox" = Depends(get_bot)):
+async def add_emoji(var_name: str, name: str, emoji_id: str, animated: bool = False):
     entries = _parse_emoji_file()
     if any(e.var_name == var_name for e in entries):
         raise HTTPException(400, f"Emoji '{var_name}' already exists")
@@ -211,12 +208,12 @@ async def add_emoji(var_name: str, name: str, emoji_id: str, animated: bool = Fa
         content += "\n" + line
     with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
         f.write(content)
-    if hasattr(bot, "mongo") and bot.mongo:
-        await bot.mongo.save_emoji_override(var_name, name, emoji_id, animated)
+    from utils.emoji_store import save_override
+    save_override(var_name, name, emoji_id, animated)
     return {"status": "added", "var_name": var_name}
 
 @router.delete("/emojis/{var_name}")
-async def delete_emoji(var_name: str, bot: "zyrox" = Depends(get_bot)):
+async def delete_emoji(var_name: str):
     with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
         content = f.read()
     new_content = re.sub(
@@ -226,31 +223,25 @@ async def delete_emoji(var_name: str, bot: "zyrox" = Depends(get_bot)):
         raise HTTPException(404, f"Emoji '{var_name}' not found")
     with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
         f.write(new_content)
-    if hasattr(bot, "mongo") and bot.mongo:
-        await bot.mongo.delete_emoji_override(var_name)
+    from utils.emoji_store import delete_override
+    delete_override(var_name)
     return {"status": "deleted", "var_name": var_name}
 
 @router.patch("/emojis/{var_name}")
-async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, animated: bool = None, bot: "zyrox" = Depends(get_bot)):
-    print(f"[EMOJI DEBUG] PATCH {var_name}: name={name!r} emoji_id={emoji_id!r} animated={animated}")
+async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, animated: bool = None):
     with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
         content = f.read()
     match = re.search(rf'^({re.escape(var_name)}\s*=\s*"<)(a?)(:(\w+):(\d+))(>"\s*)$', content, re.MULTILINE)
     if not match:
-        print(f"[EMOJI DEBUG] No match found for {var_name}")
         raise HTTPException(404, f"Emoji '{var_name}' not found")
     prefix, old_animated, _, old_name, old_id, suffix = match.groups()
     new_animated = ("a" if animated else "") if animated is not None else old_animated
     new_name = name or old_name
     new_id = emoji_id or old_id
     new_line = f'{prefix}{new_animated}:{new_name}:{new_id}{suffix}'
-    print(f"[EMOJI DEBUG] Replacing: {content[match.start():match.end()]!r} -> {new_line!r}")
     content = content[:match.start()] + new_line + content[match.end():]
     with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
         f.write(content)
-    if hasattr(bot, "mongo") and bot.mongo:
-        print(f"[EMOJI DEBUG] Saving override to MongoDB: {var_name}={new_name}:{new_id}")
-        await bot.mongo.save_emoji_override(var_name, new_name, new_id, new_animated == "a")
-    else:
-        print(f"[EMOJI DEBUG] MongoDB not available, override NOT saved")
+    from utils.emoji_store import save_override
+    save_override(var_name, new_name, new_id, new_animated == "a")
     return {"status": "updated", "var_name": var_name}

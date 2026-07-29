@@ -105,17 +105,15 @@ async def on_ready():
     # Sync application emojis on startup
     await run_sync(TOKEN)
 
-    # Apply manual emoji overrides from MongoDB (overrides sync)
-    if hasattr(client, "mongo") and client.mongo:
-        try:
-            EMOJI_PY_PATH = os.path.join(os.path.dirname(__file__), "utils", "emoji.py")
-            changed = await client.mongo.apply_emoji_overrides_to_file(EMOJI_PY_PATH)
-            if changed:
-                print("\033[32m◈ Manual emoji overrides applied from MongoDB\033[0m")
-            else:
-                print("[EMOJI DEBUG] No emoji overrides to apply or none changed")
-        except Exception as e:
-            print(f"[EMOJI DEBUG] Failed to apply emoji overrides: {e}")
+    # Apply manual emoji overrides from local storage (overrides sync)
+    from utils.emoji_store import apply_overrides_to_file
+    EMOJI_PY_PATH = os.path.join(os.path.dirname(__file__), "utils", "emoji.py")
+    try:
+        changed = apply_overrides_to_file(EMOJI_PY_PATH)
+        if changed:
+            print("\033[32m◈ Manual emoji overrides applied\033[0m")
+    except Exception as e:
+        print(f"\033[33m◈ Failed to apply emoji overrides: {e}\033[0m")
 
     # Backup SQLite databases to MongoDB
     if hasattr(client, "mongo") and client.mongo:
