@@ -22,7 +22,7 @@ export default function EmojiManagerPage() {
 
   const fetchEmojis = async () => {
     try {
-      const data = await api.request<any>("/admin/emojis");
+      const data = await api.request<any>(`/admin/emojis?_t=${Date.now()}`);
       setEmojis(data.emojis);
     } catch {
       toast.error("Failed to load emojis");
@@ -51,23 +51,28 @@ export default function EmojiManagerPage() {
       toast.error("Fill all fields");
       return;
     }
+    const v = newVar, n = newName, i = newId, a = newAnimated;
+    setEmojis(prev => [...prev, { var_name: v, name: n, emoji_id: i, animated: a }]);
+    setNewVar(""); setNewName(""); setNewId(""); setNewAnimated(false);
     try {
-      await api.request<any>(`/admin/emojis?var_name=${encodeURIComponent(newVar)}&name=${encodeURIComponent(newName)}&emoji_id=${encodeURIComponent(newId)}&animated=${newAnimated}`, { method: "POST" });
+      await api.request<any>(`/admin/emojis?var_name=${encodeURIComponent(v)}&name=${encodeURIComponent(n)}&emoji_id=${encodeURIComponent(i)}&animated=${a}`, { method: "POST" });
       toast.success("Emoji added");
-      setNewVar(""); setNewName(""); setNewId(""); setNewAnimated(false);
       fetchEmojis();
     } catch (e: any) {
       toast.error(e.message || "Failed to add");
+      fetchEmojis();
     }
   };
 
   const handleDelete = async (varName: string) => {
+    setEmojis(prev => prev.filter(e => e.var_name !== varName));
     try {
       await api.request<any>(`/admin/emojis/${encodeURIComponent(varName)}`, { method: "DELETE" });
       toast.success("Emoji deleted");
       fetchEmojis();
     } catch {
       toast.error("Failed to delete");
+      fetchEmojis();
     }
   };
 
@@ -84,13 +89,15 @@ export default function EmojiManagerPage() {
   };
 
   const saveEdit = async (varName: string) => {
+    setEmojis(prev => prev.map(e => e.var_name === varName ? { ...e, name: editName, emoji_id: editId } : e));
+    setEditing(null);
     try {
       await api.request<any>(`/admin/emojis/${encodeURIComponent(varName)}?name=${encodeURIComponent(editName)}&emoji_id=${encodeURIComponent(editId)}`, { method: "PATCH" });
       toast.success("Emoji updated");
-      setEditing(null);
       fetchEmojis();
     } catch {
       toast.error("Failed to update");
+      fetchEmojis();
     }
   };
 
