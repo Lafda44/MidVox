@@ -53,7 +53,10 @@ def system(msg):  _log("EmojiSync", Fore.MAGENTA, "★", msg)
 
 
 def _restart() -> None:
-    pass
+    import sys
+    print(f"{Fore.MAGENTA}★ EmojiSync:{Style.RESET_ALL} Restarting to load new emoji values...")
+    sys.stdout.flush()
+    os._exit(0)
 
 
 async def _fetch_emoji_image(session: aiohttp.ClientSession, emoji_id: str, animated: bool):
@@ -68,21 +71,21 @@ async def _fetch_emoji_image(session: aiohttp.ClientSession, emoji_id: str, anim
     return None
 
 
-async def run_sync(token: str) -> None:
+async def run_sync(token: str) -> bool:
     """
     Async emoji sync. Pass the bot token directly.
     Respects the EMOJI_SYNC env var — set to "false" to disable.
-    Triggers an automatic restart when emoji.py is patched.
+    Returns True if emoji.py was modified (caller should restart).
     """
     # ── Toggle check ──────────────────────────────────────────────────────────
     enabled = os.getenv("EMOJI_SYNC", "true").strip().lower()
     if enabled != "true":
         info(f"Disabled via EMOJI_SYNC={enabled!r} — skipping.")
-        return
+        return False
 
     if not token:
         warning("No token provided — skipping EmojiSync.")
-        return
+        return False
 
     # ── Read emoji.py ─────────────────────────────────────────────────────────
     try:
@@ -90,12 +93,12 @@ async def run_sync(token: str) -> None:
             content = f.read()
     except Exception as err:
         error(f"Could not read emoji.py ({err})")
-        return
+        return False
 
     matches = set(re.findall(r"<(a?):(\w+):(\d+)>", content))
     if not matches:
         info("No custom emojis found in emoji.py — nothing to sync.")
-        return
+        return False
 
     system(f"Starting Application Emoji Sync — {len(matches)} unique emojis found in emoji.py")
 
@@ -109,14 +112,14 @@ async def run_sync(token: str) -> None:
         async with session.get("https://discord.com/api/v10/users/@me") as r:
             if r.status != 200:
                 error(f"Failed to fetch bot info [HTTP {r.status}]")
-                return
+                return False
             app_id = (await r.json()).get("id")
 
         # Fetch existing application emojis
         async with session.get(f"https://discord.com/api/v10/applications/{app_id}/emojis") as r:
             if r.status != 200:
                 error(f"Failed to fetch application emojis [HTTP {r.status}]")
-                return
+                return False
             data = await r.json()
             app_emojis: list = data.get("items", []) if isinstance(data, dict) else data
 
@@ -223,6 +226,4 @@ async def run_sync(token: str) -> None:
     else:
         system("Sync complete: nothing to do.")
 
-    # ── Auto-restart if emoji.py was changed ─────────────────────────────────
-    if updated:
-        _restart()
+    return updated

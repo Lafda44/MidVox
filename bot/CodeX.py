@@ -108,9 +108,11 @@ async def on_ready():
     print(f"Connected to: {len(client.guilds)} guilds")
     print(f"Connected to: {len(client.users)} users")
 
-    # Sync application emojis (upload missing ones); never modifies existing entries
+    # Sync application emojis — returns True if emoji.py was patched (needs restart)
     try:
-        await run_sync(TOKEN)
+        if await run_sync(TOKEN):
+            print("\033[33m◈ Emoji sync updated emoji.py — restarting for new values...\033[0m")
+            os._exit(0)
     except Exception as e:
         print(f"\033[33m◈ Emoji sync failed: {e}\033[0m")
 
