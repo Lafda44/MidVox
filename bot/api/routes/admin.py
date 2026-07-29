@@ -190,6 +190,9 @@ def _write_emoji_file(entries: List[EmojiEntry]):
 @router.get("/emojis")
 async def list_emojis():
     entries = _parse_emoji_file()
+    if entries:
+        first = entries[0]
+        print(f"[EMOJI DEBUG] GET /emojis: {len(entries)} entries, first={first.var_name}={first.name}:{first.emoji_id}")
     return {"emojis": [e.dict() for e in entries], "total": len(entries)}
 
 @router.post("/emojis")
@@ -229,19 +232,25 @@ async def delete_emoji(var_name: str, bot: "zyrox" = Depends(get_bot)):
 
 @router.patch("/emojis/{var_name}")
 async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, animated: bool = None, bot: "zyrox" = Depends(get_bot)):
+    print(f"[EMOJI DEBUG] PATCH {var_name}: name={name!r} emoji_id={emoji_id!r} animated={animated}")
     with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
         content = f.read()
     match = re.search(rf'^({re.escape(var_name)}\s*=\s*"<)(a?)(:(\w+):(\d+))(>"\s*)$', content, re.MULTILINE)
     if not match:
+        print(f"[EMOJI DEBUG] No match found for {var_name}")
         raise HTTPException(404, f"Emoji '{var_name}' not found")
     prefix, old_animated, _, old_name, old_id, suffix = match.groups()
     new_animated = ("a" if animated else "") if animated is not None else old_animated
     new_name = name or old_name
     new_id = emoji_id or old_id
     new_line = f'{prefix}{new_animated}:{new_name}:{new_id}{suffix}'
+    print(f"[EMOJI DEBUG] Replacing: {content[match.start():match.end()]!r} -> {new_line!r}")
     content = content[:match.start()] + new_line + content[match.end():]
     with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
         f.write(content)
     if hasattr(bot, "mongo") and bot.mongo:
+        print(f"[EMOJI DEBUG] Saving override to MongoDB: {var_name}={new_name}:{new_id}")
         await bot.mongo.save_emoji_override(var_name, new_name, new_id, new_animated == "a")
+    else:
+        print(f"[EMOJI DEBUG] MongoDB not available, override NOT saved")
     return {"status": "updated", "var_name": var_name}
