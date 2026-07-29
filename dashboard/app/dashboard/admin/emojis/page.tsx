@@ -119,8 +119,14 @@ export default function EmojiManagerPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {filtered.map((emoji) => (
           <div key={emoji.var_name} className="bg-[#141B2D] border border-slate-800 rounded-xl p-4 flex items-center gap-4 group hover:border-slate-700 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-xl">
-              {emoji.animated ? "🎬" : "😊"}
+            <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center overflow-hidden">
+              <img
+                src={`https://cdn.discordapp.com/emojis/${emoji.emoji_id}.${emoji.animated ? "gif" : "webp"}`}
+                alt={emoji.name}
+                className="w-8 h-8 object-contain"
+                loading="lazy"
+                onError={(e) => { (e.target as HTMLImageElement).src = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'><text y='20' font-size='20'>❓</text></svg>"; }}
+              />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white truncate">{emoji.var_name}</p>
