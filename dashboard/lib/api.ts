@@ -90,6 +90,8 @@ async function request<T>(
 }
 
 export const api = {
+  request: <T>(endpoint: string, options: RequestInit = {}) => request<T>(endpoint, options),
+
   // Bot 
   getBotStatus: () => request<BotStatus>("/bot/status"),
   getBotInfo: () => request<BotInfo>("/bot/info"),

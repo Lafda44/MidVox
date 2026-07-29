@@ -22,7 +22,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Server, ShieldCheck, Ticket, BarChart4, FileText, Settings,
   Menu, X, Bell, User, Search, ChevronRight, Star, Sparkles, LogOut,
-  LifeBuoy, ChevronDown, Bot, Shield
+  LifeBuoy, ChevronDown, Bot, Shield, SmilePlus
 } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { cn, isAdmin } from "@/lib/utils";
@@ -143,7 +143,8 @@ export default function DashboardLayout({
         { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
         { name: "Servers", href: "/dashboard/guilds", icon: Server },
         ...(isAdmin(session?.user?.id) 
-            ? [{ name: "Admin Panel", href: "/dashboard/admin", icon: Shield }] 
+            ? [{ name: "Admin Panel", href: "/dashboard/admin", icon: Shield },
+               { name: "Emoji Manager", href: "/dashboard/admin/emojis", icon: SmilePlus }] 
             : []),
       ];
 

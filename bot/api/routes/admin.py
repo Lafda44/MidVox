@@ -16,10 +16,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from api.dependencies import get_bot
 from api.schemas import AdminStats, AdminNodeStatus, AdminConfig, AdminConfigUpdate
 from typing import TYPE_CHECKING, List
-import os
-import aiosqlite
-import asyncio
-import sys
+from pydantic import BaseModel
+import os, re, aiosqlite, asyncio, sys
 
 if TYPE_CHECKING:
     from core.zyrox import zyrox
@@ -140,3 +138,76 @@ async def sync_emojis(bot: "zyrox" = Depends(get_bot)):
         return {"status": "synced", "detail": "Emoji IDs updated. Restart bot to apply."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Emoji sync failed: {e}")
+
+EMOJI_PY_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "utils", "emoji.py")
+
+class EmojiEntry(BaseModel):
+    name: str
+    var_name: str
+    emoji_id: str
+    animated: bool
+    raw: str
+
+def _parse_emoji_file() -> List[EmojiEntry]:
+    with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+    entries = []
+    for m in re.finditer(r'^(\w+)\s*=\s*"<((a?):(\w+):(\d+))>"', content, re.MULTILINE):
+        var_name, full, animated_str, name, eid = m.groups()
+        entries.append(EmojiEntry(
+            name=name,
+            var_name=var_name,
+            emoji_id=eid,
+            animated=bool(animated_str),
+            raw=f"<{animated_str}:{name}:{eid}>",
+        ))
+    return entries
+
+def _write_emoji_file(entries: List[EmojiEntry]):
+    lines = []
+    with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+    for e in entries:
+        a = "a" if e.animated else ""
+        old = re.search(rf'^{e.var_name}\s*=\s*".*?"', content, re.MULTILINE)
+        new_val = f'{e.var_name} = "<{a}:{e.name}:{e.emoji_id}>"'
+        if old:
+            content = content[:old.start()] + new_val + content[old.end():]
+    with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
+        f.write(content)
+
+@router.get("/emojis")
+async def list_emojis():
+    entries = _parse_emoji_file()
+    return {"emojis": [e.dict() for e in entries], "total": len(entries)}
+
+@router.post("/emojis")
+async def add_emoji(var_name: str, name: str, emoji_id: str, animated: bool = False):
+    entries = _parse_emoji_file()
+    if any(e.var_name == var_name for e in entries):
+        raise HTTPException(400, f"Emoji '{var_name}' already exists")
+    a = "a" if animated else ""
+    line = f'{var_name} = "<{a}:{name}:{emoji_id}>"\n'
+    with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+    footer = "\n# ============================================================================\n"
+    if footer in content:
+        content = content.replace(footer, line + footer)
+    else:
+        content += "\n" + line
+    with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
+        f.write(content)
+    return {"status": "added", "var_name": var_name}
+
+@router.delete("/emojis/{var_name}")
+async def delete_emoji(var_name: str):
+    with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+    new_content = re.sub(
+        rf'^{re.escape(var_name)}\s*=\s*".*?"\n?', "", content, flags=re.MULTILINE
+    )
+    if new_content == content:
+        raise HTTPException(404, f"Emoji '{var_name}' not found")
+    with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
+        f.write(new_content)
+    return {"status": "deleted", "var_name": var_name}
