@@ -210,7 +210,8 @@ async def add_emoji(var_name: str, name: str, emoji_id: str, animated: bool = Fa
         f.write(content)
     from utils.emoji_store import save_override
     save_override(var_name, name, emoji_id, animated)
-    return {"status": "added", "var_name": var_name}
+    _schedule_restart()
+    return {"status": "added", "var_name": var_name, "restarting": True}
 
 @router.delete("/emojis/{var_name}")
 async def delete_emoji(var_name: str):
@@ -225,7 +226,8 @@ async def delete_emoji(var_name: str):
         f.write(new_content)
     from utils.emoji_store import delete_override
     delete_override(var_name)
-    return {"status": "deleted", "var_name": var_name}
+    _schedule_restart()
+    return {"status": "deleted", "var_name": var_name, "restarting": True}
 
 @router.post("/emojis/upload")
 async def upload_emoji(var_name: str, name: str, image_url: str, animated: bool = False):
@@ -274,7 +276,8 @@ async def upload_emoji(var_name: str, name: str, image_url: str, animated: bool 
                 f.write(content)
             from utils.emoji_store import save_override
             save_override(var_name, name, new_id, animated)
-            return {"status": "uploaded", "var_name": var_name, "emoji_id": new_id, "name": name, "animated": animated}
+            _schedule_restart()
+            return {"status": "uploaded", "var_name": var_name, "emoji_id": new_id, "name": name, "animated": animated, "restarting": True}
 
 @router.patch("/emojis/{var_name}")
 async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, animated: bool = None):
@@ -293,4 +296,5 @@ async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, an
         f.write(content)
     from utils.emoji_store import save_override
     save_override(var_name, new_name, new_id, new_animated == "a")
-    return {"status": "updated", "var_name": var_name}
+    _schedule_restart()
+    return {"status": "updated", "var_name": var_name, "restarting": True}
