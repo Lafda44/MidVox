@@ -82,10 +82,16 @@ async def update_stats():
         
         await asyncio.sleep(600) # Update every 10 minutes
 
+_initial_ready_done = False
+
 # --- Event Handlers ---
 @client.event
 async def on_ready():
+    global _initial_ready_done
     await client.wait_until_ready()
+    if _initial_ready_done:
+        return
+    _initial_ready_done = True
     
     print("""
         \033[1;31m
@@ -102,18 +108,13 @@ async def on_ready():
     print(f"Connected to: {len(client.guilds)} guilds")
     print(f"Connected to: {len(client.users)} users")
 
-    # Sync application emojis on startup
-    await run_sync(TOKEN)
-
-    # Apply manual emoji overrides from local storage (overrides sync)
-    from utils.emoji_store import apply_overrides_to_file
-    EMOJI_PY_PATH = os.path.join(os.path.dirname(__file__), "utils", "emoji.py")
+    # Sync application emojis (upload missing ones); never modifies existing entries
     try:
-        changed = apply_overrides_to_file(EMOJI_PY_PATH)
-        if changed:
-            print("\033[32m◈ Manual emoji overrides applied\033[0m")
+        await run_sync(TOKEN)
     except Exception as e:
-        print(f"\033[33m◈ Failed to apply emoji overrides: {e}\033[0m")
+        print(f"\033[33m◈ Emoji sync failed: {e}\033[0m")
+
+    # Emoji overrides file is NOT applied here — editing emoji.py directly is the source of truth.
 
     # Backup SQLite databases to MongoDB
     if hasattr(client, "mongo") and client.mongo:

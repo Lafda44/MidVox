@@ -31,6 +31,7 @@ Call `run_sync(token)` once inside on_ready.
 import os
 import re
 import sys
+import json
 import base64
 import asyncio
 import aiohttp
@@ -137,16 +138,7 @@ async def run_sync(token: str) -> None:
             )
 
             if existing:
-                new_id = existing["id"]
-                if old_id != new_id:
-                    old_str = f"<{animated_str}:{name}:{old_id}>"
-                    new_str = f"<{animated_str}:{existing['name']}:{new_id}>"
-                    content = content.replace(old_str, new_str)
-                    updated = True
-                    fixed += 1
-                    warning(f"Auto-fixing ID: {name} {Fore.LIGHTBLACK_EX}-> {new_id}")
-                else:
-                    skipped += 1
+                skipped += 1
                 continue
 
             # Not found — upload it

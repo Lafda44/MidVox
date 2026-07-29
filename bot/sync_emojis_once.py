@@ -71,16 +71,7 @@ for animated_str, name, old_id in matches:
     )
 
     if existing:
-        new_id = existing["id"]
-        if old_id != new_id:
-            old_str = f"<{animated_str}:{name}:{old_id}>"
-            new_str = f"<{animated_str}:{existing['name']}:{new_id}>"
-            content = content.replace(old_str, new_str)
-            updated = True
-            fixed += 1
-            log(f"Fixed ID: {name} {old_id} -> {new_id}")
-        else:
-            skipped += 1
+        skipped += 1
         continue
 
     # Not found — download and upload
