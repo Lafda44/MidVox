@@ -383,7 +383,7 @@ async def main():
                 print(f"\033[33m◈ MongoDB: Failed to connect — {e}\033[0m")
                 print("\033[33m◈ AntiSpamPlus will use SQLite fallback\033[0m")
 
-max_retries = 5
+        max_retries = 5
         for attempt in range(max_retries):
             try:
                 await client.start(TOKEN)

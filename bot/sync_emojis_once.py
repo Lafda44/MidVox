@@ -31,6 +31,7 @@ if not matches:
 headers = {
     "Authorization": f"Bot {token}",
     "Content-Type": "application/json",
+    "User-Agent": "MidVoxBot/1.0",
 }
 
 def api(method, url, data=None):
