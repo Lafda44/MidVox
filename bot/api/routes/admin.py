@@ -17,7 +17,7 @@ from api.dependencies import get_bot
 from api.schemas import AdminStats, AdminNodeStatus, AdminConfig, AdminConfigUpdate
 from typing import TYPE_CHECKING, List
 from pydantic import BaseModel
-import os, re, aiosqlite, asyncio, threading
+import os, re, json, base64, aiosqlite, asyncio, threading, aiohttp
 
 if TYPE_CHECKING:
     from core.zyrox import zyrox
@@ -226,6 +226,55 @@ async def delete_emoji(var_name: str):
     from utils.emoji_store import delete_override
     delete_override(var_name)
     return {"status": "deleted", "var_name": var_name}
+
+@router.post("/emojis/upload")
+async def upload_emoji(var_name: str, name: str, image_url: str, animated: bool = False):
+    token = os.getenv("TOKEN") or os.getenv("BOT_TOKEN")
+    if not token:
+        raise HTTPException(500, "No bot token available")
+    entries = _parse_emoji_file()
+    if any(e.var_name == var_name for e in entries):
+        raise HTTPException(400, f"Emoji '{var_name}' already exists")
+    headers = {"Authorization": f"Bot {token}"}
+    async with aiohttp.ClientSession(headers=headers) as session:
+        async with session.get("https://discord.com/api/v10/users/@me") as r:
+            if r.status != 200:
+                raise HTTPException(502, "Failed to fetch bot info")
+            app_id = (await r.json()).get("id")
+        try:
+            async with session.get(image_url, timeout=aiohttp.ClientTimeout(total=30)) as img_r:
+                if img_r.status != 200:
+                    raise HTTPException(400, f"Failed to fetch image from URL (HTTP {img_r.status})")
+                img_data = await img_r.read()
+        except asyncio.TimeoutError:
+            raise HTTPException(400, "Timeout fetching image URL")
+        except Exception as e:
+            raise HTTPException(400, f"Failed to fetch image: {e}")
+        mime = "image/gif" if animated else "image/webp"
+        b64 = base64.b64encode(img_data).decode("utf-8")
+        image_uri = f"data:{mime};base64,{b64}"
+        async with session.post(
+            f"https://discord.com/api/v10/applications/{app_id}/emojis",
+            json={"name": name, "image": image_uri},
+        ) as r2:
+            if r2.status not in (200, 201):
+                raise HTTPException(502, f"Discord rejected upload: {await r2.text()}")
+            result = await r2.json()
+            new_id = result["id"]
+            a = "a" if animated else ""
+            line = f'{var_name} = "<{a}:{name}:{new_id}>"\n'
+            with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
+                content = f.read()
+            footer = "\n# ============================================================================\n"
+            if footer in content:
+                content = content.replace(footer, line + footer)
+            else:
+                content += "\n" + line
+            with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
+                f.write(content)
+            from utils.emoji_store import save_override
+            save_override(var_name, name, new_id, animated)
+            return {"status": "uploaded", "var_name": var_name, "emoji_id": new_id, "name": name, "animated": animated}
 
 @router.patch("/emojis/{var_name}")
 async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, animated: bool = None):
