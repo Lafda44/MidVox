@@ -135,13 +135,13 @@ async def sync_emojis(bot: "zyrox" = Depends(get_bot)):
     try:
         from utils.sync_emojis import run_sync
         await run_sync(token)
-        # Save all synced emojis to local override file
-        from utils.emoji_store import save_all
-        entries = _parse_emoji_file()
-        save_all([
-            {"var_name": e.var_name, "name": e.name, "emoji_id": e.emoji_id, "animated": e.animated}
-            for e in entries
-        ])
+        # Save synced state to local override file (manual overrides take priority)
+        from utils.emoji_store import _read, _write
+        overrides = _read()
+        for e in _parse_emoji_file():
+            # Only add if no manual override exists for this emoji
+            overrides.setdefault(e.var_name, {"name": e.name, "emoji_id": e.emoji_id, "animated": e.animated})
+        _write(overrides)
         _schedule_restart()
         return {"status": "synced", "detail": "Emoji IDs synced. Restarting..."}
     except Exception as e:
