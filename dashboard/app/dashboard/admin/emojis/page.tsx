@@ -37,7 +37,7 @@ export default function EmojiManagerPage() {
     setSyncing(true);
     try {
       await api.syncEmojis();
-      toast.success("Emoji sync triggered! May need restart to apply.");
+      toast.success("Emoji sync complete — restarting bot...");
     } catch {
       toast.error("Sync failed");
     } finally {
@@ -52,9 +52,8 @@ export default function EmojiManagerPage() {
     }
     try {
       await api.request<any>(`/admin/emojis?var_name=${encodeURIComponent(newVar)}&name=${encodeURIComponent(newName)}&emoji_id=${encodeURIComponent(newId)}&animated=${newAnimated}`, { method: "POST" });
-      toast.success("Emoji added");
+      toast.success("Emoji added — restarting bot...");
       setNewVar(""); setNewName(""); setNewId(""); setNewAnimated(false);
-      fetchEmojis();
     } catch (e: any) {
       toast.error(e.message || "Failed to add");
     }
@@ -63,8 +62,7 @@ export default function EmojiManagerPage() {
   const handleDelete = async (varName: string) => {
     try {
       await api.request<any>(`/admin/emojis/${encodeURIComponent(varName)}`, { method: "DELETE" });
-      toast.success("Emoji deleted");
-      fetchEmojis();
+      toast.success("Emoji deleted — restarting bot...");
     } catch {
       toast.error("Failed to delete");
     }
@@ -85,9 +83,8 @@ export default function EmojiManagerPage() {
   const saveEdit = async (varName: string) => {
     try {
       await api.request<any>(`/admin/emojis/${encodeURIComponent(varName)}?name=${encodeURIComponent(editName)}&emoji_id=${encodeURIComponent(editId)}`, { method: "PATCH" });
-      toast.success("Emoji updated");
+      toast.success("Emoji updated — restarting bot...");
       setEditing(null);
-      fetchEmojis();
     } catch {
       toast.error("Failed to update");
     }

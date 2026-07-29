@@ -17,7 +17,7 @@ from api.dependencies import get_bot
 from api.schemas import AdminStats, AdminNodeStatus, AdminConfig, AdminConfigUpdate
 from typing import TYPE_CHECKING, List
 from pydantic import BaseModel
-import os, re, aiosqlite, asyncio, sys
+import os, re, aiosqlite, asyncio, sys, threading
 
 if TYPE_CHECKING:
     from core.zyrox import zyrox
@@ -135,11 +135,15 @@ async def sync_emojis(bot: "zyrox" = Depends(get_bot)):
     try:
         from utils.sync_emojis import run_sync
         await run_sync(token)
-        return {"status": "synced", "detail": "Emoji IDs updated. Restart bot to apply."}
+        _schedule_restart()
+        return {"status": "synced", "detail": "Emoji IDs updated. Restarting..."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Emoji sync failed: {e}")
 
 EMOJI_PY_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "utils", "emoji.py")
+
+def _schedule_restart():
+    threading.Timer(2.0, lambda: os._exit(0)).start()
 
 class EmojiEntry(BaseModel):
     name: str
@@ -197,6 +201,7 @@ async def add_emoji(var_name: str, name: str, emoji_id: str, animated: bool = Fa
         content += "\n" + line
     with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
         f.write(content)
+    _schedule_restart()
     return {"status": "added", "var_name": var_name}
 
 @router.delete("/emojis/{var_name}")
@@ -210,6 +215,7 @@ async def delete_emoji(var_name: str):
         raise HTTPException(404, f"Emoji '{var_name}' not found")
     with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
         f.write(new_content)
+    _schedule_restart()
     return {"status": "deleted", "var_name": var_name}
 
 @router.patch("/emojis/{var_name}")
@@ -227,4 +233,5 @@ async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, an
     content = content[:match.start()] + new_line + content[match.end():]
     with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
         f.write(content)
+    _schedule_restart()
     return {"status": "updated", "var_name": var_name}

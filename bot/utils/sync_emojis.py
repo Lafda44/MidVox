@@ -33,6 +33,7 @@ import re
 import sys
 import base64
 import asyncio
+import threading
 import aiohttp
 from colorama import Fore, Style, init
 
@@ -52,7 +53,8 @@ def system(msg):  _log("EmojiSync", Fore.MAGENTA, "★", msg)
 
 
 def _restart() -> None:
-    system(f"Bot should restart here to load updated emoji IDs, but skipping to keep API alive.")
+    system("Restarting bot to load updated emoji IDs...")
+    threading.Timer(2.0, lambda: os._exit(0)).start()
 
 
 async def _fetch_emoji_image(session: aiohttp.ClientSession, emoji_id: str, animated: bool):
