@@ -7,7 +7,7 @@ async function proxy(
   params: { path: string[] },
   method: string
 ) {
-  const endpoint = "/" + params.path.join("/") + (req.nextUrl.pathname.endsWith("/") ? "/" : "");
+  const endpoint = "/" + params.path.join("/") + (req.nextUrl.pathname.endsWith("/") ? "/" : "") + req.nextUrl.search;
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
