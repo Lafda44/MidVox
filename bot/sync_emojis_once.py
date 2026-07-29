@@ -56,6 +56,19 @@ data = api("GET", f"https://discord.com/api/v10/applications/{app_id}/emojis")
 app_emojis = data.get("items", []) if isinstance(data, dict) else data or []
 log(f"Application has {len(app_emojis)} emojis")
 
+# Load manual overrides — IDs the user explicitly set should never be auto-fixed
+OVERRIDE_PATH = os.path.join(os.path.dirname(__file__), "db", "emoji_overrides.json")
+protected_ids = set()
+try:
+    if os.path.exists(OVERRIDE_PATH):
+        with open(OVERRIDE_PATH, "r") as _f:
+            _data = json.load(_f)
+        for _info in _data.values():
+            if _info.get("emoji_id"):
+                protected_ids.add(_info["emoji_id"])
+except Exception:
+    pass
+
 updated = False
 uploaded = fixed = skipped = failed = 0
 
@@ -71,7 +84,19 @@ for animated_str, name, old_id in matches:
     )
 
     if existing:
-        skipped += 1
+        new_id = existing["id"]
+        if old_id != new_id:
+            if old_id in protected_ids:
+                skipped += 1
+                continue
+            old_str = f"<{animated_str}:{name}:{old_id}>"
+            new_str = f"<{animated_str}:{existing['name']}:{new_id}>"
+            content = content.replace(old_str, new_str)
+            updated = True
+            fixed += 1
+            log(f"Fixed ID: {name} {old_id} -> {new_id}")
+        else:
+            skipped += 1
         continue
 
     # Not found — download and upload
