@@ -1,15 +1,16 @@
-import os, re
+import os, re, glob
 import aiosqlite
 from motor.motor_asyncio import AsyncIOMotorClient
 
 
-SQLITE_DBS = [
-    "db/automod.db",
-    "db/anti.db",
-    "db/admin_config.db",
-    "db/antispamplus.db",
-]
+def _discover_db_paths():
+    """Auto-discover all .db files in the db/ directory."""
+    db_dir = os.path.join(os.path.dirname(__file__), "..", "db")
+    if not os.path.isdir(db_dir):
+        return []
+    return sorted(glob.glob(os.path.join(db_dir, "*.db")))
 
+SQLITE_DBS = _discover_db_paths() or []
 
 class MongoManager:
     def __init__(self):
@@ -20,7 +21,11 @@ class MongoManager:
         uri = uri or os.getenv("MONGO_URI")
         if not uri:
             raise ValueError("MONGO_URI is not set")
-        self._client = AsyncIOMotorClient(uri)
+        # Add TLS params if missing — Render's SSL env may not have the right CAs
+        if "tls=" not in uri and "ssl=" not in uri:
+            sep = "&" if "?" in uri else "?"
+            uri += f"{sep}tls=true&tlsAllowInvalidCertificates=true"
+        self._client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=10000)
         self._db = self._client[db_name]
         await self._client.admin.command("ping")
         return self
