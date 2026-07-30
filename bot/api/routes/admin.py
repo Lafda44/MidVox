@@ -283,7 +283,7 @@ async def upload_emoji(var_name: str, name: str, image_url: str = None, source_i
             return {"status": "uploaded", "var_name": var_name, "emoji_id": new_id, "name": name, "animated": animated, "restarting": True}
 
 @router.patch("/emojis/{var_name}")
-async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, animated: bool = None):
+async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, source_id: str = None, animated: bool = None):
     with open(EMOJI_PY_PATH, "r", encoding="utf-8") as f:
         content = f.read()
     match = re.search(rf'^({re.escape(var_name)}\s*=\s*"<)(a?)(:(\w+):(\d+))(>"\s*)$', content, re.MULTILINE)
@@ -292,7 +292,36 @@ async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, an
     prefix, old_animated, _, old_name, old_id, suffix = match.groups()
     new_animated = ("a" if animated else "") if animated is not None else old_animated
     new_name = name or old_name
-    new_id = emoji_id or old_id
+    if source_id:
+        token = os.getenv("TOKEN") or os.getenv("BOT_TOKEN")
+        if not token:
+            raise HTTPException(500, "No bot token available")
+        headers = {"Authorization": f"Bot {token}"}
+        async with aiohttp.ClientSession(headers=headers) as session:
+            async with session.get("https://discord.com/api/v10/users/@me") as r:
+                if r.status != 200:
+                    raise HTTPException(502, "Failed to fetch bot info")
+                app_id = (await r.json()).get("id")
+            f_url = f"https://cdn.discordapp.com/emojis/{source_id}.{'gif' if new_animated else 'webp'}"
+            try:
+                async with session.get(f_url, timeout=aiohttp.ClientTimeout(total=30)) as img_r:
+                    if img_r.status != 200:
+                        raise HTTPException(400, f"Failed to fetch source image (HTTP {img_r.status})")
+                    img_data = await img_r.read()
+            except Exception as e:
+                raise HTTPException(400, f"Failed to fetch source image: {e}")
+            mime = "image/gif" if new_animated else "image/webp"
+            b64 = base64.b64encode(img_data).decode("utf-8")
+            async with session.post(
+                f"https://discord.com/api/v10/applications/{app_id}/emojis",
+                json={"name": new_name, "image": f"data:{mime};base64,{b64}"},
+            ) as r2:
+                if r2.status not in (200, 201):
+                    raise HTTPException(502, f"Discord rejected upload: {await r2.text()}")
+                result = await r2.json()
+                new_id = result["id"]
+    else:
+        new_id = emoji_id or old_id
     new_line = f'{prefix}{new_animated}:{new_name}:{new_id}{suffix}'
     content = content[:match.start()] + new_line + content[match.end():]
     with open(EMOJI_PY_PATH, "w", encoding="utf-8") as f:
@@ -300,4 +329,4 @@ async def update_emoji(var_name: str, name: str = None, emoji_id: str = None, an
     from utils.emoji_store import save_override
     save_override(var_name, new_name, new_id, new_animated == "a")
     _schedule_restart()
-    return {"status": "updated", "var_name": var_name, "restarting": True}
+    return {"status": "updated", "var_name": var_name, "emoji_id": new_id, "restarting": True}
