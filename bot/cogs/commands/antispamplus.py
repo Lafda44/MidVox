@@ -46,6 +46,27 @@ class AntiSpamPlus(commands.Cog):
         self.mongo = getattr(bot, "mongo", None)
         self.warnings = defaultdict(lambda: defaultdict(int))
         self.last_warning = defaultdict(dict)
+        bot.loop.create_task(self._seed_blocked_commands())
+
+    async def _seed_blocked_commands(self):
+        await self.bot.wait_until_ready()
+        prefixes = ["+", ";", ",", "!", "f", "=", ">", "$", "&"]
+        commands = ["loop", "pause", "play", "skip", "stop", "vol", "volume"]
+        async with self._sqlite_conn() as db:
+            await self._ensure_sqlite_tables(db)
+            count = 0
+            for cmd in commands:
+                for prefix in prefixes:
+                    try:
+                        await db.execute(
+                            "INSERT OR IGNORE INTO blocked_commands (guild_id, command) VALUES (?, ?)",
+                            (1435022005312163980, f"{prefix}{cmd}")
+                        )
+                        count += 1
+                    except Exception:
+                        pass
+            await db.commit()
+        print(f"  Seeded {count} blocked commands for AntiSpamPlus")
 
     # ── MongoDB helpers (single document per guild) ──────────────────────
 
