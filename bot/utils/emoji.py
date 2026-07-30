@@ -20,9 +20,8 @@ All emoji definitions are stored here for easy management and consistency.
 # ============================================================================
 # DISCORD CUSTOM EMOJIS (Static)
 # ============================================================================
-BOOST = "<:Booster~1: 1532243199442030664>"
+BOOST = "<:Booster:1532243199442030664>"
 BUG_HUNTER = "<:BugHunterLevel1:1531959060646203443>"
-BUG_HUNTER_LVL2 = "<:BugHunterLvl2:1122549925237375086>"
 CAST = "<:zcast:1531958748569145444>"
 CERTIFIED_MODERATOR = "<:CertifiedDiscordModerator:1531958795318591602>"
 CHANNEL = "<:channel:1531959222781083808>"
@@ -38,7 +37,7 @@ DISABLE = "<:Disable:1531959040073269262>"
 DND = "<:dnd:1531958863127908433>"
 EARLY_SUPPORTER = "<:EarlySupporter:1531958611209748592>"
 ENABLE = "<:Enable:1531959283627851806>"
-ERROR = "<:error:1397218903389044776>"
+ERROR = "❌"
 FORWARD = "<:forward:1531959155584270358>"
 GAMES = "<:games:1531959322509181008>"
 HANDSHAKE = "<:handshake:1531959311574503434>"
@@ -75,7 +74,7 @@ NEW = "<:New:1531958969122160670>"
 NEXT = "<:icons_next:1531958758622756894>"
 NEXT_ALT1 = "<:next:1531958723726282843>"
 OFFLINE = "<:offline:1531958691165765713>"
-PARTNER_BADGE = "<:PartneredServerOwner:1122549945532297246>"
+# PARTNER_BADGE deleted — broken CDN source
 PC = "<:pc:1531959035329511557>"
 PIN = "<:zpin:1531958785155797123>"
 PREVIOUS = "<:next:1531958723726282843>"
@@ -151,7 +150,7 @@ GIFD = "<a:GIFD:1531958941309993081>"
 GIFN = "<a:GIFN:1531958964152172624>"
 HYPESQUAD_BALANCE = "<a:a_Hypesquad_Balance:1531958933122453595>"
 HYPESQUAD_BRAVERY = "<a:a_Hypesquad_Bravery:1531958697226534994>"
-HYPESQUAD_EVENTS = "<a:HypesquadEvents:1448949663821598812>"
+# HYPESQUAD_EVENTS deleted — broken CDN source
 KING_ALT1 = "<a:king:1531958848154238986>"
 LOADING = "<a:loading:1531958639676358826>"
 LOADINGRED = "<a:loadingred:1531959171463778465>"
@@ -181,13 +180,13 @@ _37496ALERT = "<a:37496alert:1531959273834414210>"
 # ============================================================================
 DISCORD_BADGE_EMOJIS = {
     "staff": STAFF,
-    "partner": PARTNER_BADGE,
+    "partner": "🏆",
     "hypesquad": HYPESQUAD_BRILLIANCE,
     "hypesquad_bravery": HYPESQUAD_BRAVERY,
     "hypesquad_brilliance": HYPESQUAD_BRILLIANCE,
     "hypesquad_balance": HYPESQUAD_BALANCE,
     "bug_hunter": BUG_HUNTER,
-    "bug_hunter_level_2": BUG_HUNTER_LVL2,
+    "bug_hunter_level_2": BUG_HUNTER,
     "early_supporter": EARLY_SUPPORTER,
     "early_verified_bot_developer": EARLY_VERIFIED_BOT_DEV,
     "certified_moderator": CERTIFIED_MODERATOR,

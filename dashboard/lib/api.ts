@@ -250,5 +250,4 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
-  syncEmojis: () => request<{ status: string }>("/admin/sync-emojis", { method: "POST" }),
 };
