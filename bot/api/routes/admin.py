@@ -150,7 +150,7 @@ async def sync_emojis(bot: "zyrox" = Depends(get_bot)):
 EMOJI_PY_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "utils", "emoji.py")
 
 def _schedule_restart():
-    threading.Timer(5.0, lambda: os._exit(0)).start()
+    threading.Timer(30.0, lambda: os._exit(0)).start()
 
 class EmojiEntry(BaseModel):
     name: str
