@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import { SyncEmojiButton } from "./sync-emoji-button";
 
 interface AntiSpamPlusFormProps {
   initialConfig: any;
@@ -320,8 +319,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
             <SmilePlus className="h-4 w-4 text-yellow-400" />
             <h3 className="text-sm font-bold text-white">Emoji Sync</h3>
           </div>
-          <p className="text-xs text-slate-500 mb-4">Sync custom emojis so they show correctly in bot messages.</p>
-          <SyncEmojiButton />
+          <p className="text-xs text-slate-500 mb-4">Emojis are managed directly in emoji.py on GitHub.</p>
         </div>
       </div>
     </div>
