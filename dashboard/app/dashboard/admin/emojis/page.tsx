@@ -16,7 +16,8 @@ export default function EmojiManagerPage() {
   const [newName, setNewName] = useState("");
   const [newId, setNewId] = useState("");
   const [newUrl, setNewUrl] = useState("");
-  const [useUrl, setUseUrl] = useState(false);
+  const [newSourceId, setNewSourceId] = useState("");
+  const [mode, setMode] = useState<"id" | "url" | "source">("id");
   const [newAnimated, setNewAnimated] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
@@ -49,12 +50,12 @@ export default function EmojiManagerPage() {
   };
 
   const handleAdd = async () => {
-    if (!newVar || !newName || (!newId && !newUrl)) {
+    if (!newVar || !newName || (!newId && !newUrl && !newSourceId)) {
       toast.error("Fill all fields");
       return;
     }
     const v = newVar, n = newName, a = newAnimated;
-    if (useUrl) {
+    if (mode === "url") {
       setEmojis(prev => [...prev, { var_name: v, name: n, emoji_id: "uploading...", animated: a }]);
       setNewVar(""); setNewName(""); setNewUrl(""); setNewAnimated(false);
       try {
@@ -63,6 +64,17 @@ export default function EmojiManagerPage() {
         fetchEmojis();
       } catch (e: any) {
         toast.error(e.message || "Failed to upload");
+        fetchEmojis();
+      }
+    } else if (mode === "source") {
+      setEmojis(prev => [...prev, { var_name: v, name: n, emoji_id: "uploading...", animated: a }]);
+      setNewVar(""); setNewName(""); setNewSourceId(""); setNewAnimated(false);
+      try {
+        const res = await api.request<any>(`/admin/emojis/upload?var_name=${encodeURIComponent(v)}&name=${encodeURIComponent(n)}&source_id=${encodeURIComponent(newSourceId)}&animated=${a}`, { method: "POST" });
+        toast.success(`Uploaded as ID: ${res.emoji_id}`);
+        fetchEmojis();
+      } catch (e: any) {
+        toast.error(e.message || "Failed to copy");
         fetchEmojis();
       }
     } else {
@@ -149,20 +161,23 @@ export default function EmojiManagerPage() {
       <div className="bg-[#141B2D] border border-slate-800 rounded-2xl p-6 space-y-4">
         <h3 className="text-sm font-bold text-white flex items-center gap-2"><Plus className="h-4 w-4 text-green-400" /> Add Emoji</h3>
         <div className="flex gap-2 mb-3">
-          <Button size="sm" variant={useUrl ? "secondary" : "default"} onClick={() => { setUseUrl(false); setNewUrl(""); }}>By ID</Button>
-          <Button size="sm" variant={useUrl ? "default" : "secondary"} onClick={() => { setUseUrl(true); setNewId(""); }}>By URL</Button>
+          <Button size="sm" variant={mode === "id" ? "default" : "secondary"} onClick={() => { setMode("id"); setNewUrl(""); setNewSourceId(""); }}>By ID</Button>
+          <Button size="sm" variant={mode === "url" ? "default" : "secondary"} onClick={() => { setMode("url"); setNewId(""); setNewSourceId(""); }}>By URL</Button>
+          <Button size="sm" variant={mode === "source" ? "default" : "secondary"} onClick={() => { setMode("source"); setNewId(""); setNewUrl(""); }}>From ID</Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           <Input placeholder="Variable name (e.g. MY_EMOJI)" value={newVar} onChange={(e) => setNewVar(e.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, ""))} className="bg-slate-900/50 border-slate-800" />
           <Input placeholder="Emoji name (e.g. myemoji)" value={newName} onChange={(e) => setNewName(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))} className="bg-slate-900/50 border-slate-800" />
-          {useUrl ? (
+          {mode === "url" ? (
             <Input placeholder="Image URL (e.g. https://example.com/emoji.png)" value={newUrl} onChange={(e) => setNewUrl(e.target.value)} className="bg-slate-900/50 border-slate-800 md:col-span-2" />
+          ) : mode === "source" ? (
+            <Input placeholder="Existing emoji ID to copy (numbers)" value={newSourceId} onChange={(e) => setNewSourceId(e.target.value.replace(/\D/g, ""))} className="bg-slate-900/50 border-slate-800" />
           ) : (
             <Input placeholder="Discord emoji ID (numbers)" value={newId} onChange={(e) => setNewId(e.target.value.replace(/\D/g, ""))} className="bg-slate-900/50 border-slate-800" />
           )}
           <div className="flex gap-2">
             <Button variant={newAnimated ? "default" : "secondary"} onClick={() => setNewAnimated(!newAnimated)} className="flex-1">{newAnimated ? "Animated" : "Static"}</Button>
-            <Button onClick={handleAdd} className="gap-2"><Plus className="h-4 w-4" /> {useUrl ? "Upload" : "Add"}</Button>
+            <Button onClick={handleAdd} className="gap-2"><Plus className="h-4 w-4" /> {mode === "id" ? "Add" : "Upload"}</Button>
           </div>
         </div>
       </div>

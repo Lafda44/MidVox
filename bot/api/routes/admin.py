@@ -230,7 +230,9 @@ async def delete_emoji(var_name: str):
     return {"status": "deleted", "var_name": var_name, "restarting": True}
 
 @router.post("/emojis/upload")
-async def upload_emoji(var_name: str, name: str, image_url: str, animated: bool = False):
+async def upload_emoji(var_name: str, name: str, image_url: str = None, source_id: str = None, animated: bool = False):
+    if not image_url and not source_id:
+        raise HTTPException(400, "Provide either image_url or source_id")
     token = os.getenv("TOKEN") or os.getenv("BOT_TOKEN")
     if not token:
         raise HTTPException(500, "No bot token available")
@@ -243,13 +245,14 @@ async def upload_emoji(var_name: str, name: str, image_url: str, animated: bool 
             if r.status != 200:
                 raise HTTPException(502, "Failed to fetch bot info")
             app_id = (await r.json()).get("id")
+        fetch_url = image_url or f"https://cdn.discordapp.com/emojis/{source_id}.{'gif' if animated else 'webp'}"
         try:
-            async with session.get(image_url, timeout=aiohttp.ClientTimeout(total=30)) as img_r:
+            async with session.get(fetch_url, timeout=aiohttp.ClientTimeout(total=30)) as img_r:
                 if img_r.status != 200:
-                    raise HTTPException(400, f"Failed to fetch image from URL (HTTP {img_r.status})")
+                    raise HTTPException(400, f"Failed to fetch image (HTTP {img_r.status})")
                 img_data = await img_r.read()
         except asyncio.TimeoutError:
-            raise HTTPException(400, "Timeout fetching image URL")
+            raise HTTPException(400, "Timeout fetching image")
         except Exception as e:
             raise HTTPException(400, f"Failed to fetch image: {e}")
         mime = "image/gif" if animated else "image/webp"
