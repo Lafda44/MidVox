@@ -242,6 +242,14 @@ export const api = {
       body: JSON.stringify(data),
     }),
 
+  // Insta Downloader
+  getInstaDL: (guildId: string) => request<any>(`/guilds/${guildId}/instadl`),
+  updateInstaDL: (guildId: string, data: any) =>
+    request<any>(`/guilds/${guildId}/instadl`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
   // Admin
   getAdminStats: () => request<AdminStats>("/admin/stats"),
   getAdminConfig: () => request<AdminConfig>("/admin/config"),

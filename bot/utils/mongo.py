@@ -34,6 +34,10 @@ class MongoManager:
     def antispamplus_config(self):
         return self._db["antispamplus_config"]
 
+    @property
+    def instadl_config(self):
+        return self._db["instadl_config"]
+
     async def close(self):
         if self._client:
             self._client.close()

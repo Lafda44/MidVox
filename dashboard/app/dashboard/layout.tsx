@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Server, ShieldCheck, Ticket, BarChart4, FileText, Settings,
   Menu, X, Bell, User, Search, ChevronRight, Sparkles, LogOut,
-  LifeBuoy, ChevronDown, Bot, Shield
+  LifeBuoy, ChevronDown, Bot, Shield, Download
 } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { cn, isAdmin } from "@/lib/utils";
@@ -110,6 +110,12 @@ export default function DashboardLayout({
             { name: "Join DM", href: `/dashboard/guild/${currentGuildId}/joindm`, icon: User },
             { name: "Invites", href: `/dashboard/guild/${currentGuildId}/invites`, icon: Search },
             { name: "Tracking", href: `/dashboard/guild/${currentGuildId}/tracking`, icon: BarChart4 },
+          ],
+        },
+        {
+          name: "Media",
+          items: [
+            { name: "Insta Downloader", href: `/dashboard/guild/${currentGuildId}/instadl`, icon: Download },
           ],
         },
         {

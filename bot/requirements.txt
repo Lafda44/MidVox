@@ -39,3 +39,4 @@ uvicorn==0.46.0
 fastapi
 slowapi
 pycloudflared
+yt-dlp

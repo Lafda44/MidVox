@@ -31,10 +31,10 @@ export default async function DashboardPage() {
   }
 
   const stats = [
-    { name: "Total Guilds", value: botInfo.guilds.toLocaleString(), icon: ServerIcon },
-    { name: "Total Users", value: botInfo.users.toLocaleString(), icon: Users },
-    { name: "Commands", value: botInfo.commands.toLocaleString(), icon: Zap },
-    { name: "API Latency", value: botInfo.latency, icon: Activity },
+    { name: "Total Guilds", value: botInfo.guilds.toLocaleString(), icon: <ServerIcon className="h-5 w-5 text-primary" /> },
+    { name: "Total Users", value: botInfo.users.toLocaleString(), icon: <Users className="h-5 w-5 text-primary" /> },
+    { name: "Commands", value: botInfo.commands.toLocaleString(), icon: <Zap className="h-5 w-5 text-primary" /> },
+    { name: "API Latency", value: botInfo.latency, icon: <Activity className="h-5 w-5 text-primary" /> },
   ];
 
   return (

@@ -375,3 +375,15 @@ class AntiSpamPlusUpdate(BaseModel):
     remove_excluded_channel: Optional[str] = None
     add_target_channel: Optional[str] = None
     remove_target_channel: Optional[str] = None
+
+class InstaDLConfig(BaseModel):
+    guild_id: int
+    enabled: bool = False
+    delete_original: bool = False
+    channels: List[str] = []
+
+class InstaDLUpdate(BaseModel):
+    enabled: Optional[bool] = None
+    delete_original: Optional[bool] = None
+    add_channel: Optional[str] = None
+    remove_channel: Optional[str] = None

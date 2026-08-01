@@ -28,7 +28,8 @@ from api.schemas import (
     InvcConfig, InvcUpdate,
     RRConfig, RRUpdate, ReactionRoleEntry,
     InviteStat, InvitesLeaderboard,
-    AntiSpamPlusConfig, AntiSpamPlusUpdate
+    AntiSpamPlusConfig, AntiSpamPlusUpdate,
+    InstaDLConfig, InstaDLUpdate
 )
 from typing import TYPE_CHECKING, List, Optional
 import math
@@ -1473,5 +1474,45 @@ async def patch_guild_antispamplus(guild_id: int, data: AntiSpamPlusUpdate, bot:
     result = await cog.get_config(guild_id)
     print(f"[AntiSpamPlus PATCH] guild={guild_id} result delete_messages={result.get('delete_messages')} target_users={result.get('target_users')}")
     return result
+
+
+@router.get("/{guild_id}/instadl", response_model=InstaDLConfig, summary="Get Insta Downloader config", description="Retrieves the Instagram auto-download channels and settings for a guild.")
+async def get_guild_instadl(guild_id: int, bot: "zyrox" = Depends(get_bot)):
+    cog = bot.get_cog("InstaDownloader")
+    if not cog:
+        raise HTTPException(status_code=503, detail="Insta Downloader service unavailable")
+    try:
+        return await cog.get_config(guild_id)
+    except Exception as e:
+        print(f"[InstaDL GET] guild={guild_id} error: {e}")
+        raise HTTPException(status_code=500, detail=f"InstaDL config error: {str(e)}")
+
+@router.patch("/{guild_id}/instadl", response_model=InstaDLConfig, summary="Update Insta Downloader config", description="Updates the Insta Downloader channels and options for a guild.")
+async def patch_guild_instadl(guild_id: int, data: InstaDLUpdate, bot: "zyrox" = Depends(get_bot)):
+    cog = bot.get_cog("InstaDownloader")
+    if not cog:
+        raise HTTPException(status_code=503, detail="Insta Downloader service unavailable")
+
+    payload = data.dict(exclude_unset=True)
+    print(f"[InstaDL PATCH] guild={guild_id} payload={payload}")
+
+    if "enabled" in payload or "delete_original" in payload:
+        await cog.update_config(guild_id, payload)
+
+    if payload.get("add_channel"):
+        try:
+            cid = int(payload["add_channel"])
+        except (TypeError, ValueError):
+            raise HTTPException(status_code=422, detail="Invalid channel id")
+        await cog.add_channel(guild_id, cid)
+
+    if payload.get("remove_channel"):
+        try:
+            cid = int(payload["remove_channel"])
+        except (TypeError, ValueError):
+            raise HTTPException(status_code=422, detail="Invalid channel id")
+        await cog.remove_channel(guild_id, cid)
+
+    return await cog.get_config(guild_id)
 
 

@@ -1,0 +1,350 @@
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║                                                                  ║
+# ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
+# ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
+# ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
+# ║                                                                  ║
+# ║            © 2026 CodeX Devs — All Rights Reserved              ║
+# ║                                                                  ║
+# ║   discord  ──  https://discord.gg/codexdev                      ║
+# ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
+# ║   github   ──  https://github.com/RayExo                        ║
+# ║                                                                  ║
+# ╚══════════════════════════════════════════════════════════════════╝
+
+"""
+Insta Downloader — when an Instagram link is posted in a configured
+channel, download the media (reel/post) and repost it to Discord so it
+plays inline. Instagram embeds don't render in Discord, hence the bot.
+
+Storage mirrors the AntiSpamPlus pattern: SQLite is always written (a
+crash/restart-safe mirror), MongoDB is the durable store when reachable.
+"""
+
+import discord
+from discord.ext import commands
+import aiosqlite
+import asyncio
+import os
+import re
+import time
+import tempfile
+from collections import defaultdict
+
+INSTA_URL_RE = re.compile(
+    r"(?:https?://)?(?:www\.|m\.|dl\.)?(?:instagram\.com|instagr\.am)/"
+    r"(?:reel|reels|p|tv|stories)/[\w\-]+",
+    re.IGNORECASE,
+)
+
+CONFIG_DEFAULTS = {
+    "enabled": False,
+    "delete_original": False,
+}
+
+
+class InstaDownloader(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self._channel_cooldown = defaultdict(float)
+        self._download_lock = asyncio.Lock()
+
+    @property
+    def mongo(self):
+        return getattr(self.bot, "mongo", None)
+
+    # ── SQLite mirror ──────────────────────────────────────────────────
+
+    def _sqlite_conn(self):
+        os.makedirs("db", exist_ok=True)
+        return aiosqlite.connect("db/instadl.db")
+
+    async def _ensure_tables(self, db):
+        tables = [
+            """CREATE TABLE IF NOT EXISTS config (
+                guild_id INTEGER PRIMARY KEY,
+                enabled INTEGER DEFAULT 0,
+                delete_original INTEGER DEFAULT 0
+            )""",
+            """CREATE TABLE IF NOT EXISTS channels (
+                guild_id INTEGER, channel_id INTEGER, PRIMARY KEY (guild_id, channel_id)
+            )""",
+        ]
+        for t in tables:
+            await db.execute(t)
+        await db.commit()
+
+    async def _sqlite_get_config(self, guild_id):
+        async with self._sqlite_conn() as db:
+            await self._ensure_tables(db)
+            cursor = await db.execute(
+                "SELECT enabled, delete_original FROM config WHERE guild_id = ?",
+                (guild_id,),
+            )
+            row = await cursor.fetchone()
+            if not row:
+                await db.execute(
+                    "INSERT INTO config (guild_id) VALUES (?)", (guild_id,)
+                )
+                await db.commit()
+                row = (0, 0)
+            cursor = await db.execute(
+                "SELECT channel_id FROM channels WHERE guild_id = ?", (guild_id,)
+            )
+            channels = [r[0] for r in await cursor.fetchall()]
+            return {
+                "guild_id": guild_id,
+                "enabled": bool(row[0]),
+                "delete_original": bool(row[1]),
+                "channels": [str(c) for c in channels],
+            }
+
+    # ── Mongo (durable) ────────────────────────────────────────────────
+
+    def _default_doc(self, guild_id):
+        return {
+            "_id": str(guild_id),
+            "guild_id": guild_id,
+            **CONFIG_DEFAULTS,
+            "channels": [],
+        }
+
+    async def _flush_to_mongo(self, guild_id, sqlite_cfg):
+        """Push the SQLite mirror state into Mongo (lazy flush on read)."""
+        if not self.mongo:
+            return
+        try:
+            doc = self._default_doc(guild_id)
+            doc.update(sqlite_cfg)
+            doc["guild_id"] = int(guild_id)
+            doc["_id"] = str(guild_id)
+            doc.pop("_doc_id", None)
+            await self.mongo.instadl_config.replace_one(
+                {"_id": str(guild_id)}, doc, upsert=True
+            )
+        except Exception as e:
+            print(f"[InstaDL] Mongo flush failed for {guild_id}: {e}")
+
+    async def _mongo_get(self, guild_id):
+        if not self.mongo:
+            return None
+        try:
+            return await self.mongo.instadl_config.find_one({"_id": str(guild_id)})
+        except Exception as e:
+            print(f"[InstaDL] Mongo read failed: {e}")
+            return None
+
+    # ── Public API (used by bot/api routes) ────────────────────────────
+
+    async def get_config(self, guild_id):
+        doc = await self._mongo_get(guild_id)
+        if doc:
+            return {
+                "guild_id": guild_id,
+                "enabled": bool(doc.get("enabled", False)),
+                "delete_original": bool(doc.get("delete_original", False)),
+                "channels": [str(c) for c in doc.get("channels", [])],
+            }
+        cfg = await self._sqlite_get_config(guild_id)
+        # Lazy flush: if Mongo is reachable but the doc is missing, push
+        # the mirror state so nothing saved during an outage is lost.
+        if self.mongo and (cfg["enabled"] or cfg["channels"] or cfg["delete_original"]):
+            await self._flush_to_mongo(guild_id, cfg)
+        return cfg
+
+    async def update_config(self, guild_id, data):
+        async with self._sqlite_conn() as db:
+            await self._ensure_tables(db)
+            row = await (await db.execute(
+                "SELECT enabled, delete_original FROM config WHERE guild_id = ?",
+                (guild_id,),
+            )).fetchone()
+            enabled = row[0] if row else 0
+            delete_original = row[1] if row else 0
+            if "enabled" in data:
+                enabled = 1 if data["enabled"] else 0
+            if "delete_original" in data:
+                delete_original = 1 if data["delete_original"] else 0
+            await db.execute(
+                """INSERT OR REPLACE INTO config (guild_id, enabled, delete_original)
+                   VALUES (?, ?, ?)""",
+                (guild_id, enabled, delete_original),
+            )
+            await db.commit()
+
+        if self.mongo:
+            doc = await self._mongo_get(guild_id)
+            if doc:
+                doc["enabled"] = bool(enabled)
+                doc["delete_original"] = bool(delete_original)
+                try:
+                    await self.mongo.instadl_config.replace_one(
+                        {"_id": str(guild_id)}, doc, upsert=True
+                    )
+                except Exception as e:
+                    print(f"[InstaDL] Mongo update failed (mirror kept): {e}")
+            else:
+                await self._flush_to_mongo(guild_id, await self._sqlite_get_config(guild_id))
+        return await self.get_config(guild_id)
+
+    async def add_channel(self, guild_id, channel_id):
+        try:
+            async with self._sqlite_conn() as db:
+                await self._ensure_tables(db)
+                await db.execute(
+                    "INSERT OR IGNORE INTO channels (guild_id, channel_id) VALUES (?, ?)",
+                    (guild_id, channel_id),
+                )
+                await db.commit()
+        except Exception as e:
+            print(f"[InstaDL] SQLite mirror write failed: {e}")
+        if self.mongo:
+            try:
+                await self.mongo.instadl_config.update_one(
+                    {"_id": str(guild_id)},
+                    {"$addToSet": {"channels": str(channel_id)}},
+                    upsert=True,
+                )
+            except Exception as e:
+                print(f"[InstaDL] Mongo channel add failed (mirror kept): {e}")
+        return await self.get_config(guild_id)
+
+    async def remove_channel(self, guild_id, channel_id):
+        try:
+            async with self._sqlite_conn() as db:
+                await self._ensure_tables(db)
+                await db.execute(
+                    "DELETE FROM channels WHERE guild_id = ? AND channel_id = ?",
+                    (guild_id, channel_id),
+                )
+                await db.commit()
+        except Exception as e:
+            print(f"[InstaDL] SQLite mirror delete failed: {e}")
+        if self.mongo:
+            try:
+                await self.mongo.instadl_config.update_one(
+                    {"_id": str(guild_id)},
+                    {"$pull": {"channels": str(channel_id)}},
+                )
+            except Exception as e:
+                print(f"[InstaDL] Mongo channel remove failed (mirror kept): {e}")
+        return await self.get_config(guild_id)
+
+    # ── Downloader ─────────────────────────────────────────────────────
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        try:
+            if message.author.bot or not message.guild:
+                return
+            if not isinstance(message.channel, discord.TextChannel):
+                return
+
+            config = await self.get_config(message.guild.id)
+            if not config.get("enabled"):
+                return
+            if str(message.channel.id) not in config.get("channels", []):
+                return
+
+            content = message.content or ""
+            match = INSTA_URL_RE.search(content)
+            if not match:
+                return
+
+            url = match.group(0)
+            if not url.startswith("http"):
+                url = "https://" + url
+
+            # Per-channel cooldown so a spam of links can't hammer Instagram
+            now = time.time()
+            key = str(message.channel.id)
+            if now - self._channel_cooldown.get(key, 0) < 8:
+                return
+            self._channel_cooldown[key] = now
+
+            print(f"[InstaDL] downloading {url} for guild {message.guild.id}")
+            await self._download_and_send(message, url, config)
+        except Exception as e:
+            print(f"[InstaDL] on_message error: {e}")
+
+    async def _download_and_send(self, message, url, config):
+        """Download the media with yt-dlp and repost it in the channel."""
+        try:
+            import yt_dlp
+        except ImportError:
+            try:
+                await message.channel.send(
+                    "Insta Downloader is missing the `yt-dlp` dependency.",
+                    reference=message,
+                )
+            except Exception:
+                pass
+            return
+
+        file_path = None
+        try:
+            tmp = os.path.join(tempfile.gettempdir(), "instadl_%(id)s.%(ext)s")
+            opts = {
+                "format": "b[ext=mp4]/b",
+                "outtmpl": tmp,
+                "quiet": True,
+                "no_warnings": True,
+                "noplaylist": True,
+                "max_filesize": 24 * 1024 * 1024,
+                "socket_timeout": 25,
+                "retries": 2,
+                "fragment_retries": 2,
+            }
+            loop = asyncio.get_running_loop()
+
+            def _download():
+                with yt_dlp.YoutubeDL(opts) as ydl:
+                    info = ydl.extract_info(url, download=True)
+                    path = ydl.prepare_filename(info)
+                    return path if os.path.exists(path) else None
+
+            file_path = await loop.run_in_executor(None, _download)
+
+            if not file_path or not os.path.exists(file_path):
+                await message.channel.send(
+                    f"Couldn't download that link — Instagram likely blocked it or it's not a downloadable post.\n{url}",
+                    reference=message,
+                )
+                return
+
+            size = os.path.getsize(file_path)
+            if size > 25 * 1024 * 1024:
+                await message.channel.send(
+                    f"That media is {size // 1024 // 1024}MB — Discord's upload limit is 25MB.",
+                    reference=message,
+                )
+                return
+
+            await message.channel.send(
+                file=discord.File(file_path, filename=f"instagram_{int(time.time())}.mp4")
+            )
+
+            if config.get("delete_original"):
+                try:
+                    await message.delete()
+                except Exception:
+                    pass
+        except Exception as e:
+            print(f"[InstaDL] download failed for {url}: {e}")
+            try:
+                await message.channel.send(
+                    f"Couldn't download that link: `{type(e).__name__}`",
+                    reference=message,
+                )
+            except Exception:
+                pass
+        finally:
+            if file_path and os.path.exists(file_path):
+                try:
+                    os.remove(file_path)
+                except Exception:
+                    pass
+
+
+def setup(bot):
+    bot.add_cog(InstaDownloader(bot))

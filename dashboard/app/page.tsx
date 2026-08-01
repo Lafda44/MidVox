@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useInView, animate } from "framer-motion";
 import {
   ShieldCheck,
   Zap,
@@ -20,7 +20,6 @@ import {
   CheckCircle2,
   ShieldAlert,
   Globe,
-  Terminal,
   Users2,
   Lock,
   Gamepad2,
@@ -28,11 +27,16 @@ import {
   User,
   Settings,
   Mail,
-  Star,
-  ArrowRight
+  ArrowRight,
+  Download,
+  Ban,
+  Ticket,
+  Server,
+  TrendingUp,
+  Bell,
+  Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -42,6 +46,210 @@ const fadeUp = {
     transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" as const },
   }),
 };
+
+function CountUp({ to, decimals = 0, suffix = "" }: { to: number; decimals?: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const value = useMotionValue(0);
+  const spring = useSpring(value, { stiffness: 90, damping: 24 });
+
+  useEffect(() => {
+    if (!inView) return;
+    value.set(to);
+    const unsub = spring.on("change", (v) => {
+      if (ref.current) {
+        ref.current.textContent = v.toFixed(decimals) + suffix;
+      }
+    });
+    return unsub;
+  }, [inView, to, decimals, suffix, value, spring]);
+
+  return <span ref={ref}>{`0${suffix}`}</span>;
+}
+
+function DashboardMockup() {
+  const metrics = [
+    { label: "Guilds", value: 128, icon: Server, color: "text-primary-light" },
+    { label: "Members", value: 48213, icon: Users2, color: "text-blue-400" },
+    { label: "API Latency", value: 34, icon: Zap, color: "text-emerald-400", suffix: "ms" },
+  ];
+
+  const bars = [34, 58, 42, 76, 51, 88, 64, 95, 72, 84, 61, 90];
+
+  const events = [
+    { icon: Ban, text: "Anti-Spam+ deleted 3 messages in #general", time: "2m ago", tone: "text-red-400" },
+    { icon: Download, text: "Instagram reel saved from #media", time: "5m ago", tone: "text-primary-light" },
+    { icon: Ticket, text: "New ticket #42 created by @rayexo", time: "11m ago", tone: "text-yellow-400" },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40, rotateX: 8 }}
+      animate={{ opacity: 1, y: 0, rotateX: 0 }}
+      transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="relative w-full max-w-5xl mx-auto"
+      style={{ perspective: 1200 }}
+    >
+      {/* Glow under the window */}
+      <div className="absolute inset-x-8 -bottom-8 h-24 bg-primary/20 blur-[80px] rounded-full" />
+
+      <div className="relative border-gradient rounded-2xl overflow-hidden shadow-2xl shadow-primary/10">
+        {/* Browser chrome */}
+        <div className="flex items-center gap-3 px-4 py-3 bg-slate-950 border-b border-slate-800">
+          <div className="flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
+          </div>
+          <div className="flex-1 max-w-md mx-auto flex items-center gap-2 px-3 py-1 rounded-md bg-slate-900 border border-slate-800">
+            <Lock className="h-3 w-3 text-slate-600" />
+            <span className="text-[10px] font-mono text-slate-500">midvox.app/dashboard</span>
+          </div>
+          <Bell className="h-3.5 w-3.5 text-slate-600" />
+        </div>
+
+        <div className="flex">
+          {/* Mini sidebar */}
+          <div className="hidden sm:flex flex-col gap-1 w-40 p-3 bg-slate-950/60 border-r border-slate-800">
+            <div className="flex items-center gap-2 px-2 py-2 mb-3">
+              <div className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center">
+                <Bot className="h-3.5 w-3.5 text-white" />
+              </div>
+              <span className="text-xs font-bold text-white">MidVox</span>
+            </div>
+            {[
+              { icon: LayoutDashboard, label: "Overview", active: true },
+              { icon: ShieldCheck, label: "Security" },
+              { icon: Ticket, label: "Tickets" },
+              { icon: BarChart4, label: "Leveling" },
+              { icon: Settings, label: "Settings" },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[10px] font-semibold uppercase tracking-wider ${
+                  item.active
+                    ? "bg-primary/15 text-primary-light border border-primary/20"
+                    : "text-slate-500 border border-transparent"
+                }`}
+              >
+                <item.icon className="h-3.5 w-3.5" />
+                {item.label}
+              </div>
+            ))}
+            <div className="mt-auto flex items-center gap-2 px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-800">
+              <div className="h-5 w-5 rounded-full bg-gradient-to-br from-indigo-400 to-primary flex items-center justify-center text-[8px] font-bold text-white">R</div>
+              <span className="text-[9px] font-semibold text-slate-400">rayexo</span>
+            </div>
+          </div>
+
+          {/* Main panel */}
+          <div className="flex-1 p-4 sm:p-5 space-y-4 bg-slate-900/40">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-bold text-white">Overview</p>
+                <p className="text-[9px] text-slate-500 mt-0.5">Live metrics</p>
+              </div>
+              <div className="hidden md:flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-600">
+                <Search className="h-3 w-3" />
+                <span className="text-[9px]">Search…</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              {metrics.map((m, i) => (
+                <motion.div
+                  key={m.label}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 + i * 0.12, duration: 0.4 }}
+                  className="bg-slate-950 border border-slate-800 rounded-xl p-3"
+                >
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <m.icon className={`h-3 w-3 ${m.color}`} />
+                    <span className="text-[8px] font-semibold uppercase tracking-widest text-slate-600">{m.label}</span>
+                  </div>
+                  <p className="text-lg font-bold text-white font-mono tabular-nums">
+                    <CountUp to={m.value} suffix={m.suffix || ""} />
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.95, duration: 0.4 }}
+              className="bg-slate-950 border border-slate-800 rounded-xl p-4"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-600">Message volume</span>
+                <span className="flex items-center gap-1 text-[9px] text-emerald-400 font-semibold">
+                  <TrendingUp className="h-3 w-3" /> +12.4%
+                </span>
+              </div>
+              <div className="flex items-end gap-1.5 h-20">
+                {bars.map((h, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ height: 0 }}
+                    animate={{ height: `${h}%` }}
+                    transition={{ delay: 1 + i * 0.05, duration: 0.5, ease: "easeOut" }}
+                    className={`flex-1 rounded-sm ${i >= 7 ? "bg-primary" : "bg-primary/25"}`}
+                  />
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.6, duration: 0.5 }}
+              className="space-y-1.5"
+            >
+              {events.map((e) => (
+                <div key={e.text} className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-slate-950 border border-slate-800">
+                  <e.icon className={`h-3 w-3 shrink-0 ${e.tone}`} />
+                  <span className="text-[10px] text-slate-400 flex-1 truncate">{e.text}</span>
+                  <span className="text-[8px] text-slate-600 font-mono">{e.time}</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating toast */}
+      <motion.div
+        initial={{ opacity: 0, x: 24 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.9, duration: 0.5, ease: "easeOut" }}
+        className="absolute -right-2 sm:-right-6 top-24 flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-primary/30 shadow-xl shadow-primary/10"
+      >
+        <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center">
+          <Download className="h-3.5 w-3.5 text-primary-light" />
+        </div>
+        <div>
+          <p className="text-[10px] font-semibold text-white">Reel downloaded</p>
+          <p className="text-[9px] text-slate-500">#media → 8.2 MB mp4</p>
+        </div>
+      </motion.div>
+
+      {/* Floating module pill */}
+      <motion.div
+        initial={{ opacity: 0, x: -24 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 2.2, duration: 0.5, ease: "easeOut" }}
+        className="absolute -left-2 sm:-left-6 -bottom-5 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 shadow-xl"
+      >
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+        </span>
+        <span className="text-[10px] font-semibold text-slate-300">18 modules online</span>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export default function LandingPage() {
   const features = [
@@ -93,7 +301,7 @@ export default function LandingPage() {
     { name: "Join DM", desc: "Personalized direct messages", icon: Mail },
     { name: "Custom Roles", desc: "User-purchased roles", icon: Lock },
     { name: "Logging", desc: "Full audit trail", icon: History },
-    { name: "Tracking", desc: "Member analytics", icon: Activity },
+    { name: "Insta Downloader", desc: "Auto-save Instagram media", icon: Download },
   ];
 
   const faqs = [
@@ -157,7 +365,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <header className="relative z-10 pt-40 pb-24 px-6">
+      <header className="relative z-10 pt-36 pb-16 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -169,7 +377,7 @@ export default function LandingPage() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-60" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
             </span>
-            Discord Management Platform
+            Trusted by 120+ servers
           </motion.div>
 
           <motion.h1
@@ -188,8 +396,8 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10"
           >
-            Security, engagement and automation modules for modern Discord communities.
-            Configure everything visually — no commands required.
+            Anti-nuke, automod, tickets, leveling and Instagram media saving —
+            configured visually from a single dashboard. No commands required.
           </motion.p>
 
           <motion.div
@@ -213,6 +421,10 @@ export default function LandingPage() {
               </Link>
             </Button>
           </motion.div>
+        </div>
+
+        <div className="mt-16 px-6">
+          <DashboardMockup />
         </div>
       </header>
 
@@ -267,7 +479,7 @@ export default function LandingPage() {
               Modules
             </p>
             <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-              16+ modules. Fully configurable.
+              17 modules. Fully configurable.
             </h2>
           </div>
 

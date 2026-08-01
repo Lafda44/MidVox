@@ -26,7 +26,8 @@ import {
   Zap,
   Mic,
   Mail,
-  Ban
+  Ban,
+  Instagram
 } from "lucide-react";
 
 interface Tab {
@@ -44,6 +45,7 @@ export function GuildTabs({ guildId }: { guildId: string }) {
     { name: "Anti-Nuke", href: `/dashboard/guild/${guildId}/antinuke`, icon: Sword },
     { name: "Automod", href: `/dashboard/guild/${guildId}/automod`, icon: ShieldCheck },
     { name: "Anti-Spam+", href: `/dashboard/guild/${guildId}/antispamplus`, icon: Ban },
+    { name: "Insta Downloader", href: `/dashboard/guild/${guildId}/instadl`, icon: Instagram },
     { name: "Tickets", href: `/dashboard/guild/${guildId}/tickets`, icon: Ticket },
     { name: "Verification", href: `/dashboard/guild/${guildId}/verification`, icon: Shield },
     { name: "Welcome", href: `/dashboard/guild/${guildId}/welcome`, icon: SmilePlus },

@@ -84,6 +84,7 @@ from .commands.nitro import Nitro
 from .commands.image import ImageCommands
 from .commands.youtube import Youtube
 from .commands.antispamplus import AntiSpamPlus
+from .commands.insta_downloader import InstaDownloader
 #____________ Events _____________
 
 #from .events.autoblacklist import AutoBlacklist
@@ -264,6 +265,7 @@ async def setup(bot: zyrox):
   await bot.add_cog(ImageCommands(bot))
   await bot.add_cog(Youtube(bot))
   await bot.add_cog(AntiSpamPlus(bot))
+  await bot.add_cog(InstaDownloader(bot))
 
   await bot.add_cog(_antinuke(bot))
   await bot.add_cog(_extra(bot))
