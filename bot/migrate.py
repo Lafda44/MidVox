@@ -13,10 +13,10 @@ import sys
 import aiosqlite
 from motor.motor_asyncio import AsyncIOMotorClient
 
-MONGO_URI = os.getenv(
-    "MONGO_URI",
-    "mongodb+srv://mayankitscb10ai2_db_user:lE7mKTyWNds46xkK@cluster0.ltcxfox.mongodb.net/midvox?retryWrites=true&w=majority",
-)
+MONGO_URI = os.getenv("MONGO_URI")
+if not MONGO_URI:
+    print("MONGO_URI env var is required. Set it to your MongoDB connection string.")
+    sys.exit(1)
 DB_PATH = "db/antispamplus.db"
 
 

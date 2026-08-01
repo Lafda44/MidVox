@@ -7,6 +7,7 @@ import time
 from datetime import timedelta
 from collections import defaultdict, deque
 from utils.Tools import *
+from utils.mongo import MongoManager
 
 
 CONFIG_DEFAULTS = {
@@ -54,6 +55,7 @@ class AntiSpamPlus(commands.Cog):
         self.warnings = defaultdict(lambda: defaultdict(int))
         self.last_warning = defaultdict(dict)
         bot.loop.create_task(self._seed_blocked_commands())
+        bot.loop.create_task(self._mongo_watch())
 
     @property
     def mongo(self):
@@ -227,13 +229,123 @@ class AntiSpamPlus(commands.Cog):
             await db.execute(t)
         await db.commit()
 
+    # ── Mongo reconnection + SQLite mirror flush ─────────────────────────
+
+    async def _mongo_watch(self):
+        """If Mongo wasn't reachable at startup, keep retrying in the
+        background. On success, flush the SQLite mirror so no settings
+        saved during the outage are lost."""
+        await self.bot.wait_until_ready()
+        print("[AntiSpamPlus] Mongo watcher started (retries every 60s)")
+        while True:
+            try:
+                if not self.mongo:
+                    mongo_uri = os.getenv("MONGO_URI")
+                    if mongo_uri:
+                        try:
+                            mongo = MongoManager()
+                            await mongo.connect(mongo_uri)
+                            self.bot.mongo = mongo
+                            print("\033[32m◈ MongoDB: Connected (background retry)\033[0m")
+                            await self._flush_sqlite_to_mongo()
+                        except Exception as e:
+                            print(f"\033[33m◈ MongoDB: reconnect failed — {e}\033[0m")
+                    else:
+                        print("\033[33m◈ MONGO_URI not set — SQLite-only mode\033[0m")
+            except Exception as e:
+                print(f"[AntiSpamPlus] mongo watcher error: {e}")
+            await asyncio.sleep(60)
+
+    def _sqlite_row_meaningful(
+        self, row, blocked_commands, target_users, excluded_channels, target_channels
+    ):
+        if row[1]:
+            return True
+        if any(
+            row[i] != CONFIG_DEFAULTS[key]
+            for i, key in [
+                (2, "delete_delay"),
+                (3, "re_limit"),
+                (4, "re_window"),
+                (5, "re_cooldown"),
+                (6, "re_delay"),
+                (7, "timeout_duration"),
+            ]
+        ):
+            return True
+        if target_users or excluded_channels or target_channels:
+            return True
+        if blocked_commands and set(
+            b.lower() for b in blocked_commands
+        ) != set(self._default_blocked_commands()):
+            return True
+        return False
+
+    async def _flush_sqlite_to_mongo(self):
+        """Push any user-modified SQLite state into MongoDB so data saved
+        while Mongo was down survives. Default-only rows are skipped so a
+        real Mongo doc is never clobbered by an empty mirror row."""
+        if not self.mongo:
+            return
+        try:
+            async with self._sqlite_conn() as db:
+                await self._ensure_sqlite_tables(db)
+                cursor = await db.execute("SELECT * FROM config")
+                rows = await cursor.fetchall()
+            flushed = 0
+            for row in rows:
+                gid = row[0]
+                async with self._sqlite_conn() as db:
+                    lists = {}
+                    for table, key in [
+                        ("target_users", "user_id"),
+                        ("blocked_commands", "command"),
+                        ("excluded_channels", "channel_id"),
+                        ("target_channels", "channel_id"),
+                    ]:
+                        c = await db.execute(
+                            f"SELECT {key} FROM {table} WHERE guild_id = ?", (gid,)
+                        )
+                        lists[table] = [r[0] for r in await c.fetchall()]
+                if not self._sqlite_row_meaningful(
+                    row,
+                    lists["blocked_commands"],
+                    lists["target_users"],
+                    lists["excluded_channels"],
+                    lists["target_channels"],
+                ):
+                    continue
+                doc = {
+                    "_id": str(gid),
+                    "guild_id": gid,
+                    "delete_messages": bool(row[1]),
+                    "delete_delay": row[2],
+                    "re_limit": row[3],
+                    "re_window": row[4],
+                    "re_cooldown": row[5],
+                    "re_delay": row[6],
+                    "timeout_duration": row[7],
+                    "target_users": [str(u) for u in lists["target_users"]],
+                    "blocked_commands": [
+                        str(c).lower() for c in lists["blocked_commands"]
+                    ],
+                    "excluded_channels": [
+                        str(c) for c in lists["excluded_channels"]
+                    ],
+                    "target_channels": [str(c) for c in lists["target_channels"]],
+                    "seeded_blocked_commands": True,
+                }
+                await self.mongo.antispamplus_config.replace_one(
+                    {"_id": str(gid)}, doc, upsert=True
+                )
+                flushed += 1
+            print(f"[AntiSpamPlus] SQLite mirror -> MongoDB: flushed {flushed} guild(s)")
+        except Exception as e:
+            print(f"[AntiSpamPlus] flush to MongoDB failed: {e}")
+
     # ── Public API ───────────────────────────────────────────────────────
 
-    async def get_config(self, guild_id):
-        if self.mongo:
-            doc = await self._get_doc(guild_id)
-            return _doc_to_config(doc)
-
+    async def _sqlite_get_config(self, guild_id):
         async with self._sqlite_conn() as db:
             await self._ensure_sqlite_tables(db)
 
@@ -247,14 +359,7 @@ class AntiSpamPlus(commands.Cog):
                     "INSERT INTO config (guild_id) VALUES (?)", (guild_id,)
                 )
                 await db.commit()
-                return {
-                    "guild_id": guild_id,
-                    **CONFIG_DEFAULTS,
-                    "target_users": [],
-                    "blocked_commands": [],
-                    "excluded_channels": [],
-                    "target_channels": [],
-                }
+                row = (guild_id, 0, 8, 5, 30, 20, 0.35, 1)
 
             cursor = await db.execute(
                 "SELECT user_id FROM target_users WHERE guild_id = ?", (guild_id,)
@@ -290,12 +395,17 @@ class AntiSpamPlus(commands.Cog):
                 "target_channels": [str(c) for c in target_channels],
             }
 
-    async def update_config(self, guild_id, data):
+    async def get_config(self, guild_id):
         if self.mongo:
-            await self._set_fields(guild_id, data)
-            doc = await self._get_doc(guild_id)
-            return _doc_to_config(doc)
+            try:
+                doc = await self._get_doc(guild_id)
+                return _doc_to_config(doc)
+            except Exception as e:
+                print(f"[AntiSpamPlus] Mongo read failed, using SQLite mirror: {e}")
+        return await self._sqlite_get_config(guild_id)
 
+    async def update_config(self, guild_id, data):
+        # SQLite mirror — always written so a Mongo outage can't lose data
         async with self._sqlite_conn() as db:
             await self._ensure_sqlite_tables(db)
             await db.execute(
@@ -315,100 +425,123 @@ class AntiSpamPlus(commands.Cog):
                 ),
             )
             await db.commit()
-        return await self.get_config(guild_id)
+
+        if self.mongo:
+            try:
+                await self._set_fields(guild_id, data)
+                return _doc_to_config(await self._get_doc(guild_id))
+            except Exception as e:
+                print(f"[AntiSpamPlus] Mongo update failed (SQLite mirror kept): {e}")
+        return await self._sqlite_get_config(guild_id)
+
+    async def _mirror_into(self, table, columns, values):
+        """Write one row into the SQLite mirror (best-effort, never throws)."""
+        try:
+            async with self._sqlite_conn() as db:
+                await self._ensure_sqlite_tables(db)
+                await db.execute(
+                    f"INSERT OR IGNORE INTO {table} ({columns}) VALUES ({', '.join(['?'] * len(values))})",
+                    tuple(values),
+                )
+                await db.commit()
+        except Exception as e:
+            print(f"[AntiSpamPlus] SQLite mirror write failed: {e}")
+
+    async def _mirror_out(self, table, column, *values):
+        """Delete a row from the SQLite mirror (best-effort, never throws)."""
+        try:
+            async with self._sqlite_conn() as db:
+                await self._ensure_sqlite_tables(db)
+                await db.execute(
+                    f"DELETE FROM {table} WHERE guild_id = ? AND {column} = ?",
+                    tuple(values),
+                )
+                await db.commit()
+        except Exception as e:
+            print(f"[AntiSpamPlus] SQLite mirror delete failed: {e}")
+
+    async def _mongo_write(self, coro, label):
+        """Run a Mongo write; on failure keep the SQLite mirror and log."""
+        if not self.mongo:
+            return
+        try:
+            await coro
+        except Exception as e:
+            print(f"[AntiSpamPlus] Mongo write failed ({label}); SQLite mirror kept: {e}")
 
     async def add_target_user(self, guild_id, user_id):
+        await self._mirror_into("target_users", "guild_id, user_id", (guild_id, user_id))
         if self.mongo:
-            return await self._push_array(guild_id, "target_users", user_id)
-        async with self._sqlite_conn() as db:
-            await self._ensure_sqlite_tables(db)
-            await db.execute(
-                "INSERT OR IGNORE INTO target_users (guild_id, user_id) VALUES (?, ?)",
-                (guild_id, user_id),
+            await self._mongo_write(
+                self._push_array(guild_id, "target_users", user_id), "target_users"
             )
-            await db.commit()
 
     async def remove_target_user(self, guild_id, user_id):
+        await self._mirror_out("target_users", "user_id", guild_id, user_id)
         if self.mongo:
-            return await self._pull_array(guild_id, "target_users", user_id)
-        async with self._sqlite_conn() as db:
-            await db.execute(
-                "DELETE FROM target_users WHERE guild_id = ? AND user_id = ?",
-                (guild_id, user_id),
+            await self._mongo_write(
+                self._pull_array(guild_id, "target_users", user_id), "target_users"
             )
-            await db.commit()
 
     async def add_blocked_command(self, guild_id, command):
+        await self._mirror_into(
+            "blocked_commands", "guild_id, command", (guild_id, command.lower())
+        )
         if self.mongo:
-            return await self._push_array(
-                guild_id, "blocked_commands", command.lower()
+            await self._mongo_write(
+                self._push_array(guild_id, "blocked_commands", command.lower()),
+                "blocked_commands",
             )
-        async with self._sqlite_conn() as db:
-            await db.execute(
-                "INSERT OR IGNORE INTO blocked_commands (guild_id, command) VALUES (?, ?)",
-                (guild_id, command.lower()),
-            )
-            await db.commit()
 
     async def remove_blocked_command(self, guild_id, command):
+        await self._mirror_out(
+            "blocked_commands", "command", guild_id, command.lower()
+        )
         if self.mongo:
-            return await self._pull_array(
-                guild_id, "blocked_commands", command.lower()
+            await self._mongo_write(
+                self._pull_array(guild_id, "blocked_commands", command.lower()),
+                "blocked_commands",
             )
-        async with self._sqlite_conn() as db:
-            await db.execute(
-                "DELETE FROM blocked_commands WHERE guild_id = ? AND command = ?",
-                (guild_id, command.lower()),
-            )
-            await db.commit()
 
     async def add_excluded_channel(self, guild_id, channel_id):
+        await self._mirror_into(
+            "excluded_channels", "guild_id, channel_id", (guild_id, channel_id)
+        )
         if self.mongo:
-            return await self._push_array(
-                guild_id, "excluded_channels", channel_id
+            await self._mongo_write(
+                self._push_array(guild_id, "excluded_channels", channel_id),
+                "excluded_channels",
             )
-        async with self._sqlite_conn() as db:
-            await db.execute(
-                "INSERT OR IGNORE INTO excluded_channels (guild_id, channel_id) VALUES (?, ?)",
-                (guild_id, channel_id),
-            )
-            await db.commit()
 
     async def remove_excluded_channel(self, guild_id, channel_id):
+        await self._mirror_out(
+            "excluded_channels", "channel_id", guild_id, channel_id
+        )
         if self.mongo:
-            return await self._pull_array(
-                guild_id, "excluded_channels", channel_id
+            await self._mongo_write(
+                self._pull_array(guild_id, "excluded_channels", channel_id),
+                "excluded_channels",
             )
-        async with self._sqlite_conn() as db:
-            await db.execute(
-                "DELETE FROM excluded_channels WHERE guild_id = ? AND channel_id = ?",
-                (guild_id, channel_id),
-            )
-            await db.commit()
 
     async def add_target_channel(self, guild_id, channel_id):
+        await self._mirror_into(
+            "target_channels", "guild_id, channel_id", (guild_id, channel_id)
+        )
         if self.mongo:
-            return await self._push_array(
-                guild_id, "target_channels", channel_id
+            await self._mongo_write(
+                self._push_array(guild_id, "target_channels", channel_id),
+                "target_channels",
             )
-        async with self._sqlite_conn() as db:
-            await db.execute(
-                "INSERT OR IGNORE INTO target_channels (guild_id, channel_id) VALUES (?, ?)",
-                (guild_id, channel_id),
-            )
-            await db.commit()
 
     async def remove_target_channel(self, guild_id, channel_id):
+        await self._mirror_out(
+            "target_channels", "channel_id", guild_id, channel_id
+        )
         if self.mongo:
-            return await self._pull_array(
-                guild_id, "target_channels", channel_id
+            await self._mongo_write(
+                self._pull_array(guild_id, "target_channels", channel_id),
+                "target_channels",
             )
-        async with self._sqlite_conn() as db:
-            await db.execute(
-                "DELETE FROM target_channels WHERE guild_id = ? AND channel_id = ?",
-                (guild_id, channel_id),
-            )
-            await db.commit()
 
     # ── Listeners ────────────────────────────────────────────────────────
 
