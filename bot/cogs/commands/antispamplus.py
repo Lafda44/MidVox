@@ -21,17 +21,23 @@ CONFIG_DEFAULTS = {
 
 
 def _doc_to_config(doc):
+    def _int(v, default):
+        try:
+            return int(v)
+        except (TypeError, ValueError):
+            return default
+
     return {
         "guild_id": doc.get("guild_id", int(doc["_id"])),
-        "delete_messages": doc.get("delete_messages", False),
-        "delete_delay": doc.get("delete_delay", 8),
-        "re_limit": doc.get("re_limit", 5),
-        "re_window": doc.get("re_window", 30),
-        "re_cooldown": doc.get("re_cooldown", 20),
-        "re_delay": doc.get("re_delay", 0.35),
-        "timeout_duration": doc.get("timeout_duration", 1),
+        "delete_messages": bool(doc.get("delete_messages", False)),
+        "delete_delay": _int(doc.get("delete_delay", 8), 8),
+        "re_limit": _int(doc.get("re_limit", 5), 5),
+        "re_window": _int(doc.get("re_window", 30), 30),
+        "re_cooldown": _int(doc.get("re_cooldown", 20), 20),
+        "re_delay": float(doc.get("re_delay", 0.35) or 0.35),
+        "timeout_duration": _int(doc.get("timeout_duration", 1), 1),
         "target_users": [str(u) for u in doc.get("target_users", [])],
-        "blocked_commands": doc.get("blocked_commands", []),
+        "blocked_commands": [c.lower() for c in doc.get("blocked_commands", [])],
         "excluded_channels": [str(c) for c in doc.get("excluded_channels", [])],
         "target_channels": [str(c) for c in doc.get("target_channels", [])],
     }
@@ -43,61 +49,106 @@ class AntiSpamPlus(commands.Cog):
         self.user_data = defaultdict(deque)
         self.message_reactions = defaultdict(lambda: defaultdict(int))
         self.cooldown = {}
-        self.mongo = getattr(bot, "mongo", None)
         self.warnings = defaultdict(lambda: defaultdict(int))
         self.last_warning = defaultdict(dict)
         bot.loop.create_task(self._seed_blocked_commands())
 
-    async def _seed_blocked_commands(self):
-        await self.bot.wait_until_ready()
+    @property
+    def mongo(self):
+        return getattr(self.bot, "mongo", None)
+
+    def _default_blocked_commands(self):
         prefixes = ["+", ";", ",", "!", "f", "=", ">", "$", "&"]
         commands = ["loop", "pause", "play", "skip", "stop", "vol", "volume"]
+        return [f"{prefix}{cmd}" for cmd in commands for prefix in prefixes]
+
+    async def _seed_blocked_commands_for(self, guild_id):
+        seeded = self._default_blocked_commands()
         async with self._sqlite_conn() as db:
             await self._ensure_sqlite_tables(db)
-            count = 0
-            for cmd in commands:
-                for prefix in prefixes:
-                    try:
-                        await db.execute(
-                            "INSERT OR IGNORE INTO blocked_commands (guild_id, command) VALUES (?, ?)",
-                            (1435022005312163980, f"{prefix}{cmd}")
-                        )
-                        count += 1
-                    except Exception:
-                        pass
+            for cmd in seeded:
+                try:
+                    await db.execute(
+                        "INSERT OR IGNORE INTO blocked_commands (guild_id, command) VALUES (?, ?)",
+                        (guild_id, cmd),
+                    )
+                except Exception:
+                    pass
             await db.commit()
-        print(f"  Seeded {count} blocked commands for AntiSpamPlus")
+
+        if self.mongo:
+            doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
+            if not doc:
+                await self.mongo.antispamplus_config.insert_one(self._default_doc(guild_id))
+            else:
+                await self.mongo.antispamplus_config.update_one(
+                    {"_id": str(guild_id)},
+                    {
+                        "$addToSet": {"blocked_commands": {"$each": seeded}},
+                        "$set": {"seeded_blocked_commands": True},
+                    },
+                )
+
+    async def _seed_blocked_commands(self):
+        await self.bot.wait_until_ready()
+        guild_ids = [g.id for g in self.bot.guilds]
+        print(f"  Seeding blocked commands for {len(guild_ids)} guild(s): {guild_ids}")
+        for gid in guild_ids:
+            try:
+                await self._seed_blocked_commands_for(gid)
+            except Exception as e:
+                print(f"[AntiSpamPlus] Seed failed for guild {gid}: {e}")
+        print(f"  Seeded {len(self._default_blocked_commands())} blocked commands for {len(guild_ids)} guild(s)")
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        try:
+            await self._seed_blocked_commands_for(guild.id)
+            print(f"[AntiSpamPlus] Seeded blocked commands for new guild {guild.id}")
+        except Exception as e:
+            print(f"[AntiSpamPlus] Seed on join failed for guild {guild.id}: {e}")
 
     # ── MongoDB helpers (single document per guild) ──────────────────────
 
-    async def _get_doc(self, guild_id):
-        doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
-        if doc:
-            return doc
-        default = {
+    def _default_doc(self, guild_id):
+        return {
             "_id": str(guild_id),
             "guild_id": guild_id,
             **CONFIG_DEFAULTS,
             "target_users": [],
-            "blocked_commands": [],
+            "blocked_commands": self._default_blocked_commands(),
             "excluded_channels": [],
             "target_channels": [],
+            "seeded_blocked_commands": True,
         }
+
+    async def _get_doc(self, guild_id):
+        doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
+        if doc:
+            if not doc.get("seeded_blocked_commands"):
+                await self.mongo.antispamplus_config.update_one(
+                    {"_id": str(guild_id)},
+                    {
+                        "$addToSet": {
+                            "blocked_commands": {"$each": self._default_blocked_commands()}
+                        },
+                        "$set": {"seeded_blocked_commands": True},
+                    },
+                )
+                doc = await self.mongo.antispamplus_config.find_one(
+                    {"_id": str(guild_id)}
+                )
+            return doc
+        default = self._default_doc(guild_id)
         await self.mongo.antispamplus_config.insert_one(default)
         return default
 
     async def _set_fields(self, guild_id, data):
         doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
         if not doc:
-            await self.mongo.antispamplus_config.insert_one({
-                "_id": str(guild_id),
-                "guild_id": guild_id,
-                **CONFIG_DEFAULTS,
-                "target_users": [],
-                "blocked_commands": [],
-                "excluded_channels": [],
-                "target_channels": [],
-            })
+            await self.mongo.antispamplus_config.insert_one(
+                self._default_doc(guild_id)
+            )
         update = {"$set": {}}
         for k in CONFIG_DEFAULTS:
             if k in data:
@@ -113,15 +164,9 @@ class AntiSpamPlus(commands.Cog):
         doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
         print(f"[AntiSpamPlus _push_array] guild={guild_id} doc_exists={doc is not None}")
         if not doc:
-            await self.mongo.antispamplus_config.insert_one({
-                "_id": str(guild_id),
-                "guild_id": guild_id,
-                **CONFIG_DEFAULTS,
-                "target_users": [],
-                "blocked_commands": [],
-                "excluded_channels": [],
-                "target_channels": [],
-            })
+            await self.mongo.antispamplus_config.insert_one(
+                self._default_doc(guild_id)
+            )
             print(f"[AntiSpamPlus _push_array] guild={guild_id} created new doc")
         await self.mongo.antispamplus_config.update_one(
             {"_id": str(guild_id)},
@@ -361,13 +406,13 @@ class AntiSpamPlus(commands.Cog):
             if not config["delete_messages"]:
                 return
 
-            if message.channel.id in config["excluded_channels"]:
+            if str(message.channel.id) in config["excluded_channels"]:
                 return
 
             content = (message.content or "").lower().strip()
             should_delete = False
 
-            if message.author.id in config["target_users"]:
+            if str(message.author.id) in config["target_users"]:
                 should_delete = True
 
             if any(
@@ -437,7 +482,7 @@ class AntiSpamPlus(commands.Cog):
                 return
 
             config = await self.get_config(payload.guild_id)
-            if payload.channel_id not in config["target_channels"]:
+            if str(payload.channel_id) not in config["target_channels"]:
                 return
 
             now = time.time()
@@ -487,7 +532,7 @@ class AntiSpamPlus(commands.Cog):
                 print(f"Timeout failed: {e}")
 
             for ch_id in config["target_channels"]:
-                channel = self.bot.get_channel(ch_id)
+                channel = self.bot.get_channel(int(ch_id))
                 if not channel:
                     continue
                 try:

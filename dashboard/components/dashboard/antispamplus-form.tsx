@@ -108,6 +108,18 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
     setConfig((prev: any) => ({ ...prev, [field]: value }));
   };
 
+  const toggleDeleteMessages = async (value: boolean) => {
+    updateField("delete_messages", value);
+    try {
+      const result = await api.updateAntiSpamPlus(guildId, { delete_messages: value });
+      setConfig((prev: any) => ({ ...prev, ...result }));
+      toast.success(value ? "Message deletion enabled" : "Message deletion disabled");
+    } catch (err) {
+      toast.error("Failed to update message deletion");
+      console.error(err);
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
@@ -122,7 +134,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                 <p className="text-xs text-slate-400">Delete messages from target users or matching commands</p>
               </div>
             </div>
-            <Switch checked={config.delete_messages} onCheckedChange={(v) => updateField("delete_messages", v)} />
+            <Switch checked={config.delete_messages} onCheckedChange={toggleDeleteMessages} />
           </div>
 
           {config.delete_messages && (
