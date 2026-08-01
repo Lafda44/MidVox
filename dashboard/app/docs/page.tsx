@@ -67,14 +67,14 @@ export default function DocsPage() {
   const [activeTab, setActiveTab] = useState("Introduction");
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans">
       {/* Background Decor */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-red-500/[0.02] blur-[150px] rounded-full" />
       </div>
 
       {/* Nav */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/[0.03] bg-[#020617]/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
+      <nav className="fixed top-0 w-full z-50 border-b border-white/[0.03] bg-slate-950/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-4 group">
             <div className="h-8 w-8 rounded-lg bg-red-600 flex items-center justify-center mr-3">
@@ -111,7 +111,7 @@ export default function DocsPage() {
       <div className="max-w-7xl mx-auto flex pt-20">
         {/* Sidebar */}
         <aside className={cn(
-          "fixed inset-y-0 left-0 z-40 w-80 bg-[#020617] border-r border-white/5 pt-20 transition-transform lg:translate-x-0 lg:static lg:bg-transparent",
+          "fixed inset-y-0 left-0 z-40 w-80 bg-slate-950 border-r border-white/5 pt-20 transition-transform lg:translate-x-0 lg:static lg:bg-transparent",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
           <div className="h-full p-8 overflow-y-auto no-scrollbar">

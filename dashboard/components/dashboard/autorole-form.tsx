@@ -157,7 +157,7 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-[#141B2D] border border-slate-800 rounded-[32px] shadow-2xl p-8 space-y-10 relative">
+        <div className="bg-slate-900 border border-slate-800 rounded-[32px] shadow-2xl p-8 space-y-10 relative">
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {renderRoleList("humans")}
@@ -179,7 +179,7 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
       </div>
 
       <div className="space-y-6">
-        <div className="bg-gradient-to-br from-[#141B2D] to-slate-900 border border-slate-800 rounded-3xl p-6 relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-slate-900 to-slate-900 border border-slate-800 rounded-3xl p-6 relative overflow-hidden group">
           <div className="absolute -right-6 -top-6 opacity-[0.05] group-hover:scale-110 transition-transform duration-500">
             <UserPlus className="h-40 w-40 text-primary" />
           </div>

@@ -3,20 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --background: #020617;
-  --foreground: #f8fafc;
-  --primary: #ef4444;
-  --primary-glow: rgba(239, 68, 68, 0.15);
-  --glass-bg: rgba(15, 23, 42, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --glass-red-border: rgba(239, 68, 68, 0.2);
+  --background: #0b0b10;
+  --foreground: #e2e2e9;
+  --primary: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --primary-glow: rgba(139, 92, 246, 0.15);
+  --surface: #14141b;
+  --surface-light: #1a1a23;
+  --border: #23232c;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #020617;
-    --foreground: #f8fafc;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
@@ -24,31 +22,38 @@ body {
   background: var(--background);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: #fff;
 }
 
 /* Custom Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #020617;
+  background: #0b0b10;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #2c2c37;
   border-radius: 10px;
-  border: 2px solid #020617;
+  border: 2px solid #0b0b10;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ef4444; /* Primary Red */
+  background: #8b5cf6;
 }
 
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #1e293b #020617;
+  scrollbar-color: #2c2c37 #0b0b10;
 }
 
 @layer utilities {
@@ -68,10 +73,24 @@ body {
   .glass-red {
     @apply backdrop-blur-xl bg-red-500/[0.02] border border-red-500/[0.1];
   }
-  .liquid-glass {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  .panel {
+    @apply bg-slate-900 border border-slate-800 rounded-2xl;
+  }
+  .panel-hover {
+    @apply panel transition-all duration-300 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5;
+  }
+  .label-mono {
+    @apply text-[10px] font-black uppercase tracking-[0.2em] text-slate-500;
+  }
+  .divider {
+    @apply h-px w-full bg-slate-800;
+  }
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-light to-indigo-400 bg-clip-text text-transparent;
+  }
+  .grid-bg {
+    background-image: linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
 }

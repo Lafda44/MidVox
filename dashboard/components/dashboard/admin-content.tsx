@@ -106,7 +106,7 @@ export function AdminContent() {
       {/* Header */}
       <div className="relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-indigo-500 rounded-3xl blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
-        <div className="relative bg-[#0f172a] border border-white/10 rounded-3xl p-8 lg:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+        <div className="relative bg-slate-950 border border-white/10 rounded-3xl p-8 lg:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           <div className="flex items-center gap-6">
             <div className="h-16 w-16 rounded-2xl bg-red-500/20 flex items-center justify-center border border-red-500/30 shadow-2xl shadow-red-500/20">
               <Shield className="h-8 w-8 text-red-500" />

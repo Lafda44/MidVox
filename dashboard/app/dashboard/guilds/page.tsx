@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Users, ShieldCheck, ChevronRight, Hash, RefreshCcw } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
@@ -130,49 +131,55 @@ export default function GuildsPage() {
               </p>
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {guilds.map((guild: any) => (
-            <div key={guild.id} className="bg-[#141B2D] border border-slate-800 rounded-3xl group hover:border-primary/50 hover:bg-[#202c3f] transition-all duration-300 overflow-hidden shadow-sm hover:shadow-primary/5 shadow-black/20">
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            {guilds.map((guild: any, i: number) => (
+            <motion.div
+              key={guild.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05, duration: 0.35, ease: "easeOut" }}
+              className="bg-slate-900 border border-slate-800 rounded-xl group hover:border-primary/40 transition-all duration-300 overflow-hidden hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5"
+            >
+              <div className="p-5">
+                <div className="flex items-start justify-between mb-5">
                   <div className="relative">
                     {guild.icon_url ? (
-                      <Image src={guild.icon_url} alt={guild.name} width={64} height={64} className="rounded-2xl border-2 border-slate-800 shadow-xl group-hover:scale-105 transition-transform" />
+                      <Image src={guild.icon_url} alt={guild.name} width={56} height={56} className="rounded-xl border-2 border-slate-700 transition-transform group-hover:scale-105" />
                     ) : (
-                      <div className="h-16 w-16 bg-primary/20 rounded-2xl flex items-center justify-center border-2 border-slate-800 text-primary font-bold text-2xl shadow-xl group-hover:scale-105 transition-transform">
+                      <div className="h-14 w-14 bg-primary/15 rounded-xl flex items-center justify-center border-2 border-slate-700 text-primary font-bold text-xl transition-transform group-hover:scale-105">
                         {guild.name.charAt(0)}
                       </div>
                     )}
-                    <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 border-2 border-[#141B2D]" title="Bot Online" />
+                    <div className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 border-2 border-slate-900" title="Bot Online" />
                   </div>
                   <div className="flex flex-col items-end text-right">
-                    <span className="text-[10px] uppercase font-bold text-slate-500 tracking-widest mb-1">Guild ID</span>
-                    <span className="text-xs font-mono text-slate-400 bg-black/20 px-2 py-1 rounded-lg border border-white/5 truncate max-w-[120px]">{guild.id}</span>
+                    <span className="text-[9px] uppercase font-semibold text-slate-600 tracking-widest mb-1">Guild ID</span>
+                    <span className="text-[10px] font-mono text-slate-500 bg-slate-950 px-2 py-1 rounded-md border border-slate-800 truncate max-w-[110px]">{guild.id}</span>
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white truncate group-hover:text-primary transition-colors">{guild.name}</h3>
-                  <div className="flex items-center gap-4 mt-4 text-slate-400">
-                    <div className="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1.5 rounded-xl border border-white/5">
-                      <Users className="h-4 w-4 text-slate-500" />
-                      <span className="text-sm font-semibold text-slate-300">{guild.member_count.toLocaleString()}</span>
+                  <h3 className="text-lg font-bold text-white truncate group-hover:text-primary-light transition-colors">{guild.name}</h3>
+                  <div className="flex items-center gap-3 mt-3 text-slate-400">
+                    <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-800">
+                      <Users className="h-3.5 w-3.5 text-slate-500" />
+                      <span className="text-xs font-semibold text-slate-300">{guild.member_count.toLocaleString()}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1.5 rounded-xl border border-white/5">
-                      <Hash className="h-4 w-4 text-slate-500" />
-                      <span className="text-sm font-semibold text-slate-300">Active</span>
+                    <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-800">
+                      <Hash className="h-3.5 w-3.5 text-slate-500" />
+                      <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-400">Active</span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="px-6 py-4 bg-slate-800/20 border-t border-slate-800/80 group-hover:bg-primary/5 transition-colors">
-                <Button className="w-full justify-between group/btn py-6" variant="secondary" asChild>
+              <div className="px-5 py-3 border-t border-slate-800 group-hover:bg-slate-800/40 transition-colors">
+                <Button className="w-full justify-between group/btn" variant="secondary" asChild>
                   <Link href={`/dashboard/guild/${guild.id}`}>
                     <span>Manage Server</span>
                     <ChevronRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </>

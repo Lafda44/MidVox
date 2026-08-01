@@ -17,16 +17,10 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { 
-  Users, 
-  ShieldCheck, 
-  Ticket, 
-  BarChart4, 
-  FileText, 
-  Settings,
+import {
+  Users,
   Hash,
   Shield,
-  Layers,
   ArrowLeft,
   ShieldAlert
 } from "lucide-react";
@@ -80,61 +74,61 @@ export default async function GuildLayout({
       </Link>
 
       {/* Guild Header */}
-      <div className="bg-[#141B2D] border border-slate-800 rounded-3xl p-8 shadow-xl shadow-black/20">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-8">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg shadow-black/20">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-6">
           <div className="relative">
             {guild.icon ? (
-              <Image 
-                src={guild.icon} 
+              <Image
+                src={guild.icon}
                 alt={guild.name}
-                width={120}
-                height={120}
-                className="rounded-3xl border-4 border-slate-800 shadow-2xl"
+                width={96}
+                height={96}
+                className="rounded-xl border-2 border-slate-700"
               />
             ) : (
-              <div className="h-[120px] w-[120px] bg-primary rounded-3xl flex items-center justify-center text-4xl font-bold text-white shadow-2xl border-4 border-slate-800">
+              <div className="h-24 w-24 bg-primary rounded-xl flex items-center justify-center text-3xl font-bold text-white border-2 border-slate-700">
                 {guild.name.charAt(0)}
               </div>
             )}
-            <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-2 rounded-xl shadow-lg border-2 border-[#141B2D]" title="Active">
-              <div className="h-3 w-3 rounded-full bg-white animate-pulse" />
+            <div className="absolute -bottom-1.5 -right-1.5 bg-emerald-500 text-white p-1.5 rounded-lg shadow-lg border-2 border-slate-900" title="Active">
+              <div className="h-2.5 w-2.5 rounded-full bg-white animate-pulse" />
             </div>
           </div>
 
           <div className="flex-1 space-y-4">
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-4xl font-black text-white tracking-tight">{guild.name}</h1>
-                <span className="px-3 py-1 bg-slate-800 rounded-lg text-[10px] uppercase font-black text-slate-500 tracking-tighter border border-white/5">
+                <h1 className="text-2xl font-bold text-white tracking-tight">{guild.name}</h1>
+                <span className="px-2.5 py-1 bg-slate-950 rounded-md text-[10px] uppercase font-medium text-slate-500 border border-slate-800">
                   ID: {guildId}
                 </span>
               </div>
-              <p className="text-slate-400 mt-1 italic opacity-80">Server Owner Dashboard</p>
+              <p className="text-sm text-slate-500 mt-1">Server Owner Dashboard</p>
             </div>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
               {[
                 { label: "Members", value: guild.member_count, icon: Users, color: "text-blue-400" },
                 { label: "Roles", value: guild.role_count, icon: Shield, color: "text-emerald-400" },
-                { label: "Channels", value: guild.channel_count, icon: Hash, color: "text-purple-400" },
+                { label: "Channels", value: guild.channel_count, icon: Hash, color: "text-primary-light" },
               ].map((item) => (
-                <div key={item.label} className="flex items-center gap-3 bg-slate-800/50 px-5 py-3 rounded-2xl border border-white/5 shadow-inner">
-                  <div className={cn("p-2 rounded-lg bg-slate-900/50", item.color)}>
-                    <item.icon className="h-5 w-5" />
+                <div key={item.label} className="flex items-center gap-3 bg-slate-950 px-4 py-2.5 rounded-lg border border-slate-800">
+                  <div className={cn("p-1.5 rounded-md bg-slate-900", item.color)}>
+                    <item.icon className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider leading-none mb-1">{item.label}</p>
-                    <p className="text-xl font-bold text-white leading-none">{item.value.toLocaleString()}</p>
+                    <p className="text-[9px] uppercase font-medium text-slate-500 tracking-wider leading-none mb-1">{item.label}</p>
+                    <p className="text-base font-bold text-white leading-none">{item.value.toLocaleString()}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row lg:flex-col gap-3">
+          <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5">
             <Link href={`/dashboard/guild/${guildId}`} className="w-full">
              <Button className="w-full">
-               Refresh 
+               Refresh
              </Button>
             </Link>
              <Link href={`/dashboard/guild/${guildId}/settings`} className="w-full">

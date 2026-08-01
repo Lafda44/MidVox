@@ -23,13 +23,13 @@ import { Button } from "@/components/ui/button";
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans">
       {/* Background Decor */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-red-600/[0.03] blur-[120px] rounded-full" />
       </div>
 
-      <nav className="fixed top-0 w-full z-50 border-b border-white/[0.03] bg-[#020617]/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
+      <nav className="fixed top-0 w-full z-50 border-b border-white/[0.03] bg-slate-950/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-4 group">
           <div className="h-10 w-10 rounded-xl bg-red-600 flex items-center justify-center group-hover:rotate-12 transition-transform">
             <Bot className="h-5 w-5 text-white" />

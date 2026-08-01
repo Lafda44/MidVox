@@ -1,19 +1,3 @@
-/**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
- */
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -30,47 +14,41 @@ interface MetricCardProps {
   className?: string;
 }
 
-export const MetricCard = ({ 
-  name, 
-  value, 
-  icon: Icon, 
+export const MetricCard = ({
+  name,
+  value,
+  icon: Icon,
   description,
   trend,
-  className 
+  className
 }: MetricCardProps) => {
   return (
     <div className={cn(
-      "bg-[#141B2D] border border-slate-800 p-6 rounded-3xl relative overflow-hidden group hover:border-primary/50 transition-all shadow-xl hover:shadow-primary/5 shadow-black/20",
+      "bg-slate-900 border border-slate-800 p-5 rounded-xl group hover:border-primary/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5",
       className
     )}>
-      <div className="flex items-center justify-between relative z-10">
+      <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-black uppercase text-slate-500 tracking-widest">{name}</p>
-          <div className="flex items-baseline gap-2 mt-1">
-            <p className="text-3xl font-black text-white tracking-tighter">{value}</p>
+          <p className="text-[10px] font-semibold uppercase text-slate-500 tracking-widest">{name}</p>
+          <div className="flex items-baseline gap-2 mt-1.5">
+            <p className="text-2xl font-bold text-white tracking-tight tabular-nums">{value}</p>
             {trend && (
               <span className={cn(
-                "text-[10px] font-black px-1.5 py-0.5 rounded-lg",
-                trend.isUp ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500"
+                "text-[10px] font-semibold px-1.5 py-0.5 rounded-md",
+                trend.isUp ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-400"
               )}>
                 {trend.isUp ? "+" : ""}{trend.value}
               </span>
             )}
           </div>
           {description && (
-             <p className="text-[10px] text-slate-500 mt-2 italic font-medium">{description}</p>
+            <p className="text-[11px] text-slate-500 mt-1.5">{description}</p>
           )}
         </div>
-        <div className="p-4 bg-slate-800/50 rounded-2xl group-hover:scale-110 group-hover:bg-primary/10 transition-all border border-white/5">
-          <Icon className="h-6 w-6 text-primary" />
+        <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:scale-105 transition-transform">
+          <Icon className="h-5 w-5 text-primary" />
         </div>
       </div>
-      
-      {/* Decorative Gradient Line */}
-      <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-primary/50 to-transparent w-full opacity-0 group-hover:opacity-100 transition-opacity" />
-      
-      {/* Glow Effect */}
-      <div className="absolute -right-8 -bottom-8 h-24 w-24 bg-primary/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
   );
 };

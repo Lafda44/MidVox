@@ -93,7 +93,7 @@ export default function InvcRolePage({ params }: { params: { guildId: string } }
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3 space-y-6">
-          <div className="bg-[#141B2D] border border-slate-800 rounded-3xl overflow-hidden shadow-xl p-8 space-y-8">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl p-8 space-y-8">
             
             {/* Status & Toggle */}
             <div className="flex items-center justify-between p-6 bg-slate-900/40 rounded-2xl border border-slate-800">
