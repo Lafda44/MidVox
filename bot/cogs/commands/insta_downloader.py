@@ -29,11 +29,12 @@ import os
 import re
 import time
 import tempfile
+import urllib.request
 from collections import defaultdict
 
 INSTA_URL_RE = re.compile(
     r"(?:https?://)?(?:www\.|m\.|dl\.)?(?:instagram\.com|instagr\.am)/"
-    r"(?:reel|reels|p|tv|stories)/[\w\-]+",
+    r"(?:reel|reels|p|tv|stories|share)/[\w\-]+",
     re.IGNORECASE,
 )
 
@@ -331,6 +332,18 @@ class InstaDownloader(commands.Cog):
                     pass
         except Exception as e:
             print(f"[InstaDL] download failed for {url}: {e}")
+            # yt-dlp can't do image-only posts — fall back to Instagram's
+            # /media endpoint which serves the post image directly.
+            try:
+                if await self._send_image_fallback(message, url):
+                    if config.get("delete_original"):
+                        try:
+                            await message.delete()
+                        except Exception:
+                            pass
+                    return
+            except Exception as fb:
+                print(f"[InstaDL] image fallback failed for {url}: {fb}")
             try:
                 await message.channel.send(
                     f"Couldn't download that link: `{type(e).__name__}`",
@@ -342,6 +355,48 @@ class InstaDownloader(commands.Cog):
             if file_path and os.path.exists(file_path):
                 try:
                     os.remove(file_path)
+                except Exception:
+                    pass
+
+    async def _send_image_fallback(self, message, url):
+        """Image-only posts (no video) — fetch the post image via the
+        /media endpoint and repost it. Returns True if an image was sent."""
+        m = re.search(r"/(?:reel|reels|p|tv|stories|share)/([\w\-]+)", url)
+        if not m:
+            return False
+        code = m.group(1)
+        media_url = f"https://www.instagram.com/p/{code}/media/?size=l"
+
+        def _fetch():
+            req = urllib.request.Request(media_url, headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+            })
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = resp.read()
+                ctype = resp.headers.get("Content-Type", "")
+                if not ctype.startswith("image/") or not data:
+                    return None
+                return data
+
+        loop = asyncio.get_running_loop()
+        data = await loop.run_in_executor(None, _fetch)
+        if not data:
+            return False
+        if len(data) > 25 * 1024 * 1024:
+            return False
+
+        path = os.path.join(tempfile.gettempdir(), f"instadl_{code}.jpg")
+        with open(path, "wb") as f:
+            f.write(data)
+        try:
+            await message.channel.send(
+                file=discord.File(path, filename=f"instagram_{code}.jpg")
+            )
+            return True
+        finally:
+            if os.path.exists(path):
+                try:
+                    os.remove(path)
                 except Exception:
                     pass
 
