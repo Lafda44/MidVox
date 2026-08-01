@@ -17,7 +17,7 @@ class MongoManager:
         self._client = None
         self._db = None
 
-    async def connect(self, uri: str = None, db_name: str = "midvox"):
+    async def connect(self, uri: str = None, db_name: str = "midvox", server_selection_timeout: int = 10000):
         uri = uri or os.getenv("MONGO_URI")
         if not uri:
             raise ValueError("MONGO_URI is not set")
@@ -25,7 +25,7 @@ class MongoManager:
         if "tls=" not in uri and "ssl=" not in uri:
             sep = "&" if "?" in uri else "?"
             uri += f"{sep}tls=true&tlsAllowInvalidCertificates=true"
-        self._client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=10000)
+        self._client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=server_selection_timeout)
         self._db = self._client[db_name]
         await self._client.admin.command("ping")
         return self

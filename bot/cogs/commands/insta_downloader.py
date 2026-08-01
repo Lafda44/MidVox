@@ -54,6 +54,25 @@ class InstaDownloader(commands.Cog):
     def mongo(self):
         return getattr(self.bot, "mongo", None)
 
+    async def _ensure_mongo(self):
+        """Lazy-connect Mongo on demand so reads never fall back to an
+        empty SQLite mirror right after a redeploy."""
+        if self.mongo:
+            return True
+        mongo_uri = os.getenv("MONGO_URI")
+        if not mongo_uri:
+            return False
+        try:
+            from utils.mongo import MongoManager
+            mongo = MongoManager()
+            await mongo.connect(mongo_uri, server_selection_timeout=5000)
+            self.bot.mongo = mongo
+            print("\033[32m◈ MongoDB: Connected (lazy, InstaDL)\033[0m")
+            return True
+        except Exception as e:
+            print(f"\033[33m◈ MongoDB: lazy connect failed (InstaDL) — {e}\033[0m")
+            return False
+
     # ── SQLite mirror ──────────────────────────────────────────────────
 
     def _sqlite_conn(self):
@@ -138,6 +157,7 @@ class InstaDownloader(commands.Cog):
     # ── Public API (used by bot/api routes) ────────────────────────────
 
     async def get_config(self, guild_id):
+        await self._ensure_mongo()
         doc = await self._mongo_get(guild_id)
         if doc:
             return {
@@ -173,6 +193,7 @@ class InstaDownloader(commands.Cog):
             )
             await db.commit()
 
+        await self._ensure_mongo()
         if self.mongo:
             doc = await self._mongo_get(guild_id)
             if doc:
@@ -199,6 +220,7 @@ class InstaDownloader(commands.Cog):
                 await db.commit()
         except Exception as e:
             print(f"[InstaDL] SQLite mirror write failed: {e}")
+        await self._ensure_mongo()
         if self.mongo:
             try:
                 await self.mongo.instadl_config.update_one(
@@ -221,6 +243,7 @@ class InstaDownloader(commands.Cog):
                 await db.commit()
         except Exception as e:
             print(f"[InstaDL] SQLite mirror delete failed: {e}")
+        await self._ensure_mongo()
         if self.mongo:
             try:
                 await self.mongo.instadl_config.update_one(
@@ -232,6 +255,31 @@ class InstaDownloader(commands.Cog):
         return await self.get_config(guild_id)
 
     # ── Downloader ─────────────────────────────────────────────────────
+
+    async def _auto_delete(self, msg, delay=60):
+        """Delete a bot status message after `delay` seconds (media posts
+        are never auto-deleted — only status/error messages use this)."""
+
+        async def _delete_later():
+            try:
+                await asyncio.sleep(delay)
+                await msg.delete()
+            except Exception:
+                pass
+
+        try:
+            asyncio.get_running_loop().create_task(_delete_later())
+        except Exception:
+            pass
+
+    async def _send_status(self, channel, text, reference=None, auto_delete=60):
+        try:
+            msg = await channel.send(text, reference=reference)
+        except Exception:
+            return None
+        if auto_delete:
+            await self._auto_delete(msg, auto_delete)
+        return msg
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -273,13 +321,11 @@ class InstaDownloader(commands.Cog):
         try:
             import yt_dlp
         except ImportError:
-            try:
-                await message.channel.send(
-                    "Insta Downloader is missing the `yt-dlp` dependency.",
-                    reference=message,
-                )
-            except Exception:
-                pass
+            await self._send_status(
+                message.channel,
+                "Insta Downloader is missing the `yt-dlp` dependency.",
+                reference=message,
+            )
             return
 
         file_path = None
@@ -307,7 +353,8 @@ class InstaDownloader(commands.Cog):
             file_path = await loop.run_in_executor(None, _download)
 
             if not file_path or not os.path.exists(file_path):
-                await message.channel.send(
+                await self._send_status(
+                    message.channel,
                     f"Couldn't download that link — Instagram likely blocked it or it's not a downloadable post.\n{url}",
                     reference=message,
                 )
@@ -315,7 +362,8 @@ class InstaDownloader(commands.Cog):
 
             size = os.path.getsize(file_path)
             if size > 25 * 1024 * 1024:
-                await message.channel.send(
+                await self._send_status(
+                    message.channel,
                     f"That media is {size // 1024 // 1024}MB — Discord's upload limit is 25MB.",
                     reference=message,
                 )
@@ -344,13 +392,11 @@ class InstaDownloader(commands.Cog):
                     return
             except Exception as fb:
                 print(f"[InstaDL] image fallback failed for {url}: {fb}")
-            try:
-                await message.channel.send(
-                    f"Couldn't download that link: `{type(e).__name__}`",
-                    reference=message,
-                )
-            except Exception:
-                pass
+            await self._send_status(
+                message.channel,
+                f"Couldn't download that link: `{type(e).__name__}`",
+                reference=message,
+            )
         finally:
             if file_path and os.path.exists(file_path):
                 try:

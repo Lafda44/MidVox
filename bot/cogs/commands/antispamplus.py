@@ -61,6 +61,24 @@ class AntiSpamPlus(commands.Cog):
     def mongo(self):
         return getattr(self.bot, "mongo", None)
 
+    async def _ensure_mongo(self):
+        """Lazy-connect Mongo on demand so reads never fall back to an
+        empty SQLite mirror right after a redeploy."""
+        if self.mongo:
+            return True
+        mongo_uri = os.getenv("MONGO_URI")
+        if not mongo_uri:
+            return False
+        try:
+            mongo = MongoManager()
+            await mongo.connect(mongo_uri, server_selection_timeout=5000)
+            self.bot.mongo = mongo
+            print("\033[32m◈ MongoDB: Connected (lazy)\033[0m")
+            return True
+        except Exception as e:
+            print(f"\033[33m◈ MongoDB: lazy connect failed — {e}\033[0m")
+            return False
+
     def _default_blocked_commands(self):
         prefixes = ["+", ";", ",", "!", "f", "=", ">", "$", "&"]
         commands = ["loop", "pause", "play", "skip", "stop", "vol", "volume"]
@@ -396,7 +414,7 @@ class AntiSpamPlus(commands.Cog):
             }
 
     async def get_config(self, guild_id):
-        if self.mongo:
+        if await self._ensure_mongo():
             try:
                 doc = await self._get_doc(guild_id)
                 return _doc_to_config(doc)
@@ -426,7 +444,7 @@ class AntiSpamPlus(commands.Cog):
             )
             await db.commit()
 
-        if self.mongo:
+        if await self._ensure_mongo():
             try:
                 await self._set_fields(guild_id, data)
                 return _doc_to_config(await self._get_doc(guild_id))
