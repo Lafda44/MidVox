@@ -1,4 +1,5 @@
 import os, re, glob
+import asyncio
 import aiosqlite
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -13,9 +14,35 @@ def _discover_db_paths():
 SQLITE_DBS = _discover_db_paths() or []
 
 class MongoManager:
-    def __init__(self):
-        self._client = None
-        self._db = None
+    def __init__(self, uri: str = None, db_name: str = "midvox"):
+        self._uri = uri or os.getenv("MONGO_URI")
+        self._db_name = db_name
+        # motor clients are bound to the event loop they were created on.
+        # The bot loop and the FastAPI (uvicorn) loop are different, so we
+        # keep one client per loop and hand each caller its own.
+        self._clients = {}
+
+    def _get_client(self):
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+        client = self._clients.get(loop)
+        if client is None:
+            uri = self._uri
+            if not uri:
+                raise ValueError("MONGO_URI is not set")
+            # Add TLS params if missing — Render's SSL env may not have the right CAs
+            if "tls=" not in uri and "ssl=" not in uri:
+                sep = "&" if "?" in uri else "?"
+                uri += f"{sep}tls=true&tlsAllowInvalidCertificates=true"
+            client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=10000)
+            self._clients[loop] = client
+        return client
+
+    @property
+    def _db(self):
+        return self._get_client()[self._db_name]
 
     async def connect(self, uri: str = None, db_name: str = "midvox", server_selection_timeout: int = 10000):
         uri = uri or os.getenv("MONGO_URI")
@@ -25,9 +52,13 @@ class MongoManager:
         if "tls=" not in uri and "ssl=" not in uri:
             sep = "&" if "?" in uri else "?"
             uri += f"{sep}tls=true&tlsAllowInvalidCertificates=true"
-        self._client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=server_selection_timeout)
-        self._db = self._client[db_name]
-        await self._client.admin.command("ping")
+        client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=server_selection_timeout)
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+        self._clients[loop] = client
+        await client.admin.command("ping")
         return self
 
     @property
@@ -39,8 +70,11 @@ class MongoManager:
         return self._db["instadl_config"]
 
     async def close(self):
-        if self._client:
-            self._client.close()
+        for client in self._clients.values():
+            try:
+                client.close()
+            except Exception:
+                pass
 
     @property
     def _sqlite_backup(self):
