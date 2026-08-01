@@ -28,7 +28,7 @@ def _doc_to_config(doc):
             return default
 
     return {
-        "guild_id": doc.get("guild_id", int(doc["_id"])),
+        "guild_id": int(doc["_id"]),
         "delete_messages": bool(doc.get("delete_messages", False)),
         "delete_delay": _int(doc.get("delete_delay", 8), 8),
         "re_limit": _int(doc.get("re_limit", 5), 5),
@@ -37,9 +37,11 @@ def _doc_to_config(doc):
         "re_delay": float(doc.get("re_delay", 0.35) or 0.35),
         "timeout_duration": _int(doc.get("timeout_duration", 1), 1),
         "target_users": [str(u) for u in doc.get("target_users", [])],
-        "blocked_commands": [c.lower() for c in doc.get("blocked_commands", [])],
+        "blocked_commands": [str(c).lower() for c in doc.get("blocked_commands", [])],
         "excluded_channels": [str(c) for c in doc.get("excluded_channels", [])],
         "target_channels": [str(c) for c in doc.get("target_channels", [])],
+        "_doc_id": str(doc["_id"]),
+        "_doc_id_type": type(doc["_id"]).__name__,
     }
 
 
@@ -77,9 +79,10 @@ class AntiSpamPlus(commands.Cog):
             await db.commit()
 
         if self.mongo:
-            doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
+            doc = await self._find_doc(guild_id)
             if not doc:
                 await self.mongo.antispamplus_config.insert_one(self._default_doc(guild_id))
+                print(f"[AntiSpamPlus] seed: created doc for guild {guild_id}")
             else:
                 await self.mongo.antispamplus_config.update_one(
                     {"_id": str(guild_id)},
@@ -88,6 +91,7 @@ class AntiSpamPlus(commands.Cog):
                         "$set": {"seeded_blocked_commands": True},
                     },
                 )
+                print(f"[AntiSpamPlus] seed: updated existing doc for guild {guild_id}")
 
     async def _seed_blocked_commands(self):
         await self.bot.wait_until_ready()
@@ -122,8 +126,24 @@ class AntiSpamPlus(commands.Cog):
             "seeded_blocked_commands": True,
         }
 
+    async def _find_doc(self, guild_id):
+        key = str(guild_id)
+        doc = await self.mongo.antispamplus_config.find_one({"_id": key})
+        if doc:
+            return doc
+        doc = await self.mongo.antispamplus_config.find_one({"_id": guild_id})
+        if doc:
+            try:
+                await self.mongo.antispamplus_config.insert_one({**doc, "_id": key})
+            except Exception:
+                pass
+            await self.mongo.antispamplus_config.delete_one({"_id": doc["_id"]})
+            print(f"[AntiSpamPlus] migrated doc _id {doc['_id']!r} -> {key!r}")
+            return await self.mongo.antispamplus_config.find_one({"_id": key})
+        return None
+
     async def _get_doc(self, guild_id):
-        doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
+        doc = await self._find_doc(guild_id)
         if doc:
             if not doc.get("seeded_blocked_commands"):
                 await self.mongo.antispamplus_config.update_one(
@@ -140,37 +160,33 @@ class AntiSpamPlus(commands.Cog):
                 )
             return doc
         default = self._default_doc(guild_id)
-        await self.mongo.antispamplus_config.insert_one(default)
+        await self.mongo.antispamplus_config.update_one(
+            {"_id": str(guild_id)},
+            {"$setOnInsert": default},
+            upsert=True,
+        )
         return default
 
     async def _set_fields(self, guild_id, data):
-        doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
-        if not doc:
-            await self.mongo.antispamplus_config.insert_one(
-                self._default_doc(guild_id)
-            )
-        update = {"$set": {}}
+        update = {"$set": {}, "$setOnInsert": self._default_doc(guild_id)}
         for k in CONFIG_DEFAULTS:
             if k in data:
                 update["$set"][k] = data[k]
         if update["$set"]:
             update["$set"]["guild_id"] = guild_id
             await self.mongo.antispamplus_config.update_one(
-                {"_id": str(guild_id)}, update
+                {"_id": str(guild_id)}, update, upsert=True
             )
 
     async def _push_array(self, guild_id, field, value):
         print(f"[AntiSpamPlus _push_array] guild={guild_id} field={field} value={value} (type={type(value).__name__})")
-        doc = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
-        print(f"[AntiSpamPlus _push_array] guild={guild_id} doc_exists={doc is not None}")
-        if not doc:
-            await self.mongo.antispamplus_config.insert_one(
-                self._default_doc(guild_id)
-            )
-            print(f"[AntiSpamPlus _push_array] guild={guild_id} created new doc")
         await self.mongo.antispamplus_config.update_one(
             {"_id": str(guild_id)},
-            {"$addToSet": {field: value}}
+            {
+                "$addToSet": {field: value},
+                "$setOnInsert": self._default_doc(guild_id),
+            },
+            upsert=True,
         )
         after = await self.mongo.antispamplus_config.find_one({"_id": str(guild_id)})
         print(f"[AntiSpamPlus _push_array] guild={guild_id} after {field}={after.get(field, 'MISSING')}")

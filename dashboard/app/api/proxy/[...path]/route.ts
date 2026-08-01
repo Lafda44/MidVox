@@ -27,14 +27,12 @@ async function proxy(
       } catch {}
     }
     const res = await fetch(`${API_URL}${endpoint}`, opts);
-    const text = await res.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      data = { detail: text };
-    }
-    return NextResponse.json(data, { status: res.status });
+    const body = await res.arrayBuffer();
+    const contentType = res.headers.get("content-type") || "application/json";
+    return new Response(body, {
+      status: res.status,
+      headers: { "Content-Type": contentType },
+    });
   } catch (e: any) {
     return NextResponse.json(
       { detail: e.message || "Failed to reach bot API" },
