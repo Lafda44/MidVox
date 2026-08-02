@@ -346,3 +346,18 @@ p, li { line-height: 1.7; }
   60%  { opacity: 0.55; }
   100% { transform: translate3d(var(--sway, 36px), 108vh, 0) rotate(340deg); opacity: 0; }
 }
+
+/* ─── Module marquee ────────────────────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 34s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+.marquee-track.reverse {
+  animation-direction: reverse;
+}

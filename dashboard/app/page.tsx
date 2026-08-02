@@ -9,7 +9,7 @@ import {
   LogIn, Layers, Sparkles, Activity, History, CheckCircle2, ShieldAlert,
   Globe, Users2, Lock, Gamepad2, Music4, User, Settings, Mail, ArrowRight,
   Download, Ban, Ticket, Server, TrendingUp, Bell, Search,   Shield, Terminal,
-  ArrowUpRight, Cpu, Wifi, HardDrive, Menu, X,
+  ArrowUpRight, Cpu, Wifi, HardDrive, Menu, X, ArrowUp, Star, Quote, SlidersHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -85,21 +85,104 @@ function Particles() {
 }
 
 /* ── CountUp ────────────────────────────────────────────────────────────── */
-function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
+function CountUp({ to, suffix = "", decimals = 0 }: { to: number; suffix?: string; decimals?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
   const val = useMotionValue(0);
   const spring = useSpring(val, { stiffness: 80, damping: 22 });
 
+  const fmt = (v: number) =>
+    v.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
+
   useEffect(() => {
     if (!inView) return;
     val.set(to);
     return spring.on("change", (v) => {
-      if (ref.current) ref.current.textContent = Math.round(v).toLocaleString() + suffix;
+      if (ref.current) ref.current.textContent = fmt(v);
     });
-  }, [inView, to, suffix, val, spring]);
+  }, [inView, to, suffix, decimals, val, spring, fmt]);
 
-  return <span ref={ref}>0{suffix}</span>;
+  return <span ref={ref}>{fmt(0)}</span>;
+}
+
+/* ── Cursor glow ────────────────────────────────────────────────────────── */
+function CursorGlow() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      if (ref.current) {
+        ref.current.style.transform = `translate(${e.clientX - 260}px, ${e.clientY - 260}px)`;
+      }
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className="pointer-events-none fixed left-0 top-0 z-[2] h-[520px] w-[520px] rounded-full transition-transform duration-300 ease-out"
+      style={{
+        background:
+          "radial-gradient(circle, rgba(88,101,242,0.09) 0%, rgba(56,189,248,0.05) 32%, transparent 65%)",
+      }}
+    />
+  );
+}
+
+/* ── Scroll progress bar ────────────────────────────────────────────────── */
+function ScrollProgress() {
+  const [p, setP] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = document.documentElement;
+      const max = el.scrollHeight - el.clientHeight;
+      setP(max > 0 ? (el.scrollTop / max) * 100 : 0);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <div
+      aria-hidden
+      className="fixed left-0 top-0 z-[60] h-[2px] bg-gradient-to-r from-primary via-accent to-primary"
+      style={{ width: `${p}%` }}
+    />
+  );
+}
+
+/* ── Back to top ────────────────────────────────────────────────────────── */
+function BackToTop() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShow(window.scrollY > 700);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.button
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 16 }}
+          transition={{ duration: 0.25 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Back to top"
+          className="fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-[rgba(139,151,255,0.3)] bg-[#0d0d1f]/90 text-white/70 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-colors hover:border-[rgba(139,151,255,0.5)] hover:text-white cursor-pointer"
+        >
+          <ArrowUp className="h-[18px] w-[18px]" />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
 }
 
 /* ── Security terminal ──────────────────────────────────────────────────── */
@@ -566,27 +649,38 @@ function FeatureCard({
 }
 
 /* ── Module pill ─────────────────────────────────────────────────────────── */
-function ModulePill({ name, icon: Icon, idx }: { name: string; icon: typeof ShieldAlert; idx: number }) {
+function ModulePill({ name, icon: Icon }: { name: string; icon: typeof ShieldAlert }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-20px" }}
-      transition={{ delay: idx * 0.04, duration: 0.4 }}
-      className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 bg-[#0d0d1f] border border-[rgba(139,151,255,0.14)] hover:bg-[#12122a] hover:border-[rgba(139,151,255,0.32)] transition-all duration-200 group cursor-pointer"
-    >
+    <div className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 bg-[#0d0d1f] border border-[rgba(139,151,255,0.14)] hover:bg-[#12122a] hover:border-[rgba(139,151,255,0.32)] transition-all duration-200 group cursor-pointer">
       <Icon className="h-3.5 w-3.5 text-primary-light/70 group-hover:text-primary-light transition-colors" />
       <span className="text-xs font-medium text-muted group-hover:text-white/85 transition-colors">{name}</span>
-    </motion.div>
+    </div>
+  );
+}
+
+/* ── Scrolling module marquee ───────────────────────────────────────────── */
+function MarqueeRow({ items, reverse = false }: { items: { name: string; icon: typeof ShieldAlert }[]; reverse?: boolean }) {
+  return (
+    <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+      <div className={cn("marquee-track flex w-max gap-3", reverse && "reverse")}>
+        {[...items, ...items].map((m, i) => (
+          <ModulePill key={`${m.name}-${i}`} name={m.name} icon={m.icon} />
+        ))}
+      </div>
+    </div>
   );
 }
 
 /* ── Stat card ───────────────────────────────────────────────────────────── */
-function StatCard({ value, label, sub, icon: Icon }: { value: string; label: string; sub?: string; icon: typeof Server }) {
+function StatCard({ value, suffix = "", decimals = 0, label, sub, icon: Icon }: {
+  value: number; suffix?: string; decimals?: number; label: string; sub?: string; icon: typeof Server;
+}) {
   return (
-    <div className="flex flex-col gap-1 p-6 rounded-xl border border-[rgba(139,151,255,0.14)] bg-[#0d0d1f]">
+    <div className="flex flex-col gap-1 p-6 rounded-xl border border-[rgba(139,151,255,0.14)] bg-[#0d0d1f] hover:border-[rgba(139,151,255,0.3)] hover:bg-[#0f0f26] transition-all duration-300">
       <Icon className="h-4 w-4 text-primary-light/60 mb-1" />
-      <p className="text-3xl font-bold text-white tracking-tight">{value}</p>
+      <p className="text-3xl font-bold text-white tracking-tight tabular-nums">
+        <CountUp to={value} suffix={suffix} decimals={decimals} />
+      </p>
       <p className="text-sm font-medium text-muted">{label}</p>
       {sub && <p className="text-xs text-faint mt-0.5">{sub}</p>}
     </div>
@@ -641,6 +735,18 @@ export default function LandingPage() {
     { title: "One Dashboard",   desc: "Configure every module from a single fast interface — no slash commands, no YAML, no headaches.",    tags: ["Zero commands", "1-click setup"], icon: LayoutDashboard, accent: "violet" as const },
   ];
 
+  const steps = [
+    { icon: Server,              title: "Invite the bot",      desc: "Add ZyroX to your server with one click — all 16 modules come pre-armed and safe by default." },
+    { icon: LogIn,               title: "Authenticate",        desc: "Log in with Discord on this site. We only read what you can already see — nothing more." },
+    { icon: SlidersHorizontal,   title: "Configure visually",  desc: "Toggle modules, set roles, preview rank cards — saved instantly. No commands, no config files." },
+  ];
+
+  const testimonials = [
+    { quote: "We replaced six bots with ZyroX in one afternoon. Anti-nuke blocked a full raid while I slept — the logs looked like a movie.", name: "Kai",   role: "Owner · 210k member server",  grad: "from-[#5865F2] to-[#38BDF8]", init: "K" },
+    { quote: "The dashboard is the only reason I switched. Everything is clickable, and I haven't written a single slash command since.",    name: "Maya",  role: "Mod team lead · 45k server", grad: "from-[#38BDF8] to-[#5865F2]", init: "M" },
+    { quote: "Leveling import from MEE6 took 30 seconds, and the rank cards look better than anything our paid bots ever did.",               name: "Arjun", role: "Admin · gaming community",  grad: "from-[#4752C4] to-[#7C85FD]", init: "A" },
+  ];
+
   const modules = [
     { name: "Anti-Nuke",       icon: ShieldAlert  },
     { name: "Automod",         icon: ShieldCheck  },
@@ -671,6 +777,9 @@ export default function LandingPage() {
     <div className="relative min-h-screen overflow-x-hidden bg-aurora font-sans text-white">
       <Particles />
       <Petals />
+      <CursorGlow />
+      <ScrollProgress />
+      <BackToTop />
 
       {/* dot grid overlay */}
       <div className="pointer-events-none fixed inset-0 z-0 dot-grid opacity-80" />
@@ -694,7 +803,7 @@ export default function LandingPage() {
 
           {/* links */}
           <div className="hidden items-center gap-1 lg:flex">
-            {[["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
+            {[["How it works", "#how"], ["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
               <Link
                 key={l}
                 href={h}
@@ -736,7 +845,7 @@ export default function LandingPage() {
               transition={{ duration: 0.2 }}
               className="border-t border-white/[0.07] bg-[#05050b]/95 p-2 backdrop-blur-xl lg:hidden"
             >
-              {[["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
+              {[["How it works", "#how"], ["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
                 <Link
                   key={l}
                   href={h}
@@ -912,14 +1021,57 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── HOW IT WORKS ────────────────────────────────────────────────── */}
+      <section id="how" className="relative z-10 py-24 px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-2xl mb-14">
+            <p className="label mb-4 flex items-center gap-3">
+              <span className="h-px w-10 bg-gradient-to-r from-primary to-transparent" />
+              How it works
+            </p>
+            <h2 className="heading-lg text-white">
+              Live in <span className="text-gradient">three steps</span>
+            </h2>
+          </div>
+
+          <div className="relative grid md:grid-cols-3 gap-8 md:gap-6">
+            {/* connector line */}
+            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-px bg-gradient-to-r from-primary/40 via-accent/40 to-primary/40" />
+
+            {steps.map((s, i) => (
+              <motion.div
+                key={s.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ delay: i * 0.12, duration: 0.5 }}
+                className="relative text-center md:text-left"
+              >
+                <div className="relative z-10 mx-auto md:mx-0 mb-6 flex h-24 w-24 items-center justify-center">
+                  <div className="absolute inset-0 rounded-2xl border border-[rgba(139,151,255,0.3)] bg-primary/10" />
+                  <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#6B76F5] to-[#4752C4] shadow-[0_0_24px_rgba(88,101,242,0.45)]">
+                    <s.icon className="h-6 w-6 text-white" />
+                  </div>
+                  <span className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full border border-[rgba(139,151,255,0.3)] bg-[#0d0d1f] font-mono text-[10px] font-bold text-[#a5affb]">
+                    0{i + 1}
+                  </span>
+                </div>
+                <h3 className="mb-2 text-base font-bold text-white">{s.title}</h3>
+                <p className="mx-auto md:mx-0 max-w-xs text-sm leading-relaxed text-muted">{s.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── STATS ────────────────────────────────────────────────────────── */}
       <section className="relative z-10 py-16 px-6">
         <div className="mx-auto max-w-5xl">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard value="120+" label="Active servers"   sub="growing weekly"     icon={Server} />
-            <StatCard value="18"   label="Bot modules"      sub="fully configurable" icon={Layers} />
-            <StatCard value="48k+" label="Members managed"  sub="across all guilds"  icon={Users2} />
-            <StatCard value="99.98%" label="Uptime SLA"     sub="last 90 days"       icon={Activity} />
+            <StatCard value={120} suffix="+" label="Active servers"  sub="growing weekly"     icon={Server} />
+            <StatCard value={18}   label="Bot modules"    sub="fully configurable" icon={Layers} />
+            <StatCard value={48}  suffix="k+" label="Members managed" sub="across all guilds"  icon={Users2} />
+            <StatCard value={99.98} suffix="%" decimals={2} label="Uptime SLA" sub="last 90 days" icon={Activity} />
           </div>
         </div>
       </section>
@@ -937,9 +1089,56 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2.5">
-            {modules.map((m, i) => (
-              <ModulePill key={m.name} name={m.name} icon={m.icon} idx={i} />
+          <div className="space-y-4">
+            <MarqueeRow items={modules.slice(0, 8)} />
+            <MarqueeRow items={modules.slice(8)} reverse />
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
+      <section id="testimonials" className="relative z-10 py-24 px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-2xl mb-14">
+            <p className="label mb-4 flex items-center gap-3">
+              <span className="h-px w-10 bg-gradient-to-r from-primary to-transparent" />
+              Testimonials
+            </p>
+            <h2 className="heading-lg text-white">
+              Loved by <span className="text-gradient">server owners</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="group relative flex flex-col rounded-2xl border border-[rgba(139,151,255,0.16)] bg-[#0d0d1f] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(139,151,255,0.38)] hover:bg-[#0f0f26] hover:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)]"
+              >
+                <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, s) => (
+                      <Star key={s} className="h-3.5 w-3.5 text-amber-400" fill="currentColor" />
+                    ))}
+                  </div>
+                  <Quote className="h-5 w-5 text-primary/30" />
+                </div>
+                <p className="mb-6 flex-1 text-sm leading-relaxed text-muted">&ldquo;{t.quote}&rdquo;</p>
+                <div className="flex items-center gap-3">
+                  <div className={cn("flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br text-xs font-bold text-white", t.grad)}>
+                    {t.init}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">{t.name}</p>
+                    <p className="text-xs text-faint">{t.role}</p>
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
