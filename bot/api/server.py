@@ -12,7 +12,7 @@
 # ║                                                                  ║
 # ╚══════════════════════════════════════════════════════════════════╝
 
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI, Depends, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import os
@@ -26,7 +26,7 @@ from utils.config import *
 
 
 from api.routes import bot, guilds, admin
-from api.dependencies import verify_api_key, limiter, _bot_instance
+from api.dependencies import verify_api_key, limiter, get_bot
 from api.db_manager import db_manager
 
 # Configure logging
@@ -117,8 +117,9 @@ def create_app() -> FastAPI:
 
     @app.get("/health", summary="Health Check", description="Performs a health check for container orchestration and uptime monitoring.")
     async def health():
-        bot = _bot_instance
-        if bot is None:
+        try:
+            bot = get_bot()
+        except HTTPException:
             return {"status": "starting", "detail": "Bot instance not yet initialized"}
         if bot.user is None:
             return {"status": "starting", "detail": "Bot not yet connected to Discord"}
