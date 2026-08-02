@@ -39,8 +39,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans:    ["var(--font-geist)", "var(--font-jakarta)", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["var(--font-geist)", "var(--font-grotesk)", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans:    ["var(--font-outfit)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-unbounded)", "ui-sans-serif", "system-ui", "sans-serif"],
         mono:    ["var(--font-mono)", "ui-monospace", "Menlo", "monospace"],
       },
       borderRadius: {

@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
-
 /* ─── Design tokens ───────────────────────────────────────────────────────── */
 :root {
   --bg:           #080810;
@@ -41,7 +39,7 @@ html {
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-geist), var(--font-jakarta), 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
@@ -60,8 +58,8 @@ body::before {
 }
 
 h1, h2, h3, h4, h5 {
-  font-family: var(--font-geist), var(--font-grotesk), var(--font-jakarta), ui-sans-serif, sans-serif;
-  letter-spacing: -0.025em;
+  font-family: var(--font-unbounded), var(--font-outfit), ui-sans-serif, sans-serif;
+  letter-spacing: -0.015em;
   text-wrap: balance;
   line-height: 1.1;
 }
@@ -98,13 +96,13 @@ p, li { line-height: 1.7; }
   .heading-xl {
     font-size: clamp(2.75rem, 6vw, 5rem);
     font-weight: 700;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.01em;
     line-height: 1.05;
   }
   .heading-lg {
     font-size: clamp(2rem, 4vw, 3.25rem);
     font-weight: 700;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.01em;
     line-height: 1.1;
   }
 
@@ -177,11 +175,12 @@ p, li { line-height: 1.7; }
 
   /* Animated bg gradient */
   .bg-aurora {
-    background: 
-      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99,102,241,0.14), transparent 65%),
-      radial-gradient(ellipse 50% 40% at 85% 30%, rgba(34,211,238,0.08), transparent 60%),
-      radial-gradient(ellipse 40% 30% at 15% 70%, rgba(168,85,247,0.07), transparent 60%),
-      var(--bg);
+    background-image:
+      linear-gradient(rgba(8, 8, 16, 0.72), rgba(8, 8, 16, 0.86)),
+      url('/bg-aurora.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
   }
 
   /* Divider */

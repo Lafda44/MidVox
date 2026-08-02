@@ -5,14 +5,14 @@
  */
 
 import type { Metadata } from "next";
-import { Space_Grotesk, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Unbounded, Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/auth-provider";
 
-const spaceGrotesk  = Space_Grotesk({ subsets: ["latin"], variable: "--font-grotesk", display: "swap" });
-const plusJakarta   = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap" });
+const unbounded     = Unbounded({ subsets: ["latin"], variable: "--font-unbounded", display: "swap", weight: ["400", "500", "600", "700", "800"] });
+const outfit        = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "Zyrox";
@@ -33,8 +33,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${unbounded.variable} ${outfit.variable} ${jetbrainsMono.variable}`}>
       <body className="antialiased font-sans">
+        {/* Fixed aurora background image */}
+        <div aria-hidden className="pointer-events-none fixed inset-0 -z-20">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: "url('/bg-aurora.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+          <div className="absolute inset-0 bg-[#080810]/70" />
+        </div>
         {/* Ambient glow orbs — fixed, very subtle */}
         <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
           <div
