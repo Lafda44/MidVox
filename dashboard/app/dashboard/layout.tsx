@@ -166,14 +166,20 @@ export default function DashboardLayout({
       {/* Subtle neon background glows + tech grid over dark mesh image */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 bg-kenburns"
           style={{
             backgroundImage: "url('/bg-mesh.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         />
-        <div className="absolute inset-0 bg-[#080810]/80" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 120% 100% at 50% 10%, rgba(8,8,16,0.45) 0%, rgba(8,8,16,0.88) 80%)",
+          }}
+        />
         <div className="absolute top-[-20%] left-1/2 h-[40%] w-[60%] -translate-x-1/2 bg-primary/[0.05] blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] h-[36%] w-[40%] bg-accent/[0.04] blur-[110px]" />
         <div className="absolute inset-0 cyber-grid-bg opacity-40" />

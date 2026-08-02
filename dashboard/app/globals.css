@@ -176,11 +176,18 @@ p, li { line-height: 1.7; }
   /* Animated bg gradient */
   .bg-aurora {
     background-image:
-      linear-gradient(rgba(8, 8, 16, 0.72), rgba(8, 8, 16, 0.86)),
+      linear-gradient(rgba(8, 8, 16, 0.5), rgba(8, 8, 16, 0.8)),
+      radial-gradient(ellipse 130% 100% at 50% 0%, rgba(8, 8, 16, 0) 35%, rgba(8, 8, 16, 0.8) 100%),
       url('/bg-aurora.jpg');
-    background-size: cover;
+    background-size: cover, cover, cover;
     background-position: center;
     background-attachment: fixed;
+  }
+
+  /* Slow cinematic zoom for fixed background images */
+  .bg-kenburns {
+    animation: kenburns 45s ease-in-out infinite alternate;
+    will-change: transform;
   }
 
   /* Divider */
@@ -240,6 +247,11 @@ p, li { line-height: 1.7; }
 }
 
 /* ─── Keyframes ───────────────────────────────────────────────────────────── */
+@keyframes kenburns {
+  from { transform: scale(1.02) translate(0, 0); }
+  to   { transform: scale(1.12) translate(-1.5%, -1.25%); }
+}
+
 @keyframes drift {
   0%,100% { transform: translate3d(0, 0, 0) scale(1); }
   33%      { transform: translate3d(30px, -40px, 0) scale(1.06); }
