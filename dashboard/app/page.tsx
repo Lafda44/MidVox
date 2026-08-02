@@ -512,10 +512,8 @@ function FeatureCard({
       viewport={{ once: true, margin: "-40px" }}
       transition={{ delay, duration: 0.5, ease: "easeOut" }}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] p-6 transition-all duration-300",
-        "bg-gradient-to-b from-white/[0.05] to-white/[0.015]",
-        "hover:-translate-y-1.5 hover:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)]",
-        a.border
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(139,151,255,0.16)] bg-[#0d0d1f] p-6 transition-all duration-300 cursor-pointer",
+        "hover:-translate-y-1.5 hover:border-[rgba(139,151,255,0.38)] hover:bg-[#0f0f26] hover:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)]"
       )}
     >
       {/* cursor spotlight */}
@@ -548,7 +546,7 @@ function FeatureCard({
         <Icon className={cn("h-5 w-5", a.text)} />
       </div>
       <h3 className="mb-2.5 text-[15px] font-bold tracking-tight text-white">{title}</h3>
-      <p className="flex-1 text-sm leading-relaxed text-white/45">{desc}</p>
+      <p className="flex-1 text-sm leading-relaxed text-muted">{desc}</p>
 
       {/* spec tags */}
       {tags.length > 0 && (
@@ -556,7 +554,7 @@ function FeatureCard({
           {tags.map((t) => (
             <span
               key={t}
-              className="rounded-md border border-white/[0.08] bg-black/40 px-2 py-1 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/35 transition-colors duration-300 group-hover:border-white/[0.15] group-hover:text-white/60"
+              className="rounded-md border border-primary/25 bg-primary/[0.08] px-2 py-1 font-mono text-[9px] font-semibold uppercase tracking-wider text-[#a5affb]/70 transition-colors duration-300 group-hover:border-primary/40 group-hover:text-[#a5affb]"
             >
               {t}
             </span>
@@ -575,10 +573,10 @@ function ModulePill({ name, icon: Icon, idx }: { name: string; icon: typeof Shie
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-20px" }}
       transition={{ delay: idx * 0.04, duration: 0.4 }}
-      className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 bg-white/[0.04] border border-white/[0.07] hover:bg-white/[0.07] hover:border-white/[0.12] transition-all duration-200 group cursor-default"
+      className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 bg-[#0d0d1f] border border-[rgba(139,151,255,0.14)] hover:bg-[#12122a] hover:border-[rgba(139,151,255,0.32)] transition-all duration-200 group cursor-pointer"
     >
       <Icon className="h-3.5 w-3.5 text-primary-light/70 group-hover:text-primary-light transition-colors" />
-      <span className="text-xs font-medium text-white/55 group-hover:text-white/80 transition-colors">{name}</span>
+      <span className="text-xs font-medium text-muted group-hover:text-white/85 transition-colors">{name}</span>
     </motion.div>
   );
 }
@@ -586,11 +584,11 @@ function ModulePill({ name, icon: Icon, idx }: { name: string; icon: typeof Shie
 /* ── Stat card ───────────────────────────────────────────────────────────── */
 function StatCard({ value, label, sub, icon: Icon }: { value: string; label: string; sub?: string; icon: typeof Server }) {
   return (
-    <div className="flex flex-col gap-1 p-6 rounded-xl border border-white/[0.07] bg-white/[0.03]">
+    <div className="flex flex-col gap-1 p-6 rounded-xl border border-[rgba(139,151,255,0.14)] bg-[#0d0d1f]">
       <Icon className="h-4 w-4 text-primary-light/60 mb-1" />
       <p className="text-3xl font-bold text-white tracking-tight">{value}</p>
-      <p className="text-sm font-medium text-white/50">{label}</p>
-      {sub && <p className="text-xs text-white/25 mt-0.5">{sub}</p>}
+      <p className="text-sm font-medium text-muted">{label}</p>
+      {sub && <p className="text-xs text-faint mt-0.5">{sub}</p>}
     </div>
   );
 }
@@ -622,7 +620,7 @@ function FaqItem({ q, a, idx }: { q: string; a: string; idx: number }) {
             transition={{ duration: 0.25 }}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-sm text-white/40 leading-relaxed">{a}</p>
+            <p className="pb-5 text-sm text-muted leading-relaxed">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -787,7 +785,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-white/45 max-w-xl mx-auto leading-relaxed mb-10"
+            className="text-lg text-muted max-w-xl mx-auto leading-relaxed mb-10"
           >
             Anti-nuke, automod, leveling, tickets, and Instagram media — all in one bot,
             configured from a single fast dashboard.
@@ -827,7 +825,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.45 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-white/35"
+          className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-muted"
         >
           {[
             ["120+ servers", "and growing"],
@@ -858,7 +856,7 @@ export default function LandingPage() {
               <h2 className="heading-lg text-white mb-5">
                 The shield never sleeps
               </h2>
-              <p className="text-base text-white/40 leading-relaxed mb-8">
+              <p className="text-base text-muted leading-relaxed mb-8">
                 Every action — spam deletion, raid detection, ticket creation, file saves —
                 is logged and processed in real time. You see exactly what the bot is doing, always.
               </p>
@@ -900,7 +898,7 @@ export default function LandingPage() {
               Everything communities need,{" "}
               <span className="text-gradient">nothing they don&apos;t</span>
             </h2>
-            <p className="mt-4 max-w-lg text-base text-white/40">
+            <p className="mt-4 max-w-lg text-base text-muted">
               Six core systems, each battle-tested across hundreds of servers — protected,
               engaging, and dead simple to run.
             </p>
@@ -934,7 +932,7 @@ export default function LandingPage() {
               <p className="label mb-4">Modules</p>
               <h2 className="heading-lg text-white">16 modules. One bot.</h2>
             </div>
-            <p className="text-sm text-white/35 max-w-xs">
+            <p className="text-sm text-muted max-w-xs">
               Every module is production-tested and toggled from a single dashboard panel.
             </p>
           </div>
@@ -955,7 +953,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative rounded-2xl border border-white/[0.09] bg-[#0c0c1c] overflow-hidden p-12 md:p-16 text-center"
+            className="relative rounded-2xl border border-[rgba(139,151,255,0.18)] bg-[#0c0c1c] overflow-hidden p-12 md:p-16 text-center"
           >
             {/* background glow */}
             <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-48 w-[500px] bg-primary/15 blur-[80px] rounded-full pointer-events-none" />
@@ -969,7 +967,7 @@ export default function LandingPage() {
               <h2 className="heading-lg text-white mb-5">
                 Set up in under a minute.
               </h2>
-              <p className="text-lg text-white/40 max-w-xl mx-auto mb-10 leading-relaxed">
+              <p className="text-lg text-muted max-w-xl mx-auto mb-10 leading-relaxed">
                 Invite the bot, log in, select your server, and configure every module visually.
                 No commands. No config files.
               </p>
@@ -1023,7 +1021,7 @@ export default function LandingPage() {
                 <LogoMark size="h-7 w-7" iconSize="h-3.5 w-3.5" />
                 <span className="font-bold text-[15px] text-white">{BRAND}</span>
               </div>
-              <p className="text-sm text-white/30 max-w-xs leading-relaxed">
+              <p className="text-sm text-faint max-w-xs leading-relaxed">
                 The Discord management platform for communities that care about quality.
               </p>
             </div>
