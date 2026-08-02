@@ -43,7 +43,7 @@ export default function RootLayout({
               backgroundImage: "url('/bg-aurora.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
-              filter: "brightness(0.55) saturate(1.15)",
+              filter: "brightness(0.7) saturate(1.2)",
             }}
           />
           <div
