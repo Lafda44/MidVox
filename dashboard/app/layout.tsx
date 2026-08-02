@@ -43,16 +43,16 @@ export default function RootLayout({
               backgroundImage: "url('/bg-aurora.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
-              filter: "brightness(0.7) saturate(1.2)",
-            }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse 130% 100% at 50% 15%, rgba(5,5,11,0.35) 0%, rgba(5,5,11,0.92) 80%)",
-            }}
-          />
+            filter: "brightness(0.6) saturate(1.1)",
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 130% 100% at 50% 15%, rgba(5,5,11,0.55) 0%, rgba(5,5,11,0.96) 80%)",
+          }}
+        />
         </div>
         {/* Ambient glow orbs — fixed, very subtle */}
         <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">

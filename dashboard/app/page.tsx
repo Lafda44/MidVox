@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 import { motion, useInView, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import {
   ShieldCheck, Zap, BarChart4, MessageSquare, ChevronRight, LayoutDashboard,
-  LogIn, Layers, Sparkles, Bot, Activity, History, CheckCircle2, ShieldAlert,
+  LogIn, Layers, Sparkles, Activity, History, CheckCircle2, ShieldAlert,
   Globe, Users2, Lock, Gamepad2, Music4, User, Settings, Mail, ArrowRight,
   Download, Ban, Ticket, Server, TrendingUp, Bell, Search,   Shield, Terminal,
   ArrowUpRight, Cpu, Wifi, HardDrive, Menu, X,
@@ -255,12 +255,12 @@ function DashboardMockup() {
         <div className="flex">
           {/* sidebar */}
           <div className="hidden sm:flex flex-col w-40 shrink-0 bg-[#070712] border-r border-white/[0.05] p-3 gap-0.5">
-            <div className="flex items-center gap-2 px-2 py-2.5 mb-2">
-              <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-[0_0_12px_rgba(99,102,241,0.5)]">
-                <Bot className="h-3.5 w-3.5 text-white" />
+              <div className="flex items-center gap-2 px-2 py-2.5 mb-2">
+                <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 flex items-center justify-center shadow-[0_0_12px_rgba(99,102,241,0.5)]">
+                  <Zap className="h-3 w-3 text-white" fill="currentColor" />
+                </div>
+                <span className="text-xs font-bold text-white">{BRAND}</span>
               </div>
-              <span className="text-xs font-bold text-white">{BRAND}</span>
-            </div>
 
             {views.map((v) => {
               const active = v.key === view;
@@ -467,16 +467,33 @@ function Petals({ count = 14 }: { count?: number }) {
   );
 }
 
+/* ── Brand logo mark ─────────────────────────────────────────────────────── */
+function LogoMark({ size = "h-9 w-9", iconSize = "h-[18px] w-[18px]" }: { size?: string; iconSize?: string }) {
+  return (
+    <div
+      className={cn(
+        "relative flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 shadow-[0_0_20px_rgba(99,102,241,0.5)]",
+        size
+      )}
+    >
+      <Zap className={cn("text-white", iconSize)} fill="currentColor" />
+      <div className="absolute inset-0 rounded-xl border border-white/25" />
+      <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_8px_#67e8f9] animate-pulse" />
+    </div>
+  );
+}
+
 /* ── Feature card ────────────────────────────────────────────────────────── */
 function FeatureCard({
-  icon: Icon, title, desc, delay = 0, accent = "indigo", index = 0,
+  icon: Icon, title, desc, tags = [], delay = 0, accent = "indigo", index = 0,
 }: {
-  icon: typeof ShieldCheck; title: string; desc: string; delay?: number; accent?: "indigo" | "cyan" | "violet"; index?: number;
+  icon: typeof ShieldCheck; title: string; desc: string; tags?: string[];
+  delay?: number; accent?: "indigo" | "cyan" | "violet"; index?: number;
 }) {
   const accentMap = {
-    indigo: { bg: "bg-primary/10", border: "border-primary/20", text: "text-primary-light", spot: "rgba(99,102,241,0.13)", glow: "rgba(99,102,241,0.4)", line: "from-primary/60 via-primary/25" },
-    cyan:   { bg: "bg-cyan-500/10", border: "border-cyan-500/20", text: "text-cyan-400", spot: "rgba(34,211,238,0.12)", glow: "rgba(34,211,238,0.35)", line: "from-cyan-400/60 via-cyan-400/25" },
-    violet: { bg: "bg-violet-500/10", border: "border-violet-500/20", text: "text-violet-400", spot: "rgba(168,85,247,0.12)", glow: "rgba(168,85,247,0.35)", line: "from-violet-400/60 via-violet-400/25" },
+    indigo: { text: "text-indigo-300", chip: "bg-indigo-500/15 border-indigo-500/30", glow: "rgba(99,102,241,0.5)", spot: "rgba(99,102,241,0.15)", orb: "rgba(99,102,241,0.18)", border: "hover:border-indigo-400/40" },
+    cyan:   { text: "text-cyan-300",   chip: "bg-cyan-500/15 border-cyan-500/30",   glow: "rgba(34,211,238,0.45)", spot: "rgba(34,211,238,0.13)", orb: "rgba(34,211,238,0.16)", border: "hover:border-cyan-400/40" },
+    violet: { text: "text-violet-300", chip: "bg-violet-500/15 border-violet-500/30", glow: "rgba(168,85,247,0.45)", spot: "rgba(168,85,247,0.13)", orb: "rgba(168,85,247,0.16)", border: "hover:border-violet-400/40" },
   };
   const a = accentMap[accent];
 
@@ -490,45 +507,62 @@ function FeatureCard({
   return (
     <motion.div
       onMouseMove={handleMove}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ delay, duration: 0.5, ease: "easeOut" }}
       className={cn(
-        "group relative overflow-hidden rounded-xl p-6 transition-all duration-300",
-        "border border-white/[0.07] bg-[#0c0c1a]/90 backdrop-blur-sm",
-        "hover:-translate-y-1 hover:border-white/[0.13]",
-        "hover:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.6)]"
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] p-6 transition-all duration-300",
+        "bg-gradient-to-b from-white/[0.05] to-white/[0.015]",
+        "hover:-translate-y-1.5 hover:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)]",
+        a.border
       )}
     >
       {/* cursor spotlight */}
       <div
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ background: `radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), ${a.spot}, transparent 65%)` }}
+        style={{ background: `radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), ${a.spot}, transparent 65%)` }}
       />
       {/* top gradient hairline */}
-      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      {/* corner orb */}
+      <div
+        className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: a.orb }}
+      />
       {/* HUD corner brackets */}
       <div className="hud-corners" />
       {/* index watermark */}
-      <span className="absolute right-5 top-5 font-mono text-[10px] text-white/15 transition-colors duration-300 group-hover:text-white/35">
+      <span className="absolute right-5 top-5 font-mono text-[11px] text-white/15 transition-colors duration-300 group-hover:text-white/40">
         {String(index + 1).padStart(2, "0")}
       </span>
 
+      {/* icon chip */}
       <div
         className={cn(
-          "feat-icon mb-5 flex h-10 w-10 items-center justify-center rounded-lg border",
-          a.bg, a.border
+          "feat-icon mb-5 flex h-11 w-11 items-center justify-center rounded-xl border",
+          a.chip
         )}
         style={{ "--glow": a.glow } as React.CSSProperties}
       >
-        <Icon className={cn("h-4.5 w-4.5", a.text)} />
+        <Icon className={cn("h-5 w-5", a.text)} />
       </div>
-      <h3 className="mb-2 text-sm font-bold tracking-tight text-white">{title}</h3>
-      <p className="text-sm leading-relaxed text-white/40">{desc}</p>
+      <h3 className="mb-2.5 text-[15px] font-bold tracking-tight text-white">{title}</h3>
+      <p className="flex-1 text-sm leading-relaxed text-white/45">{desc}</p>
 
-      {/* bottom accent line */}
-      <div className={cn("absolute bottom-0 left-6 right-6 h-px origin-left scale-x-0 bg-gradient-to-r to-transparent transition-transform duration-500 group-hover:scale-x-100", a.line)} />
+      {/* spec tags */}
+      {tags.length > 0 && (
+        <div className="mt-5 flex flex-wrap gap-1.5">
+          {tags.map((t) => (
+            <span
+              key={t}
+              className="rounded-md border border-white/[0.08] bg-black/40 px-2 py-1 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/35 transition-colors duration-300 group-hover:border-white/[0.15] group-hover:text-white/60"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -601,12 +635,12 @@ export default function LandingPage() {
   const [navOpen, setNavOpen] = useState(false);
 
   const features = [
-    { title: "Anti-Nuke",       desc: "Instant lockdown against mass bans, channel wipes, and rogue admin attacks — resolved in milliseconds.",    icon: ShieldAlert,    accent: "indigo" as const },
-    { title: "Smart Automod",   desc: "ML-powered message scoring catches spam, scam links, and NSFW content before anyone sees it.",               icon: ShieldCheck,    accent: "cyan"   as const },
-    { title: "Leveling",        desc: "XP tracking, custom rank cards, reward roles, and a public leaderboard — all configurable per server.",     icon: BarChart4,      accent: "violet" as const },
-    { title: "Ticket System",   desc: "Panel-based support tickets with transcripts, category routing, and staff assignments.",                    icon: MessageSquare,  accent: "indigo" as const },
-    { title: "Engagement",      desc: "Reaction roles, welcome cards, vanity roles and join DMs that keep members coming back.",                   icon: Sparkles,       accent: "cyan"   as const },
-    { title: "One Dashboard",   desc: "Configure every module from a single fast interface — no slash commands, no YAML, no headaches.",           icon: LayoutDashboard, accent: "violet" as const },
+    { title: "Anti-Nuke",       desc: "Instant lockdown against mass bans, channel wipes, and rogue admin attacks — resolved in milliseconds.", tags: ["2ms lockdown", "Instant restore"], icon: ShieldAlert,     accent: "indigo" as const },
+    { title: "Smart Automod",   desc: "ML-powered message scoring catches spam, scam links, and NSFW content before anyone sees it.",        tags: ["ML scoring", "0 false positives"], icon: ShieldCheck,  accent: "cyan"   as const },
+    { title: "Leveling",        desc: "XP tracking, custom rank cards, reward roles, and a public leaderboard — all configurable per server.", tags: ["Custom rank cards", "Reward roles"], icon: BarChart4, accent: "violet" as const },
+    { title: "Ticket System",   desc: "Panel-based support tickets with transcripts, category routing, and staff assignments.",             tags: ["Auto transcripts", "Routing"], icon: MessageSquare, accent: "indigo" as const },
+    { title: "Engagement",      desc: "Reaction roles, welcome cards, vanity roles and join DMs that keep members coming back.",            tags: ["Welcome cards", "Reaction roles"], icon: Sparkles,  accent: "cyan"   as const },
+    { title: "One Dashboard",   desc: "Configure every module from a single fast interface — no slash commands, no YAML, no headaches.",    tags: ["Zero commands", "1-click setup"], icon: LayoutDashboard, accent: "violet" as const },
   ];
 
   const modules = [
@@ -644,88 +678,79 @@ export default function LandingPage() {
       <div className="pointer-events-none fixed inset-0 z-0 dot-grid opacity-80" />
 
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 z-50 w-full px-4 pt-4">
-        <div className="mx-auto max-w-7xl">
-          {/* floating glass pill */}
-          <div className="relative flex h-14 items-center justify-between rounded-2xl border border-white/[0.08] bg-[#05050b]/70 px-5 backdrop-blur-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.7)]">
-            {/* gradient hairlines */}
-            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#ff8fab]/70 to-transparent" />
-            <div className="pointer-events-none absolute inset-x-8 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-            {/* soft inner glow */}
-            <div className="pointer-events-none absolute -top-8 left-1/4 h-16 w-40 bg-pink-500/15 blur-2xl rounded-full" />
+      <nav className="fixed top-0 z-50 w-full border-b border-white/[0.08] bg-[#05050b]/85 backdrop-blur-xl">
+        {/* gradient hairline */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
 
-            {/* logo */}
-            <div className="relative flex items-center gap-3">
-              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 shadow-[0_0_22px_rgba(255,93,143,0.45)]">
-                <Bot className="h-4.5 w-4.5 text-white" />
-                <div className="absolute inset-0 rounded-xl border border-white/25" />
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="text-[15px] font-bold tracking-tight text-white">{BRAND}</span>
-                <span className="mt-1 text-[8px] font-semibold uppercase tracking-[0.3em] text-white/30">
-                  Discord Bot
-                </span>
-              </div>
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
+          {/* logo */}
+          <div className="relative flex items-center gap-3">
+            <LogoMark />
+            <div className="flex flex-col leading-none">
+              <span className="text-[15px] font-bold tracking-tight text-white">{BRAND}</span>
+              <span className="mt-1 text-[8px] font-semibold uppercase tracking-[0.3em] text-white/30">
+                Discord Bot
+              </span>
             </div>
+          </div>
 
-            {/* links */}
-            <div className="hidden items-center gap-1 lg:flex">
+          {/* links */}
+          <div className="hidden items-center gap-1 lg:flex">
+            {[["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
+              <Link
+                key={l}
+                href={h}
+                className="group relative px-4 py-2 text-xs font-semibold text-white/45 transition-colors hover:text-white"
+              >
+                {l}
+                <span className="absolute inset-x-4 bottom-0.5 h-px origin-left scale-x-0 bg-gradient-to-r from-primary via-cyan-400 to-accent transition-transform duration-300 group-hover:scale-x-100" />
+              </Link>
+            ))}
+          </div>
+
+          {/* actions */}
+          <div className="flex items-center gap-2.5">
+            <Button
+              onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
+              className="btn-sheen h-9 gap-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-5 text-xs font-semibold text-white shadow-[0_0_24px_rgba(99,102,241,0.45)] hover:brightness-110"
+            >
+              <LogIn className="h-3.5 w-3.5" />
+              Sign in
+            </Button>
+            <button
+              type="button"
+              aria-label="Toggle menu"
+              onClick={() => setNavOpen((v) => !v)}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 transition-colors hover:text-white lg:hidden"
+            >
+              {navOpen ? <X className="h-[18px] w-[18px]" /> : <Menu className="h-[18px] w-[18px]" />}
+            </button>
+          </div>
+        </div>
+
+        {/* mobile menu */}
+        <AnimatePresence>
+          {navOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              className="border-t border-white/[0.07] bg-[#05050b]/95 p-2 backdrop-blur-xl lg:hidden"
+            >
               {[["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
                 <Link
                   key={l}
                   href={h}
-                  className="group relative px-4 py-2 text-xs font-semibold text-white/45 transition-colors hover:text-white"
+                  onClick={() => setNavOpen(false)}
+                  className="block rounded-xl px-4 py-3 text-sm font-semibold text-white/60 transition-colors hover:bg-white/[0.05] hover:text-white"
                 >
                   {l}
-                  <span className="absolute inset-x-4 bottom-0.5 h-px origin-left scale-x-0 bg-gradient-to-r from-primary via-pink-500 to-accent transition-transform duration-300 group-hover:scale-x-100" />
                 </Link>
               ))}
-            </div>
-
-            {/* actions */}
-            <div className="flex items-center gap-2.5">
-              <Button
-                onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
-                className="btn-sheen h-9 gap-2 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-5 text-xs font-semibold text-white shadow-[0_0_24px_rgba(236,72,153,0.4)] hover:brightness-110"
-              >
-                <LogIn className="h-3.5 w-3.5" />
-                Sign in
-              </Button>
-              <button
-                type="button"
-                aria-label="Toggle menu"
-                onClick={() => setNavOpen((v) => !v)}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 transition-colors hover:text-white lg:hidden"
-              >
-                {navOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
-              </button>
-            </div>
-          </div>
-
-          {/* mobile menu */}
-          <AnimatePresence>
-            {navOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8, scale: 0.98 }}
-                transition={{ duration: 0.2 }}
-                className="mt-2 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#05050b]/85 p-2 backdrop-blur-xl shadow-2xl lg:hidden"
-              >
-                {[["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
-                  <Link
-                    key={l}
-                    href={h}
-                    onClick={() => setNavOpen(false)}
-                    className="block rounded-xl px-4 py-3 text-sm font-semibold text-white/60 transition-colors hover:bg-white/[0.05] hover:text-white"
-                  >
-                    {l}
-                  </Link>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
@@ -778,7 +803,7 @@ export default function LandingPage() {
             <Button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
               size="lg"
-              className="btn-sheen h-12 w-full gap-2.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-8 text-sm font-semibold text-white shadow-[0_0_36px_rgba(236,72,153,0.4)] hover:brightness-110 sm:w-auto"
+              className="btn-sheen h-12 w-full gap-2.5 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-8 text-sm font-semibold text-white shadow-[0_0_36px_rgba(99,102,241,0.45)] hover:brightness-110 sm:w-auto"
             >
               <LayoutDashboard className="h-4 w-4" />
               Open Dashboard
@@ -881,7 +906,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {features.map((f, i) => (
               <FeatureCard key={f.title} {...f} index={i} delay={i * 0.07} />
             ))}
@@ -935,7 +960,7 @@ export default function LandingPage() {
             {/* background glow */}
             <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-48 w-[500px] bg-primary/15 blur-[80px] rounded-full pointer-events-none" />
             <div className="absolute -bottom-16 right-0 h-40 w-64 bg-cyan-500/10 blur-[70px] rounded-full pointer-events-none" />
-            <div className="absolute -bottom-10 left-0 h-36 w-56 bg-pink-500/10 blur-[70px] rounded-full pointer-events-none" />
+            <div className="absolute -bottom-10 left-0 h-36 w-56 bg-violet-500/10 blur-[70px] rounded-full pointer-events-none" />
 
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 mb-8">
@@ -952,7 +977,7 @@ export default function LandingPage() {
                 <Button
                   onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
                   size="lg"
-                  className="btn-sheen h-12 w-full gap-2.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-10 font-semibold text-white shadow-[0_0_36px_rgba(236,72,153,0.4)] hover:brightness-110 sm:w-auto"
+                  className="btn-sheen h-12 w-full gap-2.5 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-10 font-semibold text-white shadow-[0_0_36px_rgba(99,102,241,0.45)] hover:brightness-110 sm:w-auto"
                 >
                   Get started free
                   <ArrowRight className="h-4 w-4" />
@@ -995,9 +1020,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-2.5 mb-4">
-                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <Bot className="h-3.5 w-3.5 text-white" />
-                </div>
+                <LogoMark size="h-7 w-7" iconSize="h-3.5 w-3.5" />
                 <span className="font-bold text-[15px] text-white">{BRAND}</span>
               </div>
               <p className="text-sm text-white/30 max-w-xs leading-relaxed">

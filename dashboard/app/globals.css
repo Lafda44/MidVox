@@ -110,13 +110,13 @@ p, li { line-height: 1.7; }
 
   /* Gradient text */
   .text-gradient {
-    background: linear-gradient(135deg, #ff8fab 0%, #a855f7 40%, #22d3ee 100%);
+    background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 45%, #22d3ee 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .text-gradient-warm {
-    background: linear-gradient(135deg, #f0f0f8 0%, #ff8fab 55%, #a855f7 100%);
+    background: linear-gradient(135deg, #f0f0f8 0%, #a5b4fc 55%, #6366f1 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -178,8 +178,8 @@ p, li { line-height: 1.7; }
   /* Animated bg gradient */
   .bg-aurora {
     background-image:
-      linear-gradient(rgba(5, 5, 11, 0.62), rgba(5, 5, 11, 0.86)),
-      radial-gradient(ellipse 130% 100% at 50% 0%, rgba(5, 5, 11, 0) 35%, rgba(5, 5, 11, 0.85) 100%),
+      linear-gradient(rgba(5, 5, 11, 0.8), rgba(5, 5, 11, 0.94)),
+      radial-gradient(ellipse 130% 100% at 50% 0%, rgba(5, 5, 11, 0) 40%, rgba(5, 5, 11, 0.92) 100%),
       url('/bg-aurora.jpg');
     background-size: cover, cover, cover;
     background-position: center;
@@ -320,7 +320,7 @@ p, li { line-height: 1.7; }
 .animate-blink   { animation: blink 1s step-end infinite; }
 .animate-scan    { animation: scan 3.5s linear infinite; }
 .animate-shimmer {
-  background: linear-gradient(90deg, #ff8fab, #a855f7, #22d3ee, #ff8fab);
+  background: linear-gradient(90deg, #a5b4fc, #6366f1, #22d3ee, #a5b4fc);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;

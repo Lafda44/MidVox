@@ -171,14 +171,14 @@ export default function DashboardLayout({
             backgroundImage: "url('/bg-mesh.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
-            filter: "brightness(0.7) saturate(1.2)",
+            filter: "brightness(0.6) saturate(1.1)",
           }}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 120% 100% at 50% 10%, rgba(5,5,11,0.5) 0%, rgba(5,5,11,0.92) 80%)",
+              "radial-gradient(ellipse 120% 100% at 50% 10%, rgba(5,5,11,0.68) 0%, rgba(5,5,11,0.96) 80%)",
           }}
         />
         <div className="absolute top-[-20%] left-1/2 h-[40%] w-[60%] -translate-x-1/2 bg-primary/[0.05] blur-[120px]" />
