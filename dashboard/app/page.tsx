@@ -445,37 +445,66 @@ function DashboardMockup() {
 
 /* ── Feature card ────────────────────────────────────────────────────────── */
 function FeatureCard({
-  icon: Icon, title, desc, delay = 0, accent = "indigo",
+  icon: Icon, title, desc, delay = 0, accent = "indigo", index = 0,
 }: {
-  icon: typeof ShieldCheck; title: string; desc: string; delay?: number; accent?: "indigo" | "cyan" | "violet";
+  icon: typeof ShieldCheck; title: string; desc: string; delay?: number; accent?: "indigo" | "cyan" | "violet"; index?: number;
 }) {
   const accentMap = {
-    indigo: { bg: "bg-primary/10", border: "border-primary/20", text: "text-primary-light", hover: "hover:border-primary/35" },
-    cyan:   { bg: "bg-cyan-500/10", border: "border-cyan-500/20", text: "text-cyan-400", hover: "hover:border-cyan-400/35" },
-    violet: { bg: "bg-violet-500/10", border: "border-violet-500/20", text: "text-violet-400", hover: "hover:border-violet-400/35" },
+    indigo: { bg: "bg-primary/10", border: "border-primary/20", text: "text-primary-light", spot: "rgba(99,102,241,0.13)", glow: "rgba(99,102,241,0.4)", line: "from-primary/60 via-primary/25" },
+    cyan:   { bg: "bg-cyan-500/10", border: "border-cyan-500/20", text: "text-cyan-400", spot: "rgba(34,211,238,0.12)", glow: "rgba(34,211,238,0.35)", line: "from-cyan-400/60 via-cyan-400/25" },
+    violet: { bg: "bg-violet-500/10", border: "border-violet-500/20", text: "text-violet-400", spot: "rgba(168,85,247,0.12)", glow: "rgba(168,85,247,0.35)", line: "from-violet-400/60 via-violet-400/25" },
   };
   const a = accentMap[accent];
 
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
+
   return (
     <motion.div
+      onMouseMove={handleMove}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ delay, duration: 0.5, ease: "easeOut" }}
       className={cn(
-        "group relative rounded-xl p-6 border transition-all duration-300",
-        "bg-[#0c0c1a] border-white/[0.07]",
-        "hover:border-white/[0.13] hover:-translate-y-1",
+        "group relative overflow-hidden rounded-xl p-6 transition-all duration-300",
+        "border border-white/[0.07] bg-[#0c0c1a]/90 backdrop-blur-sm",
+        "hover:-translate-y-1 hover:border-white/[0.13]",
         "hover:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.6)]"
       )}
     >
-      {/* corner accent on hover */}
-      <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
-      <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center mb-5 border transition-all duration-300 group-hover:scale-110", a.bg, a.border)}>
+      {/* cursor spotlight */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: `radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), ${a.spot}, transparent 65%)` }}
+      />
+      {/* top gradient hairline */}
+      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      {/* HUD corner brackets */}
+      <div className="hud-corners" />
+      {/* index watermark */}
+      <span className="absolute right-5 top-5 font-mono text-[10px] text-white/15 transition-colors duration-300 group-hover:text-white/35">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
+      <div
+        className={cn(
+          "feat-icon mb-5 flex h-10 w-10 items-center justify-center rounded-lg border",
+          a.bg, a.border
+        )}
+        style={{ "--glow": a.glow } as React.CSSProperties}
+      >
         <Icon className={cn("h-4.5 w-4.5", a.text)} />
       </div>
-      <h3 className="text-sm font-bold text-white mb-2 tracking-tight">{title}</h3>
-      <p className="text-sm text-white/40 leading-relaxed">{desc}</p>
+      <h3 className="mb-2 text-sm font-bold tracking-tight text-white">{title}</h3>
+      <p className="text-sm leading-relaxed text-white/40">{desc}</p>
+
+      {/* bottom accent line */}
+      <div className={cn("absolute bottom-0 left-6 right-6 h-px origin-left scale-x-0 bg-gradient-to-r to-transparent transition-transform duration-500 group-hover:scale-x-100", a.line)} />
     </motion.div>
   );
 }
@@ -754,15 +783,23 @@ export default function LandingPage() {
       <section id="features" className="relative z-10 py-24 px-6">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-2xl mb-14">
-            <p className="label mb-4">Features</p>
+            <p className="label mb-4 flex items-center gap-3">
+              <span className="h-px w-10 bg-gradient-to-r from-primary to-transparent" />
+              Features
+            </p>
             <h2 className="heading-lg text-white">
-              Everything communities need, nothing they don&apos;t
+              Everything communities need,{" "}
+              <span className="text-gradient">nothing they don&apos;t</span>
             </h2>
+            <p className="mt-4 max-w-lg text-base text-white/40">
+              Six core systems, each battle-tested across hundreds of servers — protected,
+              engaging, and dead simple to run.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((f, i) => (
-              <FeatureCard key={f.title} {...f} delay={i * 0.07} />
+              <FeatureCard key={f.title} {...f} index={i} delay={i * 0.07} />
             ))}
           </div>
         </div>
