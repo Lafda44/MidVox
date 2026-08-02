@@ -211,7 +211,7 @@ export default function DashboardLayout({
         {/* Header */}
         <div className="flex h-16 items-center px-5 border-b border-white/[0.07] flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[0_0_18px_rgba(99,102,241,0.45)]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[0_0_18px_rgba(88,101,242,0.45)]">
               <Bot className="h-5 w-5 text-white" />
             </div>
             <div className="flex flex-col">
@@ -264,7 +264,7 @@ export default function DashboardLayout({
                           {isActive && (
                             <motion.span
                               layoutId="sidebar-active"
-                              className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-gradient-to-b from-primary to-accent shadow-[0_0_10px_rgba(99,102,241,0.6)]"
+                              className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-gradient-to-b from-primary to-accent shadow-[0_0_10px_rgba(88,101,242,0.6)]"
                             />
                           )}
                           <subItem.icon
@@ -303,7 +303,7 @@ export default function DashboardLayout({
                   {isActive && (
                     <motion.span
                       layoutId="sidebar-active"
-                      className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-gradient-to-b from-primary to-accent shadow-[0_0_10px_rgba(99,102,241,0.6)]"
+                      className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-gradient-to-b from-primary to-accent shadow-[0_0_10px_rgba(88,101,242,0.6)]"
                     />
                   )}
                   <item.icon

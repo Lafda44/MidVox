@@ -64,7 +64,7 @@ export default function RootLayout({
               top: "-15%",
               left: "50%",
               transform: "translateX(-50%)",
-              background: "radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(88,101,242,0.13) 0%, transparent 70%)",
               animationDuration: "22s",
             }}
           />

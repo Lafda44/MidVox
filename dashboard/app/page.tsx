@@ -256,7 +256,7 @@ function DashboardMockup() {
           {/* sidebar */}
           <div className="hidden sm:flex flex-col w-40 shrink-0 bg-[#070712] border-r border-white/[0.05] p-3 gap-0.5">
               <div className="flex items-center gap-2 px-2 py-2.5 mb-2">
-                <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 flex items-center justify-center shadow-[0_0_12px_rgba(99,102,241,0.5)]">
+                <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-[#6B76F5] to-[#4752C4] flex items-center justify-center shadow-[0_0_12px_rgba(88,101,242,0.5)]">
                   <Zap className="h-3 w-3 text-white" fill="currentColor" />
                 </div>
                 <span className="text-xs font-bold text-white">{BRAND}</span>
@@ -342,7 +342,7 @@ function DashboardMockup() {
                             className={cn(
                               "flex-1 rounded-sm",
                               i >= 7
-                                ? "bg-gradient-to-t from-primary to-accent shadow-[0_0_8px_rgba(99,102,241,0.4)]"
+                                ? "bg-gradient-to-t from-primary to-accent shadow-[0_0_8px_rgba(88,101,242,0.4)]"
                                 : "bg-white/[0.08]"
                             )}
                           />
@@ -472,7 +472,7 @@ function LogoMark({ size = "h-9 w-9", iconSize = "h-[18px] w-[18px]" }: { size?:
   return (
     <div
       className={cn(
-        "relative flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 shadow-[0_0_20px_rgba(99,102,241,0.5)]",
+        "relative flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#6B76F5] to-[#4752C4] shadow-[0_0_20px_rgba(88,101,242,0.5)]",
         size
       )}
     >
@@ -491,8 +491,8 @@ function FeatureCard({
   delay?: number; accent?: "indigo" | "cyan" | "violet"; index?: number;
 }) {
   const accentMap = {
-    indigo: { text: "text-indigo-300", chip: "bg-indigo-500/15 border-indigo-500/30", glow: "rgba(99,102,241,0.5)", spot: "rgba(99,102,241,0.15)", orb: "rgba(99,102,241,0.18)", border: "hover:border-indigo-400/40" },
-    cyan:   { text: "text-cyan-300",   chip: "bg-cyan-500/15 border-cyan-500/30",   glow: "rgba(34,211,238,0.45)", spot: "rgba(34,211,238,0.13)", orb: "rgba(34,211,238,0.16)", border: "hover:border-cyan-400/40" },
+    indigo: { text: "text-[#a5affb]", chip: "bg-[#5865F2]/15 border-[#5865F2]/30", glow: "rgba(88,101,242,0.5)", spot: "rgba(88,101,242,0.15)", orb: "rgba(88,101,242,0.18)", border: "hover:border-[#7C85FD]/40" },
+    cyan:   { text: "text-cyan-300",   chip: "bg-cyan-500/15 border-cyan-500/30",   glow: "rgba(56,189,248,0.45)", spot: "rgba(56,189,248,0.13)", orb: "rgba(56,189,248,0.16)", border: "hover:border-cyan-400/40" },
     violet: { text: "text-violet-300", chip: "bg-violet-500/15 border-violet-500/30", glow: "rgba(168,85,247,0.45)", spot: "rgba(168,85,247,0.13)", orb: "rgba(168,85,247,0.16)", border: "hover:border-violet-400/40" },
   };
   const a = accentMap[accent];
@@ -712,7 +712,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2.5">
             <Button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
-              className="btn-sheen h-9 gap-2 bg-indigo-600 px-5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] hover:bg-indigo-500 transition-colors"
+              className="btn-sheen h-9 gap-2 bg-primary px-5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(88,101,242,0.35)] hover:bg-primary-hover transition-colors"
             >
               <LogIn className="h-3.5 w-3.5" />
               Sign in
@@ -803,7 +803,7 @@ export default function LandingPage() {
             <Button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
               size="lg"
-              className="btn-sheen h-12 w-full gap-2.5 bg-indigo-600 px-8 text-sm font-semibold text-white shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:bg-indigo-500 transition-colors sm:w-auto"
+              className="btn-sheen h-12 w-full gap-2.5 bg-primary px-8 text-sm font-semibold text-white shadow-[0_0_32px_rgba(88,101,242,0.4)] hover:bg-primary-hover transition-colors sm:w-auto"
             >
               <LayoutDashboard className="h-4 w-4" />
               Open Dashboard
@@ -977,7 +977,7 @@ export default function LandingPage() {
                 <Button
                   onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
                   size="lg"
-                  className="btn-sheen h-12 w-full gap-2.5 bg-indigo-600 px-10 font-semibold text-white shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:bg-indigo-500 transition-colors sm:w-auto"
+                  className="btn-sheen h-12 w-full gap-2.5 bg-primary px-10 font-semibold text-white shadow-[0_0_32px_rgba(88,101,242,0.4)] hover:bg-primary-hover transition-colors sm:w-auto"
                 >
                   Get started free
                   <ArrowRight className="h-4 w-4" />
