@@ -162,10 +162,12 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200">
-      {/* Subtle background glow */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[60%] h-[40%] bg-primary/[0.04] blur-[120px]" />
+    <div className="min-h-screen bg-background text-slate-200">
+      {/* Subtle neon background glows + tech grid */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-20%] left-1/2 h-[40%] w-[60%] -translate-x-1/2 bg-primary/[0.05] blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] h-[36%] w-[40%] bg-accent/[0.04] blur-[110px]" />
+        <div className="absolute inset-0 cyber-grid-bg opacity-40" />
       </div>
 
       {/* Mobile Sidebar Overlay */}
@@ -184,14 +186,16 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-0 bottom-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-out lg:translate-x-0 bg-slate-950 border-r border-slate-800 flex flex-col",
+          "fixed top-0 bottom-0 left-0 z-50 w-64 transform border-r border-slate-800/80 bg-[#050509]/95 backdrop-blur-xl transition-transform duration-300 ease-out lg:translate-x-0 flex flex-col",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
+        {/* Neon top hairline */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary to-accent" />
         {/* Header */}
         <div className="flex h-16 items-center px-5 border-b border-slate-800 flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[0_0_18px_rgba(99,102,241,0.45)]">
               <Bot className="h-5 w-5 text-white" />
             </div>
             <div className="flex flex-col">
@@ -244,7 +248,7 @@ export default function DashboardLayout({
                           {isActive && (
                             <motion.span
                               layoutId="sidebar-active"
-                              className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-primary"
+                              className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-gradient-to-b from-primary to-accent shadow-[0_0_10px_rgba(99,102,241,0.6)]"
                             />
                           )}
                           <subItem.icon
@@ -283,7 +287,7 @@ export default function DashboardLayout({
                   {isActive && (
                     <motion.span
                       layoutId="sidebar-active"
-                      className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-primary"
+                      className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-gradient-to-b from-primary to-accent shadow-[0_0_10px_rgba(99,102,241,0.6)]"
                     />
                   )}
                   <item.icon
@@ -343,7 +347,8 @@ export default function DashboardLayout({
       {/* Main Content Area */}
       <div className="lg:pl-64 flex flex-col min-h-screen relative z-10">
         {/* Top Navbar */}
-        <header className="h-16 sticky top-0 z-30 flex items-center justify-between border-b border-slate-800 bg-slate-950/80 backdrop-blur-md px-4 lg:px-8">
+        <header className="relative h-16 sticky top-0 z-30 flex items-center justify-between border-b border-slate-800/80 bg-background/80 backdrop-blur-md px-4 lg:px-8">
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
           <button
             className="p-2 lg:hidden text-slate-400 hover:bg-slate-800/60 rounded-lg transition-colors"
             onClick={() => setIsSidebarOpen(true)}
@@ -356,7 +361,7 @@ export default function DashboardLayout({
             <input
               type="text"
               placeholder="Search..."
-              className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 pl-10 pr-4 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all"
+              className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 pl-10 pr-4 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/40 transition-all"
             />
           </div>
 
