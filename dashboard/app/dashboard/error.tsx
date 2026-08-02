@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -38,7 +38,7 @@ export default function DashboardError({
         <AlertTriangle className="h-10 w-10 text-red-500" />
       </div>
       
-      <h2 className="text-2xl font-black text-white mb-2 tracking-tight">System Fault Detected</h2>
+      <h2 className="text-2xl font-black text-slate-50 mb-2 tracking-tight">System Fault Detected</h2>
       <p className="text-slate-400 max-w-md mb-8">
         The neural link experienced an unexpected interruption. This could be due to a connection timeout or an internal API failure.
       </p>
@@ -63,7 +63,7 @@ export default function DashboardError({
       </div>
       
       {process.env.NODE_ENV === 'development' && (
-        <pre className="mt-8 p-4 bg-black/40 border border-slate-800 rounded-xl text-left text-xs text-red-400 overflow-auto max-w-full font-mono">
+        <pre className="mt-8 p-4 bg-slate-100 border border-slate-200 rounded-xl text-left text-xs text-red-600 overflow-auto max-w-full font-mono">
           {error.message}
         </pre>
       )}

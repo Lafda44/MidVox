@@ -1,17 +1,17 @@
-/**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+﻿/**
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -22,7 +22,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
   {
     variants: {
       variant: {
@@ -30,10 +30,10 @@ const buttonVariants = cva(
         destructive:
           "bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-500/20",
         outline:
-          "border border-slate-700 bg-transparent hover:bg-slate-800/70 hover:text-white hover:border-slate-600",
+          "border border-slate-300 bg-transparent hover:bg-slate-100 hover:text-slate-900 hover:border-slate-400",
         secondary:
-          "bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white border border-slate-700/60",
-        ghost: "hover:bg-slate-800/70 hover:text-white",
+          "bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 border border-slate-200",
+        ghost: "hover:bg-slate-100 hover:text-slate-900",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

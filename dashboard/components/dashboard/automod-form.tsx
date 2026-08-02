@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -130,7 +130,7 @@ export function AutomodForm({ initialConfig, guildId }: AutomodFormProps) {
                           <rule.icon className="h-6 w-6" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-white">{rule.name}</h3>
+                          <h3 className="font-bold text-slate-50">{rule.name}</h3>
                           <p className="text-xs text-slate-500 max-w-xs">{rule.desc}</p>
                         </div>
                       </div>
@@ -184,7 +184,7 @@ export function AutomodForm({ initialConfig, guildId }: AutomodFormProps) {
          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
             <h3 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-4">Logging Level</h3>
             <div className="space-y-3">
-               <div className="p-3 bg-slate-900/50 rounded-xl border border-white/5 flex items-center justify-between">
+               <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-200/70 flex items-center justify-between">
                   <span className="text-sm text-slate-400">Log Channel</span>
                   <span className="text-xs font-mono text-primary">#{config.logging_channel || 'None'}</span>
                </div>
@@ -194,9 +194,9 @@ export function AutomodForm({ initialConfig, guildId }: AutomodFormProps) {
 
          <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
             <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
-              <ShieldAlert className="h-32 w-32 text-white" />
+              <ShieldAlert className="h-32 w-32 text-slate-50" />
             </div>
-            <h3 className="text-sm font-bold text-white mb-2">Automod AI</h3>
+            <h3 className="text-sm font-bold text-slate-50 mb-2">Automod AI</h3>
             <p className="text-xs text-slate-400 leading-relaxed mb-4">Our neural network analyzes message context to prevent false positives.</p>
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary" />

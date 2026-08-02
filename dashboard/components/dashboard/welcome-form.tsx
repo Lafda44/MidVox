@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -102,7 +102,7 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
                   value={config.welcome_message || ""}
                   onChange={(e) => setConfig({ ...config, welcome_message: e.target.value })}
                   placeholder="Welcome {user} to {server_name}!"
-                  className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-white min-h-[120px]"
+                  className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50 min-h-[120px]"
                 />
               </div>
             )}
@@ -116,7 +116,7 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
                       type="text"
                       value={config.embed_data?.title || ""}
                       onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, title: e.target.value }})}
-                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-white"
+                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50"
                       placeholder="Welcome to the server!"
                     />
                   </div>
@@ -126,7 +126,7 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
                       type="text"
                       value={config.embed_data?.color || ""}
                       onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, color: e.target.value }})}
-                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-white"
+                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50"
                       placeholder="#3498db"
                     />
                   </div>
@@ -138,7 +138,7 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
                     value={config.embed_data?.description || ""}
                     onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, description: e.target.value }})}
                     placeholder="We're glad to have you here, {user}!"
-                    className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-white min-h-[100px]"
+                    className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50 min-h-[100px]"
                   />
                 </div>
 
@@ -149,7 +149,7 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
                       type="text"
                       value={config.embed_data?.thumbnail || ""}
                       onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, thumbnail: e.target.value }})}
-                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-white"
+                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50"
                       placeholder="{user_avatar} or https://..."
                     />
                   </div>
@@ -159,7 +159,7 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
                       type="text"
                       value={config.embed_data?.image || ""}
                       onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, image: e.target.value }})}
-                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-white"
+                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50"
                       placeholder="https://..."
                     />
                   </div>
@@ -182,13 +182,13 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
       <div className="space-y-6">
          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
             <h3 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-4">Variables</h3>
-            <div className="space-y-2 text-xs text-slate-400 font-mono bg-slate-900/50 p-4 rounded-2xl border border-white/5">
-               <p className="flex justify-between hover:text-white transition-colors"><span>{'{user}'}</span> <span>@Username</span></p>
-               <p className="flex justify-between hover:text-white transition-colors"><span>{'{user_name}'}</span> <span>Username</span></p>
-               <p className="flex justify-between hover:text-white transition-colors"><span>{'{server_name}'}</span> <span>Server Name</span></p>
-               <p className="flex justify-between hover:text-white transition-colors"><span>{'{server_membercount}'}</span> <span>Total Members</span></p>
-               <p className="border-t border-slate-800 my-2 pt-2 flex justify-between hover:text-white transition-colors"><span>{'{user_avatar}'}</span> <span>Avatar Image</span></p>
-               <p className="flex justify-between hover:text-white transition-colors"><span>{'{server_icon}'}</span> <span>Server Logo</span></p>
+            <div className="space-y-2 text-xs text-slate-400 font-mono bg-slate-900/50 p-4 rounded-2xl border border-slate-200/70">
+               <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{user}'}</span> <span>@Username</span></p>
+               <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{user_name}'}</span> <span>Username</span></p>
+               <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{server_name}'}</span> <span>Server Name</span></p>
+               <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{server_membercount}'}</span> <span>Total Members</span></p>
+               <p className="border-t border-slate-800 my-2 pt-2 flex justify-between hover:text-slate-50 transition-colors"><span>{'{user_avatar}'}</span> <span>Avatar Image</span></p>
+               <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{server_icon}'}</span> <span>Server Logo</span></p>
             </div>
             <p className="text-[10px] text-slate-500 italic text-center mt-4">You can use these variables in both message content and embeds to personalize welcomes.</p>
          </div>

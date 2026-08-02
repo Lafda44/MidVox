@@ -1,17 +1,17 @@
-/**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+﻿/**
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -74,7 +74,7 @@ export function CustomRolesForm({ initialConfig, roles, guildId }: CustomRolesFo
                 <Settings className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-white">Required Permission Role</h3>
+                <h3 className="text-lg font-black text-slate-50">Required Permission Role</h3>
                 <p className="text-sm text-slate-400 mt-1">Users need this role to assign the custom roles below.</p>
               </div>
             </div>
@@ -107,7 +107,7 @@ export function CustomRolesForm({ initialConfig, roles, guildId }: CustomRolesFo
                     <input.icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-white">{input.label}</h4>
+                    <h4 className="font-bold text-slate-50">{input.label}</h4>
                     <p className="text-xs text-slate-400 mt-1">Role assigned via .{input.key} command</p>
                   </div>
                 </div>
@@ -153,10 +153,10 @@ export function CustomRolesForm({ initialConfig, roles, guildId }: CustomRolesFo
             Allows your trusted server managers to grant specific preset roles with simple prefix commands.
           </p>
           <ul className="text-xs text-slate-500 space-y-2">
-             <li>• <code>.staff @user</code> - Assigns/Removes Staff role</li>
-             <li>• <code>.girl @user</code> - Assigns/Removes Girl role</li>
-             <li>• <code>.vip @user</code> - Assigns/Removes VIP role</li>
-             <li>• Ensure Zyrox is placed higher than these roles in server settings!</li>
+             <li>â€¢ <code>.staff @user</code> - Assigns/Removes Staff role</li>
+             <li>â€¢ <code>.girl @user</code> - Assigns/Removes Girl role</li>
+             <li>â€¢ <code>.vip @user</code> - Assigns/Removes VIP role</li>
+             <li>â€¢ Ensure Zyrox is placed higher than these roles in server settings!</li>
           </ul>
         </div>
       </div>

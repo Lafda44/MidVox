@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Users, Hash, ChevronRight, ArrowUpRight } from "lucide-react";
@@ -58,7 +58,7 @@ export const ServerCard = ({
         </div>
 
         <div>
-          <h3 className="text-lg font-bold text-white truncate group-hover:text-primary-light transition-colors tracking-tight">
+          <h3 className="text-lg font-bold text-slate-50 truncate group-hover:text-primary-light transition-colors tracking-tight">
             {name}
           </h3>
           <div className="flex items-center gap-3 mt-3">
@@ -80,7 +80,7 @@ export const ServerCard = ({
 
       <Link
         href={`/dashboard/guild/${id}`}
-        className="group/link flex items-center justify-between px-6 py-3.5 border-t border-slate-800 text-[11px] font-semibold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors"
+        className="group/link flex items-center justify-between px-6 py-3.5 border-t border-slate-800 text-[11px] font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-50 hover:bg-slate-800/50 transition-colors"
       >
         <span>Manage Server</span>
         <ArrowUpRight className="h-4 w-4 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />

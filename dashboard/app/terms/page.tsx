@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -29,15 +29,15 @@ export default function TermsPage() {
         <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-red-600/[0.03] blur-[120px] rounded-full" />
       </div>
 
-      <nav className="fixed top-0 w-full z-50 border-b border-white/[0.03] bg-slate-950/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
+      <nav className="fixed top-0 w-full z-50 border-b border-slate-200/70 bg-slate-950/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-4 group">
           <div className="h-10 w-10 rounded-xl bg-red-600 flex items-center justify-center group-hover:rotate-12 transition-transform">
-            <Bot className="h-5 w-5 text-white" />
+            <Bot className="h-5 w-5 text-slate-50" />
           </div>
-          <span className="text-xl font-bold text-white font-outfit uppercase tracking-tighter">{process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"} Engine</span>
+          <span className="text-xl font-bold text-slate-50 font-outfit uppercase tracking-tighter">{process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"} Engine</span>
         </Link>
         <Link href="/">
-          <Button variant="ghost" className="text-slate-400 hover:text-white gap-2">
+          <Button variant="ghost" className="text-slate-400 hover:text-slate-50 gap-2">
             <ChevronLeft className="h-4 w-4" />
             Back to Home
           </Button>
@@ -51,14 +51,14 @@ export default function TermsPage() {
             Neural Protocol v2.4
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold text-white font-outfit tracking-tighter uppercase mb-12 italic text-right">
+          <h1 className="text-5xl md:text-7xl font-bold text-slate-50 font-outfit tracking-tighter uppercase mb-12 italic text-right">
             Terms of <span className="text-red-500 not-italic">Service.</span>
           </h1>
 
-          <div className="glass border-white/5 rounded-[40px] p-10 md:p-16 space-y-12 bg-gradient-to-br from-white/[0.01] to-transparent">
+          <div className="glass border-slate-200/70 rounded-[40px] p-10 md:p-16 space-y-12 bg-gradient-to-br from-white/[0.01] to-transparent">
             <section className="space-y-6">
-              <div className="flex items-center gap-4 text-white">
-                <div className="h-10 w-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-red-500">
+              <div className="flex items-center gap-4 text-slate-50">
+                <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
                    <Terminal className="h-5 w-5" />
                 </div>
                 <h2 className="text-2xl font-bold font-outfit uppercase tracking-tight">Acceptance of Protocol</h2>
@@ -69,8 +69,8 @@ export default function TermsPage() {
             </section>
 
             <section className="space-y-6">
-              <div className="flex items-center gap-4 text-white">
-                <div className="h-10 w-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-red-500">
+              <div className="flex items-center gap-4 text-slate-50">
+                <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
                    <ShieldAlert className="h-5 w-5" />
                 </div>
                 <h2 className="text-2xl font-bold font-outfit uppercase tracking-tight">Usage Constraints</h2>
@@ -81,8 +81,8 @@ export default function TermsPage() {
             </section>
 
             <section className="space-y-6">
-              <div className="flex items-center gap-4 text-white">
-                <div className="h-10 w-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-red-500">
+              <div className="flex items-center gap-4 text-slate-50">
+                <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
                    <Cpu className="h-5 w-5" />
                 </div>
                 <h2 className="text-2xl font-bold font-outfit uppercase tracking-tight">API & Scaling</h2>
@@ -92,7 +92,7 @@ export default function TermsPage() {
               </p>
             </section>
 
-            <div className="pt-12 border-t border-white/5">
+            <div className="pt-12 border-t border-slate-200/70">
               <p className="text-[10px] font-black uppercase text-slate-600 tracking-[0.4em]">
                 March 2026 // Distributed via {process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"} Neural Cloud
               </p>

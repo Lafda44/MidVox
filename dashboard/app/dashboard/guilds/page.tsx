@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
@@ -94,20 +94,20 @@ export default function GuildsPage() {
     <div className="space-y-8">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-bold text-white">Your Servers</h1>
+          <h1 className="text-3xl font-bold text-slate-50">Your Servers</h1>
           <p className="text-slate-400 mt-2">
             Select a server to manage its unique configuration and modules.
           </p>
         </div>
         <div className="text-sm font-medium px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-slate-300">
-          Showing <span className="text-white">{guilds.length}</span> active guilds
+          Showing <span className="text-slate-50">{guilds.length}</span> active guilds
         </div>
       </div>
 
       {error ? (
         <div className="bg-red-500/10 border border-red-500/20 p-8 rounded-2xl text-center">
           <ShieldCheck className="h-12 w-12 text-red-500 mx-auto mb-4 opacity-50" />
-          <h3 className="text-white font-bold text-lg">Connection Error</h3>
+          <h3 className="text-slate-50 font-bold text-lg">Connection Error</h3>
           <p className="text-slate-400 mt-2">{error}</p>
           <Button variant="outline" className="mt-6" onClick={() => window.location.reload()}>Retry Connection</Button>
         </div>
@@ -116,7 +116,7 @@ export default function GuildsPage() {
           <div className="h-16 w-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
             <Users className="h-8 w-8 text-slate-600" />
           </div>
-          <h3 className="text-white font-bold text-xl">No Servers Found</h3>
+          <h3 className="text-slate-50 font-bold text-xl">No Servers Found</h3>
           <p className="text-slate-400 mt-2 max-w-sm mx-auto">
             The bot hasn&apos;t joined any servers yet.
           </p>
@@ -127,7 +127,7 @@ export default function GuildsPage() {
             <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-2xl mb-6 flex items-center gap-3">
               <ShieldCheck className="h-5 w-5 text-yellow-500 shrink-0" />
               <p className="text-sm text-slate-300">
-                Could not verify your Discord permissions — showing all guilds the bot is in.
+                Could not verify your Discord permissions â€” showing all guilds the bot is in.
               </p>
             </div>
           )}
@@ -158,7 +158,7 @@ export default function GuildsPage() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white truncate group-hover:text-primary-light transition-colors">{guild.name}</h3>
+                  <h3 className="text-lg font-bold text-slate-50 truncate group-hover:text-primary-light transition-colors">{guild.name}</h3>
                   <div className="flex items-center gap-3 mt-3 text-slate-400">
                     <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-800">
                       <Users className="h-3.5 w-3.5 text-slate-500" />

@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --background: #0b0b10;
-  --foreground: #e2e2e9;
-  --primary: #8b5cf6;
-  --primary-hover: #7c3aed;
-  --primary-glow: rgba(139, 92, 246, 0.15);
-  --surface: #14141b;
-  --surface-light: #1a1a23;
-  --border: #23232c;
+  --background: #f5f5f5;
+  --foreground: #2e2e2e;
+  --primary: #1677ff;
+  --primary-hover: #4096ff;
+  --primary-glow: rgba(22, 119, 255, 0.15);
+  --surface: #ffffff;
+  --surface-light: #f7f8fa;
+  --border: #e3e6ea;
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
@@ -44,13 +44,13 @@ body::after {
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: 0.02;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.3);
-  color: #fff;
+  background: rgba(22, 119, 255, 0.25);
+  color: #111111;
 }
 
 /* Custom Scrollbar Styles */
@@ -60,23 +60,23 @@ body::after {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0b10;
+  background: #f0f2f5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2c2c37;
+  background: #c5cbd3;
   border-radius: 10px;
-  border: 2px solid #0b0b10;
+  border: 2px solid #f0f2f5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #8b5cf6;
+  background: #1677ff;
 }
 
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #2c2c37 #0b0b10;
+  scrollbar-color: #c5cbd3 #f0f2f5;
 }
 
 @layer utilities {
@@ -91,13 +91,13 @@ body::after {
     scrollbar-width: none;
   }
   .glass {
-    @apply backdrop-blur-xl bg-white/[0.02] border border-white/[0.05];
+    @apply backdrop-blur-xl bg-white/70 border border-slate-200/80;
   }
   .glass-red {
-    @apply backdrop-blur-xl bg-red-500/[0.02] border border-red-500/[0.1];
+    @apply backdrop-blur-xl bg-red-50/70 border border-red-200/80;
   }
   .panel {
-    @apply bg-slate-900 border border-slate-800 rounded-2xl;
+    @apply bg-white border border-slate-200 rounded-xl;
   }
   .panel-hover {
     @apply panel transition-all duration-300 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5;
@@ -106,14 +106,14 @@ body::after {
     @apply text-[10px] font-black uppercase tracking-[0.2em] text-slate-500;
   }
   .divider {
-    @apply h-px w-full bg-slate-800;
+    @apply h-px w-full bg-slate-200;
   }
   .text-gradient {
-    @apply bg-gradient-to-r from-primary-light via-indigo-300 to-primary bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-light via-primary to-primary-hover bg-clip-text text-transparent;
   }
   .grid-bg {
-    background-image: linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(22, 119, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22, 119, 255, 0.06) 1px, transparent 1px);
     background-size: 48px 48px;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 75%);
   }
@@ -122,11 +122,11 @@ body::after {
     border: 1px solid transparent;
     background:
       linear-gradient(var(--background), var(--background)) padding-box,
-      linear-gradient(135deg, rgba(139, 92, 246, 0.55), rgba(99, 102, 241, 0.18), rgba(139, 92, 246, 0.55)) border-box;
+      linear-gradient(135deg, rgba(22, 119, 255, 0.55), rgba(64, 150, 255, 0.25), rgba(22, 119, 255, 0.55)) border-box;
   }
   .glow-ring {
     box-shadow:
-      0 0 0 1px rgba(139, 92, 246, 0.25),
-      0 8px 32px -8px rgba(139, 92, 246, 0.35);
+      0 0 0 1px rgba(22, 119, 255, 0.25),
+      0 8px 32px -8px rgba(22, 119, 255, 0.35);
   }
 }

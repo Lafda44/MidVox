@@ -122,7 +122,7 @@ export default function AutoReactPage({ params }: { params: { guildId: string } 
                         </div>
                         <h4 className="font-bold text-white">Trigger #{index + 1}</h4>
                       </div>
-                      <Button variant="ghost" size="sm" onClick={() => removeTrigger(index)} className="text-red-400 hover:text-red-300 hover:bg-red-400/10 h-8 w-8 p-0">
+                      <Button variant="ghost" size="sm" onClick={() => removeTrigger(index)} className="text-red-600 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0">
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>

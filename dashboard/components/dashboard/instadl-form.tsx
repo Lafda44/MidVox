@@ -95,7 +95,7 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-primary/10 text-primary"><Download className="h-5 w-5" /></div>
               <div>
-                <h4 className="font-bold text-white text-sm">Enabled</h4>
+                <h4 className="font-bold text-slate-50 text-sm">Enabled</h4>
                 <p className="text-xs text-slate-400">Watch selected channels for Instagram links</p>
               </div>
             </div>
@@ -108,9 +108,9 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
               {/* Delete Original Toggle */}
               <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-2xl border border-slate-800">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400"><Trash2 className="h-5 w-5" /></div>
+                  <div className="p-2.5 rounded-xl bg-red-500/10 text-red-600"><Trash2 className="h-5 w-5" /></div>
                   <div>
-                    <h4 className="font-bold text-white text-sm">Delete Original</h4>
+                    <h4 className="font-bold text-slate-50 text-sm">Delete Original</h4>
                     <p className="text-xs text-slate-400">Remove the original message after the media is posted</p>
                   </div>
                 </div>
@@ -121,7 +121,7 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary/10 text-primary"><Hash className="h-4 w-4" /></div>
-                  <h4 className="font-bold text-white text-sm">Monitored Channels</h4>
+                  <h4 className="font-bold text-slate-50 text-sm">Monitored Channels</h4>
                 </div>
                 <Select value="" onValueChange={addChannel}>
                   <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
@@ -142,7 +142,7 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
                       return (
                         <div key={chId} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
                           <span className="text-slate-200">#{ch?.name || chId}</span>
-                          <button onClick={() => removeChannel(chId)} className="text-slate-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                          <button onClick={() => removeChannel(chId)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
                         </div>
                       );
                     })
@@ -175,20 +175,20 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
           </div>
           <div className="flex items-center gap-2 mb-4">
             <Info className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-bold text-white">How It Works</h3>
+            <h3 className="text-sm font-bold text-slate-50">How It Works</h3>
           </div>
           <ul className="text-xs text-slate-500 space-y-2">
-            <li>• Reels and post links are downloaded automatically.</li>
-            <li>• Media is reposted inline in the channel.</li>
-            <li>• Files are capped at 24MB for Discord limits.</li>
-            <li>• Only monitored channels are watched.</li>
+            <li>â€¢ Reels and post links are downloaded automatically.</li>
+            <li>â€¢ Media is reposted inline in the channel.</li>
+            <li>â€¢ Files are capped at 24MB for Discord limits.</li>
+            <li>â€¢ Only monitored channels are watched.</li>
           </ul>
         </div>
 
         <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6">
           <div className="flex items-center gap-2 mb-3">
             <Plus className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-bold text-white">Supported Links</h3>
+            <h3 className="text-sm font-bold text-slate-50">Supported Links</h3>
           </div>
           <p className="text-xs text-slate-500 mb-2">instagram.com reels, posts, stories &amp; instagr.am short links.</p>
         </div>

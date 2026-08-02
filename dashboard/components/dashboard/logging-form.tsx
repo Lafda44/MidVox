@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -108,11 +108,11 @@ export function LoggingForm({ initialConfig, channels, guildId }: LoggingFormPro
             <div key={cat.id} className="bg-slate-900 border border-slate-800 p-8 rounded-[40px] shadow-xl hover:border-primary/20 transition-all group">
                <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                   <div className="flex items-start gap-5">
-                     <div className="h-14 w-14 rounded-2xl bg-slate-800/50 flex items-center justify-center text-slate-400 group-hover:text-primary transition-colors border border-white/5 shrink-0">
+                     <div className="h-14 w-14 rounded-2xl bg-slate-800/50 flex items-center justify-center text-slate-400 group-hover:text-primary transition-colors border border-slate-200/70 shrink-0">
                         <cat.icon className="h-7 w-7" />
                      </div>
                      <div className="flex flex-col">
-                        <h3 className="text-lg font-black text-white tracking-tight">{cat.name}</h3>
+                        <h3 className="text-lg font-black text-slate-50 tracking-tight">{cat.name}</h3>
                         <p className="text-[12px] text-slate-500 font-medium leading-relaxed max-w-sm mt-1">
                           {cat.description}
                         </p>
@@ -127,7 +127,7 @@ export function LoggingForm({ initialConfig, channels, guildId }: LoggingFormPro
                           onValueChange={(val) => handleChannelChange(cat.id, val)}
                           options={channelOptions}
                           placeholder="Select channel..."
-                          className="bg-black/20 border-slate-800 rounded-xl"
+                          className="bg-slate-100/70 border-slate-800 rounded-xl"
                         />
                      </div>
 
@@ -154,18 +154,18 @@ export function LoggingForm({ initialConfig, channels, guildId }: LoggingFormPro
       <div className="space-y-6">
          <section className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-[40px] p-8 relative overflow-hidden group">
             <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
-              <BellRing className="h-32 w-32 text-white" />
+              <BellRing className="h-32 w-32 text-slate-50" />
             </div>
             <div className="flex items-center gap-2 mb-6">
               <Info className="h-5 w-5 text-primary" />
-              <h3 className="font-bold text-white text-lg tracking-tight">Logging Engine</h3>
+              <h3 className="font-bold text-slate-50 text-lg tracking-tight">Logging Engine</h3>
             </div>
             <div className="space-y-4 relative z-10">
-               <div className="p-4 bg-black/20 rounded-2xl border border-white/5 space-y-2">
+               <div className="p-4 bg-slate-100/70 rounded-2xl border border-slate-200/70 space-y-2">
                   <p className="text-[10px] uppercase font-bold text-slate-500">Intelligent Routing</p>
                   <p className="text-xs text-slate-300 leading-relaxed font-medium">Assign specific channels to different event types for better organization.</p>
                </div>
-               <div className="p-4 bg-black/20 rounded-2xl border border-white/5 space-y-2">
+               <div className="p-4 bg-slate-100/70 rounded-2xl border border-slate-200/70 space-y-2">
                   <p className="text-[10px] uppercase font-bold text-slate-500">Webhooks</p>
                   <p className="text-xs text-slate-300 leading-relaxed font-medium">Coming soon: Export audit logs to external webhooks and elastic systems.</p>
                </div>

@@ -77,7 +77,7 @@ function DashboardMockup() {
   const bars = [34, 58, 42, 76, 51, 88, 64, 95, 72, 84, 61, 90];
 
   const events = [
-    { icon: Ban, text: "Anti-Spam+ deleted 3 messages in #general", time: "2m ago", tone: "text-red-400" },
+    { icon: Ban, text: "Anti-Spam+ deleted 3 messages in #general", time: "2m ago", tone: "text-red-600" },
     { icon: Download, text: "Instagram reel saved from #media", time: "5m ago", tone: "text-primary-light" },
     { icon: Ticket, text: "New ticket #42 created by @rayexo", time: "11m ago", tone: "text-yellow-400" },
   ];
@@ -112,10 +112,10 @@ function DashboardMockup() {
           {/* Mini sidebar */}
           <div className="hidden sm:flex flex-col gap-1 w-40 p-3 bg-slate-950/60 border-r border-slate-800">
             <div className="flex items-center gap-2 px-2 py-2 mb-3">
-              <div className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center">
+              <div className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
                 <Bot className="h-3.5 w-3.5 text-white" />
               </div>
-              <span className="text-xs font-bold text-white">MidVox</span>
+              <span className="text-xs font-bold text-slate-50">MidVox</span>
             </div>
             {[
               { icon: LayoutDashboard, label: "Overview", active: true },
@@ -137,7 +137,7 @@ function DashboardMockup() {
               </div>
             ))}
             <div className="mt-auto flex items-center gap-2 px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-800">
-              <div className="h-5 w-5 rounded-full bg-gradient-to-br from-indigo-400 to-primary flex items-center justify-center text-[8px] font-bold text-white">R</div>
+              <div className="h-5 w-5 rounded-full bg-gradient-to-br from-primary-hover to-primary flex items-center justify-center text-[8px] font-bold text-white">R</div>
               <span className="text-[9px] font-semibold text-slate-400">rayexo</span>
             </div>
           </div>
@@ -146,12 +146,12 @@ function DashboardMockup() {
           <div className="flex-1 p-4 sm:p-5 space-y-4 bg-slate-900/40">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-white">Overview</p>
+                <p className="text-xs font-bold text-slate-50">Overview</p>
                 <p className="text-[9px] text-slate-500 mt-0.5">Live metrics</p>
               </div>
               <div className="hidden md:flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-600">
                 <Search className="h-3 w-3" />
-                <span className="text-[9px]">Search…</span>
+                <span className="text-[9px]">Searchâ€¦</span>
               </div>
             </div>
 
@@ -168,7 +168,7 @@ function DashboardMockup() {
                     <m.icon className={`h-3 w-3 ${m.color}`} />
                     <span className="text-[8px] font-semibold uppercase tracking-widest text-slate-600">{m.label}</span>
                   </div>
-                  <p className="text-lg font-bold text-white font-mono tabular-nums">
+                  <p className="text-lg font-bold text-slate-50 font-mono tabular-nums">
                     <CountUp to={m.value} suffix={m.suffix || ""} />
                   </p>
                 </motion.div>
@@ -229,8 +229,8 @@ function DashboardMockup() {
           <Download className="h-3.5 w-3.5 text-primary-light" />
         </div>
         <div>
-          <p className="text-[10px] font-semibold text-white">Reel downloaded</p>
-          <p className="text-[9px] text-slate-500">#media → 8.2 MB mp4</p>
+          <p className="text-[10px] font-semibold text-slate-50">Reel downloaded</p>
+          <p className="text-[9px] text-slate-500">#media â†’ 8.2 MB mp4</p>
         </div>
       </motion.div>
 
@@ -311,7 +311,7 @@ export default function LandingPage() {
     },
     {
       q: "How do I configure modules?",
-      a: "Invite the bot, then manage every module from the web dashboard — no commands needed.",
+      a: "Invite the bot, then manage every module from the web dashboard â€” no commands needed.",
     },
     {
       q: "Can I migrate from other bots?",
@@ -335,11 +335,11 @@ export default function LandingPage() {
       <nav className="fixed top-0 w-full z-50 border-b border-slate-800 bg-slate-950/85 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/20">
               <Bot className="h-5 w-5 text-white" />
             </div>
             <div className="flex flex-col">
-              <h1 className="text-base font-bold tracking-tight text-white leading-none">
+              <h1 className="text-base font-bold tracking-tight text-slate-50 leading-none">
                 {process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"}
               </h1>
               <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-500 mt-1">
@@ -384,7 +384,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-5xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight leading-[1.05] mb-6"
+            className="text-5xl sm:text-6xl md:text-7xl font-bold text-slate-50 tracking-tight leading-[1.05] mb-6"
           >
             Everything your server needs.
             <span className="block text-gradient mt-2">One dashboard.</span>
@@ -396,7 +396,7 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10"
           >
-            Anti-nuke, automod, tickets, leveling and Instagram media saving —
+            Anti-nuke, automod, tickets, leveling and Instagram media saving â€”
             configured visually from a single dashboard. No commands required.
           </motion.p>
 
@@ -436,7 +436,7 @@ export default function LandingPage() {
               <p className="text-[10px] font-semibold uppercase text-primary-light tracking-[0.3em] mb-3">
                 Features
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-50 tracking-tight">
                 Built for communities that take moderation seriously
               </h2>
             </div>
@@ -459,7 +459,7 @@ export default function LandingPage() {
                 <div className="h-11 w-11 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
                   <feature.icon className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="text-base font-bold text-white mb-2 tracking-tight">
+                <h3 className="text-base font-bold text-slate-50 mb-2 tracking-tight">
                   {feature.title}
                 </h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
@@ -478,7 +478,7 @@ export default function LandingPage() {
             <p className="text-[10px] font-semibold uppercase text-primary-light tracking-[0.3em] mb-3">
               Modules
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-50 tracking-tight">
               17 modules. Fully configurable.
             </h2>
           </div>
@@ -497,7 +497,7 @@ export default function LandingPage() {
                 <div className="h-10 w-10 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center mb-4 group-hover:bg-primary/10 group-hover:border-primary/30 transition-colors">
                   <mod.icon className="h-5 w-5 text-slate-500 group-hover:text-primary transition-colors" />
                 </div>
-                <h4 className="text-sm font-bold text-white mb-1 tracking-tight">
+                <h4 className="text-sm font-bold text-slate-50 mb-1 tracking-tight">
                   {mod.name}
                 </h4>
                 <p className="text-[11px] text-slate-600 font-medium uppercase tracking-wider">
@@ -514,7 +514,7 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto relative rounded-2xl p-12 md:p-16 overflow-hidden bg-gradient-to-br from-primary/20 via-slate-900 to-slate-900 border border-primary/20 text-center">
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-96 h-48 bg-primary/20 blur-[100px] pointer-events-none" />
           <div className="relative z-10">
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-50 tracking-tight mb-4">
               Ready to upgrade your server?
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
@@ -541,7 +541,7 @@ export default function LandingPage() {
             <p className="text-[10px] font-semibold uppercase text-primary-light tracking-[0.3em] mb-3">
               FAQ
             </p>
-            <h2 className="text-3xl font-bold text-white tracking-tight">
+            <h2 className="text-3xl font-bold text-slate-50 tracking-tight">
               Frequently asked questions
             </h2>
           </div>
@@ -556,7 +556,7 @@ export default function LandingPage() {
                 variants={fadeUp}
                 className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-slate-700 transition-colors"
               >
-                <h4 className="text-sm font-bold text-white mb-2 tracking-tight">
+                <h4 className="text-sm font-bold text-slate-50 mb-2 tracking-tight">
                   {item.q}
                 </h4>
                 <p className="text-sm text-slate-500 leading-relaxed">
@@ -574,10 +574,10 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center">
+                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
                   <Bot className="h-4 w-4 text-white" />
                 </div>
-                <span className="text-lg font-bold text-white tracking-tight">
+                <span className="text-lg font-bold text-slate-50 tracking-tight">
                   {process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"}
                 </span>
               </div>
@@ -606,8 +606,8 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="pt-6 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-slate-700">
-              © 2026 {process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"} Development. All rights reserved.
+            <p className="text-xs text-slate-500">
+              Â© 2026 {process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"} Development. All rights reserved.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-slate-600">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />

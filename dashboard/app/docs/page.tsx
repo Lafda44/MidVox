@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -74,13 +74,13 @@ export default function DocsPage() {
       </div>
 
       {/* Nav */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/[0.03] bg-slate-950/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
+      <nav className="fixed top-0 w-full z-50 border-b border-slate-200/70 bg-slate-950/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-4 group">
             <div className="h-8 w-8 rounded-lg bg-red-600 flex items-center justify-center mr-3">
-              <Bot className="h-5 w-5 text-white" />
+              <Bot className="h-5 w-5 text-slate-50" />
             </div>
-            <span className="text-xl font-bold text-white font-outfit uppercase tracking-tighter hidden md:block">ZyroX Docs</span>
+            <span className="text-xl font-bold text-slate-50 font-outfit uppercase tracking-tighter hidden md:block">ZyroX Docs</span>
           </Link>
           
           <div className="hidden lg:flex items-center w-80 relative group">
@@ -88,7 +88,7 @@ export default function DocsPage() {
             <input 
               type="text" 
               placeholder="Search documentation..."
-              className="w-full bg-white/[0.03] border border-white/5 rounded-2xl py-2.5 pl-12 pr-4 text-xs font-bold text-slate-300 focus:outline-none focus:ring-1 focus:ring-red-500/30 focus:bg-white/[0.05] transition-all"
+              className="w-full bg-slate-100/70 border border-slate-200/70 rounded-2xl py-2.5 pl-12 pr-4 text-xs font-bold text-slate-300 focus:outline-none focus:ring-1 focus:ring-red-500/30 focus:bg-slate-100 transition-all"
             />
           </div>
         </div>
@@ -101,7 +101,7 @@ export default function DocsPage() {
              {isSidebarOpen ? <X /> : <Menu />}
            </button>
            <Link href="/">
-            <Button variant="ghost" className="text-slate-400 hover:text-white gap-2 text-xs font-black uppercase tracking-widest">
+            <Button variant="ghost" className="text-slate-400 hover:text-slate-50 gap-2 text-xs font-black uppercase tracking-widest">
               Exit Docs
             </Button>
           </Link>
@@ -111,7 +111,7 @@ export default function DocsPage() {
       <div className="max-w-7xl mx-auto flex pt-20">
         {/* Sidebar */}
         <aside className={cn(
-          "fixed inset-y-0 left-0 z-40 w-80 bg-slate-950 border-r border-white/5 pt-20 transition-transform lg:translate-x-0 lg:static lg:bg-transparent",
+          "fixed inset-y-0 left-0 z-40 w-80 bg-slate-950 border-r border-slate-200/70 pt-20 transition-transform lg:translate-x-0 lg:static lg:bg-transparent",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
           <div className="h-full p-8 overflow-y-auto no-scrollbar">
@@ -130,7 +130,7 @@ export default function DocsPage() {
                         "w-full flex flex-col items-start gap-1 p-4 rounded-2xl transition-all text-left",
                         activeTab === item.name 
                           ? "bg-red-500/10 border border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.05)]" 
-                          : "hover:bg-white/[0.02] border border-transparent"
+                          : "hover:bg-slate-100/50 border border-transparent"
                       )}
                     >
                       <span className={cn("text-sm font-bold", activeTab === item.name ? "text-red-500" : "text-slate-300")}>{item.name}</span>
@@ -150,24 +150,24 @@ export default function DocsPage() {
             V2.4 Runtime Environment
           </div>
 
-          <h1 className="text-6xl font-bold text-white font-outfit tracking-tighter uppercase mb-8 italic">
+          <h1 className="text-6xl font-bold text-slate-50 font-outfit tracking-tighter uppercase mb-8 italic">
             {activeTab}<span className="text-red-500 not-italic">.</span>
           </h1>
 
-          <div className="prose prose-invert max-w-none">
+             <div className="prose max-w-none">
              <p className="text-lg text-slate-400 mb-12 leading-relaxed">
                Welcome to the {activeTab} section of the ZyroX Engine documentation. Our engine is designed for communities that demand absolute performance and cinematic management tools.
              </p>
 
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-8 rounded-[32px] glass border-white/5 space-y-4">
+                <div className="p-8 rounded-[32px] glass border-slate-200/70 space-y-4">
                    <Zap className="h-6 w-6 text-red-500" />
-                   <h3 className="text-xl font-bold text-white font-outfit uppercase">Fast Dispatch</h3>
+                   <h3 className="text-xl font-bold text-slate-50 font-outfit uppercase">Fast Dispatch</h3>
                    <p className="text-sm text-slate-500 font-bold uppercase tracking-tight">Commands are dispatched via our global edge network in under 12ms.</p>
                 </div>
-                <div className="p-8 rounded-[32px] glass border-white/5 space-y-4">
+                <div className="p-8 rounded-[32px] glass border-slate-200/70 space-y-4">
                    <ShieldCheck className="h-6 w-6 text-emerald-500" />
-                   <h3 className="text-xl font-bold text-white font-outfit uppercase">Secure Node</h3>
+                   <h3 className="text-xl font-bold text-slate-50 font-outfit uppercase">Secure Node</h3>
                    <p className="text-sm text-slate-500 font-bold uppercase tracking-tight">Every module runs in a dedicated neural sandbox with AES-256 encryption.</p>
                 </div>
              </div>
@@ -176,18 +176,18 @@ export default function DocsPage() {
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                    <Layers className="h-32 w-32 text-red-500" />
                 </div>
-                <h2 className="text-2xl font-bold text-white font-outfit uppercase tracking-tight mb-4">Neural Architecture</h2>
-                  <h3 className="text-white font-bold">Protocol Overview</h3>
+                <h2 className="text-2xl font-bold text-slate-50 font-outfit uppercase tracking-tight mb-4">Neural Architecture</h2>
+                  <h3 className="text-slate-50 font-bold">Protocol Overview</h3>
                 <p className="text-slate-500 font-bold leading-relaxed mb-8">
                   The ZyroX Engine utilizes a decentralized event stream processing model. When a Discord event is received, it is instantly routed to the nearest edge cluster.
                 </p>
-                <div className="bg-black/40 p-6 rounded-2xl border border-white/5 font-mono text-sm text-red-500 mb-8">
+                <div className="bg-black/40 p-6 rounded-2xl border border-slate-200/70 font-mono text-sm text-red-500 mb-8">
                   $ zyrox initialize --cluster-shard [neural_07] --mode enterprise
                 </div>
              </div>
           </div>
 
-          <div className="mt-20 pt-12 border-t border-white/5 flex items-center justify-between">
+          <div className="mt-20 pt-12 border-t border-slate-200/70 flex items-center justify-between">
              <div>
                 <p className="text-[10px] font-black uppercase text-slate-600 tracking-[0.4em] mb-2">Internal Ref</p>
                 <p className="text-sm font-bold text-slate-400">DOC-ID: CX_7749_B</p>

@@ -1,17 +1,17 @@
-/**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+﻿/**
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -85,7 +85,7 @@ export function VanityRoleForm({ initialSetups, channels, roles, guildId }: Vani
       
       {/* List Existing Ones */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl p-8">
-        <h3 className="text-xl font-bold text-white mb-6">Active Vanity Roles</h3>
+        <h3 className="text-xl font-bold text-slate-50 mb-6">Active Vanity Roles</h3>
         
         {setups.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-slate-500">
@@ -114,13 +114,13 @@ export function VanityRoleForm({ initialSetups, channels, roles, guildId }: Vani
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
                       <span className="text-slate-400">Role:</span>
-                      <span className="text-white font-medium">
+                      <span className="text-slate-50 font-medium">
                         {r ? r.name : setup.role_id}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-slate-400">Log Channel:</span>
-                      <span className="text-white font-medium">
+                      <span className="text-slate-50 font-medium">
                         {c ? `#${c.name}` : setup.log_channel_id}
                       </span>
                     </div>
@@ -134,7 +134,7 @@ export function VanityRoleForm({ initialSetups, channels, roles, guildId }: Vani
 
       {/* Add New Setup */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl p-8">
-        <h3 className="text-xl font-bold text-white mb-6">Add New Vanity Role</h3>
+        <h3 className="text-xl font-bold text-slate-50 mb-6">Add New Vanity Role</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-3">
             <label className="text-sm font-bold text-slate-300">Vanity Code</label>

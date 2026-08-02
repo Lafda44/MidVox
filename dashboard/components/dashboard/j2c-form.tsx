@@ -1,17 +1,17 @@
-/**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+﻿/**
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -84,7 +84,7 @@ export function J2CForm({ initialConfig, channels, guildId }: J2CFormProps) {
                 <Power className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-white">System Status</h3>
+                <h3 className="text-lg font-black text-slate-50">System Status</h3>
                 <p className="text-sm text-slate-400 mt-1">Enable or disable the Join to Create module.</p>
               </div>
             </div>
@@ -110,7 +110,7 @@ export function J2CForm({ initialConfig, channels, guildId }: J2CFormProps) {
                   <Mic className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white">Join Channel</h4>
+                  <h4 className="font-bold text-slate-50">Join Channel</h4>
                   <p className="text-xs text-slate-400 mt-1">Voice channel users join to trigger creation</p>
                 </div>
               </div>
@@ -139,7 +139,7 @@ export function J2CForm({ initialConfig, channels, guildId }: J2CFormProps) {
                   <Headset className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white">Control Panel Channel</h4>
+                  <h4 className="font-bold text-slate-50">Control Panel Channel</h4>
                   <p className="text-xs text-slate-400 mt-1">Channel where users manage their private VCs</p>
                 </div>
               </div>
@@ -168,7 +168,7 @@ export function J2CForm({ initialConfig, channels, guildId }: J2CFormProps) {
                   <Settings2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white">Target Category</h4>
+                  <h4 className="font-bold text-slate-50">Target Category</h4>
                   <p className="text-xs text-slate-400 mt-1">Category where temporary voice channels are created</p>
                 </div>
               </div>
@@ -213,9 +213,9 @@ export function J2CForm({ initialConfig, channels, guildId }: J2CFormProps) {
             Join to Create instantly creates a private, temporary voice channel for any user who connects to the master Join Channel.
           </p>
           <ul className="text-xs text-slate-500 space-y-2">
-             <li>• The voice channel is owned by the creator.</li>
-             <li>• When the last person leaves, the channel is automatically deleted.</li>
-             <li>• The Control Panel allows owners to lock, unlock, limit members, and kick users.</li>
+             <li>â€¢ The voice channel is owned by the creator.</li>
+             <li>â€¢ When the last person leaves, the channel is automatically deleted.</li>
+             <li>â€¢ The Control Panel allows owners to lock, unlock, limit members, and kick users.</li>
           </ul>
         </div>
       </div>

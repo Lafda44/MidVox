@@ -128,9 +128,9 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
           {/* Message Deletion Toggle */}
           <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-2xl border border-slate-800">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400"><MessageSquare className="h-5 w-5" /></div>
+              <div className="p-2.5 rounded-xl bg-red-500/10 text-red-600"><MessageSquare className="h-5 w-5" /></div>
               <div>
-                <h4 className="font-bold text-white text-sm">Message Deletion</h4>
+                <h4 className="font-bold text-slate-50 text-sm">Message Deletion</h4>
                 <p className="text-xs text-slate-400">Delete messages from target users or matching commands</p>
               </div>
             </div>
@@ -149,8 +149,8 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
               {/* Target Users */}
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-red-500/10 text-red-400"><UserX className="h-4 w-4" /></div>
-                  <h4 className="font-bold text-white text-sm">Target Users</h4>
+                  <div className="p-2 rounded-lg bg-red-500/10 text-red-600"><UserX className="h-4 w-4" /></div>
+                  <h4 className="font-bold text-slate-50 text-sm">Target Users</h4>
                 </div>
                 <div className="flex gap-2">
                   <Input placeholder="Discord User ID" value={newUserId} onChange={(e) => setNewUserId(e.target.value)} className="bg-slate-900/50 border-slate-800 h-10 flex-1" />
@@ -163,7 +163,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                     config.target_users?.map((uid: string) => (
                       <div key={uid} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
                         <span className="text-slate-200 font-mono text-xs">{uid}</span>
-                        <button onClick={() => removeTargetUser(uid)} className="text-slate-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                        <button onClick={() => removeTargetUser(uid)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
                       </div>
                     ))
                   )}
@@ -174,7 +174,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-orange-500/10 text-orange-400"><Command className="h-4 w-4" /></div>
-                  <h4 className="font-bold text-white text-sm">Blocked Commands</h4>
+                  <h4 className="font-bold text-slate-50 text-sm">Blocked Commands</h4>
                 </div>
                 <div className="flex gap-2">
                   <Input placeholder="e.g. !play" value={newCommand} onChange={(e) => setNewCommand(e.target.value)} className="bg-slate-900/50 border-slate-800 h-10 flex-1" />
@@ -187,7 +187,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                     config.blocked_commands?.map((cmd: string) => (
                       <div key={cmd} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
                         <span className="text-slate-200 font-mono text-xs">{cmd}</span>
-                        <button onClick={() => removeBlockedCommand(cmd)} className="text-slate-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                        <button onClick={() => removeBlockedCommand(cmd)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
                       </div>
                     ))
                   )}
@@ -198,7 +198,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-slate-500/10 text-slate-400"><Hash className="h-4 w-4" /></div>
-                  <h4 className="font-bold text-white text-sm">Excluded Channels</h4>
+                  <h4 className="font-bold text-slate-50 text-sm">Excluded Channels</h4>
                 </div>
                 <Select value="" onValueChange={(val) => handleChannelToggle("excluded_channels", val, true)}>
                   <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
@@ -219,7 +219,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                       return (
                         <div key={chId} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
                           <span className="text-slate-200">#{ch?.name || chId}</span>
-                          <button onClick={() => handleChannelToggle("excluded_channels", chId, false)} className="text-slate-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                          <button onClick={() => handleChannelToggle("excluded_channels", chId, false)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
                         </div>
                       );
                     })
@@ -237,7 +237,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-yellow-500/10 text-yellow-400"><SmilePlus className="h-5 w-5" /></div>
               <div>
-                <h4 className="font-bold text-white text-base">Reaction Anti-Spam</h4>
+                <h4 className="font-bold text-slate-50 text-base">Reaction Anti-Spam</h4>
                 <p className="text-xs text-slate-400">Detect and punish rapid reaction spam in monitored channels</p>
               </div>
             </div>
@@ -263,7 +263,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
 
             {/* Target Channels for Reaction Spam */}
             <div className="space-y-4">
-              <h4 className="text-sm font-bold text-white flex items-center gap-2"><Users className="h-4 w-4 text-yellow-400" /> Monitored Channels</h4>
+              <h4 className="text-sm font-bold text-slate-50 flex items-center gap-2"><Users className="h-4 w-4 text-yellow-400" /> Monitored Channels</h4>
 <Select value="" onValueChange={(val) => handleChannelToggle("target_channels", val, true)}>
                   <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
                     <SelectValue placeholder="Add channel to monitor..." />
@@ -283,7 +283,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                     return (
                       <div key={chId} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
                         <span className="text-slate-200">#{ch?.name || chId}</span>
-                        <button onClick={() => handleChannelToggle("target_channels", chId, false)} className="text-slate-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                        <button onClick={() => handleChannelToggle("target_channels", chId, false)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
                       </div>
                     );
                   })
@@ -315,13 +315,13 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
           </div>
           <div className="flex items-center gap-2 mb-4">
             <Info className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-bold text-white">How It Works</h3>
+            <h3 className="text-sm font-bold text-slate-50">How It Works</h3>
           </div>
           <ul className="text-xs text-slate-500 space-y-2">
-            <li>• Messages from target users are auto-deleted.</li>
-            <li>• Blocked commands are removed instantly.</li>
-            <li>• Excluded channels are never affected.</li>
-            <li>• Reaction spam triggers a timeout + cleanup.</li>
+            <li>â€¢ Messages from target users are auto-deleted.</li>
+            <li>â€¢ Blocked commands are removed instantly.</li>
+            <li>â€¢ Excluded channels are never affected.</li>
+            <li>â€¢ Reaction spam triggers a timeout + cleanup.</li>
           </ul>
         </div>
 
@@ -329,7 +329,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
         <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6">
           <div className="flex items-center gap-2 mb-3">
             <SmilePlus className="h-4 w-4 text-yellow-400" />
-            <h3 className="text-sm font-bold text-white">Emoji Sync</h3>
+            <h3 className="text-sm font-bold text-slate-50">Emoji Sync</h3>
           </div>
           <p className="text-xs text-slate-500 mb-4">Emojis are managed directly in emoji.py on GitHub.</p>
         </div>

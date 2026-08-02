@@ -204,7 +204,7 @@ export default function VanityRolesPage({ params }: { params: { guildId: string 
                           <span className="font-medium text-slate-200">#{channel?.name || "Unknown"}</span>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(setup.vanity)} className="text-red-400 hover:text-red-300 hover:bg-red-400/10 h-8 w-8 p-0">
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(setup.vanity)} className="text-red-600 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0">
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>

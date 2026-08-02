@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -90,7 +90,7 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
             <Icon className="h-5 w-5" />
           </div>
           <div>
-            <h4 className="font-bold text-white text-base">{title}</h4>
+            <h4 className="font-bold text-slate-50 text-base">{title}</h4>
             <p className="text-xs text-slate-400">Roles given to newly joined {type}.</p>
           </div>
         </div>
@@ -140,7 +140,7 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
                     <span className="text-slate-200 font-medium">{role ? role.name : `Unknown (${roleId})`}</span>
                     <button 
                       onClick={() => removeRole(type, roleId)}
-                      className="ml-1 text-slate-500 hover:text-red-400 transition-colors p-0.5 rounded-md hover:bg-red-400/10"
+                      className="ml-1 text-slate-500 hover:text-red-600 transition-colors p-0.5 rounded-md hover:bg-red-400/10"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -186,7 +186,7 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
           
           <div className="flex items-center gap-2 mb-4">
             <Info className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-bold text-white">Guidelines</h3>
+            <h3 className="text-sm font-bold text-slate-50">Guidelines</h3>
           </div>
           
           <p className="text-xs text-slate-400 leading-relaxed mb-6">

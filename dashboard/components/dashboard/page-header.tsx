@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { cn } from "@/lib/utils";
 
 interface PageHeaderProps {
@@ -25,7 +25,7 @@ export const PageHeader = ({
           </div>
         )}
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl font-bold text-slate-50 tracking-tight">
             {title}
           </h1>
           {description && (

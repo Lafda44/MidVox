@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -113,7 +113,7 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
                 <BellRing className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-white">DM Notifications</h3>
+                <h3 className="text-lg font-black text-slate-50">DM Notifications</h3>
                 <p className="text-sm text-slate-400 mt-1">Send a direct message when a user gets/loses a role.</p>
               </div>
             </div>
@@ -125,7 +125,7 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
           </div>
 
           <div className="pt-6 border-t border-slate-800">
-            <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+            <h4 className="text-sm font-bold text-slate-50 mb-4 flex items-center gap-2">
               <Plus className="h-5 w-5 text-primary" />
               Create New Reaction Role
             </h4>
@@ -143,7 +143,7 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-400">Emoji</label>
                 <Input 
-                  placeholder="e.g. ✅" 
+                  placeholder="e.g. âœ…" 
                   value={newRR.emoji}
                   onChange={(e) => setNewRR({ ...newRR, emoji: e.target.value })}
                   className="bg-slate-900/50 h-10"
@@ -180,7 +180,7 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
           </div>
 
           <div className="pt-6 border-t border-slate-800">
-            <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+            <h4 className="text-sm font-bold text-slate-50 mb-4 flex items-center gap-2">
               <MousePointer2 className="h-5 w-5 text-primary" />
               Active Reaction Roles
             </h4>
@@ -215,7 +215,7 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
                         size="sm" 
                         onClick={() => handleDelete(rr.message_id, rr.emoji)}
                         disabled={loadingAction}
-                        className="text-red-400 hover:text-red-300 hover:bg-red-400/10 h-8 w-8 p-0"
+                        className="text-red-600 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -238,9 +238,9 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
             Reaction Roles allow members to self-assign their own roles with a single click.
           </p>
           <ul className="text-xs text-slate-500 space-y-2">
-             <li>• The bot must have access to see the message you specify.</li>
-             <li>• Make sure the bot role is HIGHER than the role you are attempting to assign.</li>
-             <li>• The bot will automatically react to the message once you click &quot;Add to Active Listeners&quot;.</li>
+             <li>â€¢ The bot must have access to see the message you specify.</li>
+             <li>â€¢ Make sure the bot role is HIGHER than the role you are attempting to assign.</li>
+             <li>â€¢ The bot will automatically react to the message once you click &quot;Add to Active Listeners&quot;.</li>
           </ul>
         </div>
       </div>

@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -105,14 +105,14 @@ export function AdminContent() {
     <div className="space-y-10 animate-in fade-in duration-500">
       {/* Header */}
       <div className="relative group">
-        <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-indigo-500 rounded-3xl blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
-        <div className="relative bg-slate-950 border border-white/10 rounded-3xl p-8 lg:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+        <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-primary-dark rounded-3xl blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
+        <div className="relative bg-slate-950 border border-slate-200 rounded-3xl p-8 lg:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           <div className="flex items-center gap-6">
             <div className="h-16 w-16 rounded-2xl bg-red-500/20 flex items-center justify-center border border-red-500/30 shadow-2xl shadow-red-500/20">
               <Shield className="h-8 w-8 text-red-500" />
             </div>
             <div>
-              <h1 className="text-4xl font-black text-white tracking-tight font-outfit">Admin Control Panel</h1>
+              <h1 className="text-4xl font-black text-slate-50 tracking-tight font-outfit">Admin Control Panel</h1>
               <p className="text-slate-400 mt-2 font-medium">Restricted access for ZyroX administrators only.</p>
             </div>
           </div>
@@ -131,9 +131,9 @@ export function AdminContent() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statItems.map((stat) => (
-          <div key={stat.name} className="glass border border-white/5 rounded-3xl p-6 hover:border-white/10 transition-all group">
+          <div key={stat.name} className="glass border border-slate-200 rounded-3xl p-6 hover:border-slate-200 transition-all group">
             <div className="flex items-center justify-between mb-4">
-              <div className={cn("p-3 rounded-xl bg-white/[0.03] group-hover:scale-110 transition-transform", stat.color)}>
+              <div className={cn("p-3 rounded-xl bg-slate-100/70 group-hover:scale-110 transition-transform", stat.color)}>
                 <stat.icon className="h-6 w-6" />
               </div>
               <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">
@@ -141,7 +141,7 @@ export function AdminContent() {
               </span>
             </div>
             <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">{stat.name}</p>
-            <h3 className="text-2xl font-black text-white mt-1 font-outfit">{stat.value}</h3>
+            <h3 className="text-2xl font-black text-slate-50 mt-1 font-outfit">{stat.value}</h3>
           </div>
         ))}
       </div>
@@ -149,11 +149,11 @@ export function AdminContent() {
       {/* System Status Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* API Health */}
-        <div className="lg:col-span-2 glass border border-white/5 rounded-[2.5rem] overflow-hidden">
-          <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.01]">
+        <div className="lg:col-span-2 glass border border-slate-200 rounded-[2.5rem] overflow-hidden">
+          <div className="p-8 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
             <div className="flex items-center gap-4">
               <Activity className="h-5 w-5 text-red-500" />
-              <h3 className="text-lg font-bold text-white">System Nodes Status</h3>
+              <h3 className="text-lg font-bold text-slate-50">System Nodes Status</h3>
             </div>
             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Auto-Polling Active</span>
           </div>
@@ -162,13 +162,13 @@ export function AdminContent() {
               const Icon = node.icon === "Globe" ? Globe : node.icon === "Database" ? Database : node.icon === "Cpu" ? Cpu : Lock;
               const isHealthy = node.status === "Healthy";
               return (
-                <div key={node.name} className="flex items-center justify-between p-4 bg-white/[0.02] rounded-2xl border border-white/5 group hover:bg-white/[0.04] transition-all">
+                <div key={node.name} className="flex items-center justify-between p-4 bg-slate-100/50 rounded-2xl border border-slate-200 group hover:bg-slate-100 transition-all">
                   <div className="flex items-center gap-4">
                     <div className="h-10 w-10 rounded-xl bg-slate-800 flex items-center justify-center group-hover:bg-slate-700 transition-colors">
                       <Icon className="h-5 w-5 text-slate-400" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">{node.name}</h4>
+                      <h4 className="text-sm font-bold text-slate-50">{node.name}</h4>
                       <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Load: {node.load}</p>
                     </div>
                   </div>
@@ -188,10 +188,10 @@ export function AdminContent() {
         </div>
 
         {/* Global Config */}
-        <div className="glass border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col">
-          <div className="p-8 border-b border-white/5 flex items-center gap-4 bg-white/[0.01]">
-            <Settings className="h-5 w-5 text-indigo-500" />
-            <h3 className="text-lg font-bold text-white">Global Settings</h3>
+        <div className="glass border border-slate-200 rounded-[2.5rem] overflow-hidden flex flex-col">
+          <div className="p-8 border-b border-slate-200 flex items-center gap-4 bg-slate-50/80">
+            <Settings className="h-5 w-5 text-primary" />
+            <h3 className="text-lg font-bold text-slate-50">Global Settings</h3>
           </div>
           <div className="p-8 flex-1 space-y-6">
             <div className="space-y-2">
@@ -203,7 +203,7 @@ export function AdminContent() {
                   "w-full flex items-center justify-between p-4 rounded-2xl border transition-all",
                   config?.maintenance_mode 
                     ? "bg-red-500/10 border-red-500/30 text-red-500" 
-                    : "bg-white/[0.03] border-white/5 text-slate-300 hover:bg-white/[0.05]"
+                    : "bg-slate-100/70 border-slate-200 text-slate-600 hover:bg-slate-100"
                 )}
               >
                 <span className="text-sm font-medium">
@@ -226,7 +226,7 @@ export function AdminContent() {
               <textarea 
                 value={notification}
                 onChange={(e) => setNotification(e.target.value)}
-                className="w-full h-32 bg-white/[0.03] border border-white/5 rounded-2xl p-4 text-xs font-medium text-slate-300 focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all placeholder:text-slate-600"
+                className="w-full h-32 bg-slate-100/70 border border-slate-200 rounded-2xl p-4 text-xs font-medium text-slate-300 focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all placeholder:text-slate-600"
                 placeholder="Message to display across all dashboards..."
               />
             </div>

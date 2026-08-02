@@ -69,7 +69,7 @@ export const MetricCard = ({
         <div>
           <p className="text-[10px] font-semibold uppercase text-slate-500 tracking-widest">{name}</p>
           <div className="flex items-baseline gap-2 mt-1.5">
-            <p className="text-2xl font-bold text-white tracking-tight tabular-nums font-mono">
+            <p className="text-2xl font-bold text-slate-50 tracking-tight tabular-nums font-mono">
               {typeof value === "number" || numericValue > 0 ? (
                 <span ref={displayRef}>0</span>
               ) : (
@@ -79,7 +79,7 @@ export const MetricCard = ({
             {trend && (
               <span className={cn(
                 "text-[10px] font-semibold px-1.5 py-0.5 rounded-md",
-                trend.isUp ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-400"
+                trend.isUp ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-600"
               )}>
                 {trend.isUp ? "+" : ""}{trend.value}
               </span>

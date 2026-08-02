@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -73,7 +73,7 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
   return (
     <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20">
       <div className="lg:col-span-2 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl shadow-black/20">
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl shadow-slate-900/5">
           <div className="p-8 space-y-8">
             <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-4">
                <span className="text-sm font-bold text-slate-300">Social Economy Status</span>
@@ -113,7 +113,7 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
                     disabled={!config.enabled}
                     className="py-6 text-lg font-bold pr-12"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-700">SEC</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">SEC</span>
                 </div>
               </div>
             </div>
@@ -180,11 +180,11 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
       <div className="space-y-6">
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 relative overflow-hidden group shadow-lg">
            <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
-              <Info className="h-32 w-32 text-white" />
+              <Info className="h-32 w-32 text-slate-50" />
            </div>
            <h3 className="text-xs font-black uppercase text-slate-500 tracking-widest mb-4">Leveling Logic</h3>
            <div className="space-y-4 text-sm leading-relaxed text-slate-400">
-              <p>Members earn <span className="text-white font-bold italic">XP</span> by chatting.</p>
+              <p>Members earn <span className="text-slate-50 font-bold italic">XP</span> by chatting.</p>
               <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10 text-[10px] font-mono">
                  5 * (level ^ 2) + (50 * level) + 100
               </div>

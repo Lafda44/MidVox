@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -88,7 +88,7 @@ export function TicketsForm({ initialConfig, guildId }: TicketsFormProps) {
   const handleAddCategory = () => {
     setEditingCategory({ 
       index: -1, 
-      data: { name: "", emoji: "📩", staff_roles: [], button_style: 2, discord_category_id: "" } 
+      data: { name: "", emoji: "ðŸ“©", staff_roles: [], button_style: 2, discord_category_id: "" } 
     });
     setIsAdding(true);
   };
@@ -138,11 +138,11 @@ export function TicketsForm({ initialConfig, guildId }: TicketsFormProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
            <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
               <div className="p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
-                <h3 className="font-bold text-lg text-white flex items-center gap-2">
+                <h3 className="font-bold text-lg text-slate-50 flex items-center gap-2">
                    {isAdding ? <Plus className="h-5 w-5 text-primary" /> : <Edit3 className="h-5 w-5 text-primary" />}
                    {isAdding ? "Add Category" : "Edit Category"}
                 </h3>
-                <button onClick={() => setEditingCategory(null)} className="text-slate-500 hover:text-white transition-colors">
+                <button onClick={() => setEditingCategory(null)} className="text-slate-500 hover:text-slate-50 transition-colors">
                    <X className="h-5 w-5" />
                 </button>
               </div>
@@ -161,7 +161,7 @@ export function TicketsForm({ initialConfig, guildId }: TicketsFormProps) {
                     <Input 
                         value={editingCategory.data.emoji || ""} 
                         onChange={(e) => setEditingCategory({...editingCategory, data: {...editingCategory.data, emoji: e.target.value}})}
-                        placeholder="e.g. 🐛"
+                        placeholder="e.g. ðŸ›"
                     />
                   </div>
                   <div className="space-y-2">
@@ -231,11 +231,11 @@ export function TicketsForm({ initialConfig, guildId }: TicketsFormProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
            <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
               <div className="p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
-                <h3 className="font-bold text-lg text-white flex items-center gap-2">
+                <h3 className="font-bold text-lg text-slate-50 flex items-center gap-2">
                    <Edit3 className="h-5 w-5 text-primary" />
                    Customize Panel Appearance
                 </h3>
-                <button onClick={() => setEditingEmbed(null)} className="text-slate-500 hover:text-white transition-colors">
+                <button onClick={() => setEditingEmbed(null)} className="text-slate-500 hover:text-slate-50 transition-colors">
                    <X className="h-5 w-5" />
                 </button>
               </div>
@@ -303,7 +303,7 @@ export function TicketsForm({ initialConfig, guildId }: TicketsFormProps) {
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-xl space-y-8">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-primary/10 text-primary"><Settings2 className="h-5 w-5" /></div>
-              <h3 className="text-xl font-bold text-white">Global Configuration</h3>
+              <h3 className="text-xl font-bold text-slate-50">Global Configuration</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -370,7 +370,7 @@ export function TicketsForm({ initialConfig, guildId }: TicketsFormProps) {
             <div className="p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/20">
               <div className="flex items-center gap-2">
                 <Tag className="h-5 w-5 text-primary" />
-                <h3 className="font-bold text-white">Ticket Categories</h3>
+                <h3 className="font-bold text-slate-50">Ticket Categories</h3>
               </div>
               <Button size="sm" variant="outline" className="h-8 gap-1 text-xs border-primary/20 text-primary hover:bg-primary/10" onClick={handleAddCategory}>
                  <Plus className="h-3 w-3" />
@@ -380,13 +380,13 @@ export function TicketsForm({ initialConfig, guildId }: TicketsFormProps) {
             <div className="p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {config.categories.map((cat, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 bg-slate-900/50 rounded-2xl border border-white/5 hover:border-primary/30 transition-all group">
+                  <div key={i} className="flex items-center justify-between p-4 bg-slate-900/50 rounded-2xl border border-slate-200/70 hover:border-primary/30 transition-all group">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-xl bg-slate-800 flex items-center justify-center text-xl shadow-inner">
-                        {cat.emoji || '📩'}
+                        {cat.emoji || 'ðŸ“©'}
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-sm font-bold text-slate-200 group-hover:text-white transition-colors">{cat.name}</span>
+                        <span className="text-sm font-bold text-slate-200 group-hover:text-slate-50 transition-colors">{cat.name}</span>
                         <span className="text-[10px] text-slate-500 flex items-center gap-1 font-mono">
                           <Shield className="h-2 w-2" />
                           {cat.staff_roles && cat.staff_roles.length > 0 ? `${cat.staff_roles.length} Staff Roles` : 'Global Staff'}
@@ -421,23 +421,23 @@ export function TicketsForm({ initialConfig, guildId }: TicketsFormProps) {
                   <div className="h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_rgba(88,101,242,0.5)]" />
               </div>
               <p className="text-sm font-medium text-slate-500">Currently Open</p>
-              <h3 className="text-3xl font-black text-white mt-1">{config.open_ticket_count} Tickets</h3>
+              <h3 className="text-3xl font-black text-slate-50 mt-1">{config.open_ticket_count} Tickets</h3>
           </div>
 
           <section className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
             <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
-              <Mail className="h-32 w-32 text-white" />
+              <Mail className="h-32 w-32 text-slate-50" />
             </div>
             <div className="flex items-center gap-2 mb-4">
               <Zap className="h-5 w-5 text-primary" />
-              <h3 className="font-bold text-white">Panel Appearance</h3>
+              <h3 className="font-bold text-slate-50">Panel Appearance</h3>
             </div>
             <div className="space-y-3 relative z-10">
-               <div className="p-3 bg-black/20 rounded-xl border border-white/5">
+               <div className="p-3 bg-slate-100/70 rounded-xl border border-slate-200/70">
                   <p className="text-[10px] uppercase font-bold text-slate-500 mb-1">Title</p>
                   <p className="text-sm text-slate-200 font-medium truncate">{config.embed.title || 'Support Department'}</p>
                </div>
-               <div className="p-3 bg-black/20 rounded-xl border border-white/5">
+               <div className="p-3 bg-slate-100/70 rounded-xl border border-slate-200/70">
                   <p className="text-[10px] uppercase font-bold text-slate-500 mb-1">Description</p>
                   <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
                     {config.embed.description || 'Open a ticket below to talk to our staff.'}

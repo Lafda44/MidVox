@@ -86,7 +86,7 @@ export default function DashboardLayout({
   const match = pathname.match(/\/dashboard\/guild\/([^\/]+)/);
   const currentGuildId = match ? match[1] : null;
 
-  // Base sidebar items – will be filtered if we are inside a guild
+  // Base sidebar items â€“ will be filtered if we are inside a guild
   const allSidebarItems = currentGuildId
     ? [
         { name: "Overview", href: `/dashboard/guild/${currentGuildId}`, icon: LayoutDashboard },
@@ -191,11 +191,11 @@ export default function DashboardLayout({
         {/* Header */}
         <div className="flex h-16 items-center px-5 border-b border-slate-800 flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/20">
               <Bot className="h-5 w-5 text-white" />
             </div>
             <div className="flex flex-col">
-              <h1 className="text-base font-bold tracking-tight text-white leading-none">
+              <h1 className="text-base font-bold tracking-tight text-slate-50 leading-none">
                 {process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"}
               </h1>
               <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-500 mt-1">
@@ -204,7 +204,7 @@ export default function DashboardLayout({
             </div>
           </div>
           <button
-            className="ml-auto p-2 lg:hidden text-slate-500 hover:text-white rounded-lg hover:bg-slate-800/60 transition-colors"
+            className="ml-auto p-2 lg:hidden text-slate-500 hover:text-slate-50 rounded-lg hover:bg-slate-800/60 transition-colors"
             onClick={() => setIsSidebarOpen(false)}
           >
             <X className="h-5 w-5" />
@@ -329,7 +329,7 @@ export default function DashboardLayout({
               )}
             </div>
             <div className="overflow-hidden">
-              <p className="text-sm font-semibold text-white truncate">
+              <p className="text-sm font-semibold text-slate-50 truncate">
                 {session?.user?.name || "Administrator"}
               </p>
               <p className="text-[10px] font-medium uppercase text-slate-500 truncate tracking-wider">
@@ -364,7 +364,7 @@ export default function DashboardLayout({
             <div className="relative" ref={bellRef}>
               <button
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                className="relative p-2 text-slate-400 hover:bg-slate-800/60 hover:text-white rounded-lg transition-all"
+                className="relative p-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-50 rounded-lg transition-all"
               >
                 <Bell className="h-5 w-5" />
                 {globalNotification && (
@@ -379,7 +379,7 @@ export default function DashboardLayout({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.98 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl shadow-black/50 p-3 z-20"
+                    className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl shadow-slate-900/10 p-3 z-20"
                   >
                     <div className="flex items-center justify-between mb-2 border-b border-slate-800 pb-2 px-1">
                       <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-[0.2em]">
@@ -457,25 +457,25 @@ export default function DashboardLayout({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.98 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl shadow-black/50 p-1.5 z-20"
+                    className="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl shadow-slate-900/10 p-1.5 z-20"
                   >
                     <div className="px-3 py-2.5 border-b border-slate-800 mb-1">
                       <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-[0.2em] mb-0.5">
                         Authenticated As
                       </p>
-                      <p className="text-sm font-semibold text-white truncate">
+                      <p className="text-sm font-semibold text-slate-50 truncate">
                         {session?.user?.name || "Administrator"}
                       </p>
                     </div>
 
-                    <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:bg-slate-800/70 hover:text-white transition-all">
+                    <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:bg-slate-800/70 hover:text-slate-50 transition-all">
                       <LifeBuoy className="h-4 w-4 text-slate-600" />
                       Support
                     </button>
 
                     <button
                       onClick={() => signOut({ callbackUrl: '/' })}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-red-600 hover:bg-red-500/10 hover:text-red-500 transition-all"
                     >
                       <LogOut className="h-4 w-4" />
                       Sign Out

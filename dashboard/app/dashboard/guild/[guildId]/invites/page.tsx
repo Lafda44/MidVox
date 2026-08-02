@@ -125,7 +125,7 @@ export default function InvitesPage({ params }: { params: { guildId: string } })
                       </div>
                       <div className="text-right">
                         <div className="text-[10px] uppercase font-bold text-slate-500">Left</div>
-                        <div className="text-red-400">{row.left}</div>
+                        <div className="text-red-600">{row.left}</div>
                       </div>
                       <div className="text-right">
                         <div className="text-[10px] uppercase font-bold text-slate-500">Fake</div>

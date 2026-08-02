@@ -41,7 +41,7 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl font-bold text-slate-50 tracking-tight">
             Overview
           </h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-600 text-xs font-medium">
             <ShieldAlert className="h-4 w-4" />
             <span>{error}</span>
           </div>
@@ -74,7 +74,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-bold text-white tracking-tight">
+            <h2 className="text-base font-bold text-slate-50 tracking-tight">
               Quick Actions
             </h2>
           </div>
@@ -93,7 +93,7 @@ export default async function DashboardPage() {
                   <item.icon className="h-5 w-5 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-sm font-semibold text-white group-hover:text-primary-light transition-colors">
+                  <h4 className="text-sm font-semibold text-slate-50 group-hover:text-primary-light transition-colors">
                     {item.title}
                   </h4>
                   <p className="text-[11px] text-slate-500 mt-0.5">{item.desc}</p>
@@ -105,7 +105,7 @@ export default async function DashboardPage() {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col">
-          <h2 className="text-base font-bold text-white mb-1 tracking-tight">
+          <h2 className="text-base font-bold text-slate-50 mb-1 tracking-tight">
             Module Status
           </h2>
           <p className="text-xs text-slate-500 mb-5">
@@ -135,7 +135,7 @@ export default async function DashboardPage() {
             ))}
           </div>
 
-          <button className="mt-auto pt-5 w-full py-2.5 rounded-lg border border-slate-700 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors">
+          <button className="mt-auto pt-5 w-full py-2.5 rounded-lg border border-slate-700 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-slate-50 hover:bg-slate-800/60 transition-colors">
             System Diagnostics
           </button>
         </div>

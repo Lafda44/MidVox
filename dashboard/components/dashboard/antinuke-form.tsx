@@ -1,17 +1,17 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║                                                                  ║
- * ║   ░█▀▀░█▀█░█▀▄░█▀▀░█░█   ░█▀▄░█▀▀░█░█░█▀▀                     ║
- * ║   ░█░░░█░█░█░█░█▀▀░▄▀▄   ░█░█░█▀▀░▀▄▀░▀▀█                     ║
- * ║   ░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀░▀   ░▀▀░░▀▀▀░░▀░░▀▀▀                     ║
- * ║                                                                  ║
- * ║           © 2026 CodeX Devs — All Rights Reserved               ║
- * ║                                                                  ║
- * ║   discord  ──  https://discord.gg/codexdev                      ║
- * ║   youtube  ──  https://youtube.com/@CodeXDevs                   ║
- * ║   github   ──  https://github.com/RayExo                        ║
- * ║                                                                  ║
- * ╚══════════════════════════════════════════════════════════════════╝
+ * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+ * â•‘                                                                  â•‘
+ * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
+ * â•‘   â–‘â–ˆâ–‘â–‘â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–„â–€â–„   â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€â–‘â–€â–„â–€â–‘â–€â–€â–ˆ                     â•‘
+ * â•‘   â–‘â–€â–€â–€â–‘â–€â–€â–€â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–€â–‘â–€   â–‘â–€â–€â–‘â–‘â–€â–€â–€â–‘â–‘â–€â–‘â–‘â–€â–€â–€                     â•‘
+ * â•‘                                                                  â•‘
+ * â•‘           Â© 2026 CodeX Devs â€” All Rights Reserved               â•‘
+ * â•‘                                                                  â•‘
+ * â•‘   discord  â”€â”€  https://discord.gg/codexdev                      â•‘
+ * â•‘   youtube  â”€â”€  https://youtube.com/@CodeXDevs                   â•‘
+ * â•‘   github   â”€â”€  https://github.com/RayExo                        â•‘
+ * â•‘                                                                  â•‘
+ * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 
 "use client";
@@ -143,7 +143,7 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
                         <feature.icon className="h-6 w-6" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-white">{feature.name}</h3>
+                        <h3 className="font-bold text-slate-50">{feature.name}</h3>
                         <p className="text-xs text-slate-500 max-w-xs">{feature.desc}</p>
                       </div>
                     </div>
@@ -162,7 +162,7 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
             </div>
 
             <div className="pt-6 border-t border-slate-800">
-              <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+              <h4 className="text-sm font-bold text-slate-50 mb-4 flex items-center gap-2">
                 <ShieldCheck className="h-5 w-5 text-emerald-500" />
                 Whitelisted Users
               </h4>
@@ -196,7 +196,7 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
                         size="sm" 
                         onClick={() => handleRemoveWhitelist(userId)}
                         disabled={saving}
-                        className="text-red-400 hover:text-red-300 hover:bg-red-400/10 h-8 w-8 p-0"
+                        className="text-red-600 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -223,7 +223,7 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
             <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
               <ShieldAlert className="h-32 w-32 text-red-500" />
             </div>
-            <h3 className="text-sm font-bold text-red-400 mb-2">Maximum Protection</h3>
+            <h3 className="text-sm font-bold text-red-600 mb-2">Maximum Protection</h3>
             <p className="text-xs text-slate-400 leading-relaxed mb-4">Anti-Nuke is fixed to instantly Ban malicious actors. Ensure that Zyrox&apos;s role is at the TOP of the role hierarchy for it to be able to ban admins.</p>
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
