@@ -162,7 +162,7 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-background text-slate-200">
+    <div className="min-h-screen bg-[#080810] text-slate-200">
       {/* Subtle neon background glows + tech grid */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-1/2 h-[40%] w-[60%] -translate-x-1/2 bg-primary/[0.05] blur-[120px]" />
@@ -186,14 +186,14 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-0 bottom-0 left-0 z-50 w-64 transform border-r border-slate-800/80 bg-[#050509]/95 backdrop-blur-xl transition-transform duration-300 ease-out lg:translate-x-0 flex flex-col",
+          "fixed top-0 bottom-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-out lg:translate-x-0 bg-[#07070f] border-r border-white/[0.07] flex flex-col",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Neon top hairline */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary to-accent" />
         {/* Header */}
-        <div className="flex h-16 items-center px-5 border-b border-slate-800 flex-shrink-0">
+        <div className="flex h-16 items-center px-5 border-b border-white/[0.07] flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[0_0_18px_rgba(99,102,241,0.45)]">
               <Bot className="h-5 w-5 text-white" />
@@ -345,9 +345,9 @@ export default function DashboardLayout({
       </aside>
 
       {/* Main Content Area */}
-      <div className="lg:pl-64 flex flex-col min-h-screen relative z-10">
+      <div className="lg:pl-64 flex flex-col min-h-screen relative z-10 bg-[#080810]">
         {/* Top Navbar */}
-        <header className="relative h-16 sticky top-0 z-30 flex items-center justify-between border-b border-slate-800/80 bg-background/80 backdrop-blur-md px-4 lg:px-8">
+        <header className="relative h-16 sticky top-0 z-30 flex items-center justify-between border-b border-white/[0.07] bg-[#080810]/80 backdrop-blur-xl px-4 lg:px-8">
           <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
           <button
             className="p-2 lg:hidden text-slate-400 hover:bg-slate-800/60 rounded-lg transition-colors"

@@ -1,90 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { motion, useMotionValue, useSpring, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import {
-  ShieldCheck,
-  Zap,
-  BarChart4,
-  MessageSquare,
-  ChevronRight,
-  LayoutDashboard,
-  LogIn,
-  Layers,
-  Sparkles,
-  Bot,
-  Activity,
-  History,
-  CheckCircle2,
-  ShieldAlert,
-  Globe,
-  Users2,
-  Lock,
-  Gamepad2,
-  Music4,
-  User,
-  Settings,
-  Mail,
-  ArrowRight,
-  Download,
-  Ban,
-  Ticket,
-  Server,
-  TrendingUp,
-  Bell,
-  Search,
-  Shield,
-  Terminal,
-  Radar,
+  ShieldCheck, Zap, BarChart4, MessageSquare, ChevronRight, LayoutDashboard,
+  LogIn, Layers, Sparkles, Bot, Activity, History, CheckCircle2, ShieldAlert,
+  Globe, Users2, Lock, Gamepad2, Music4, User, Settings, Mail, ArrowRight,
+  Download, Ban, Ticket, Server, TrendingUp, Bell, Search, Shield, Terminal,
+  ArrowUpRight, Cpu, Wifi, HardDrive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CyberBotMascot } from "@/components/cyber-bot-mascot";
 import { cn } from "@/lib/utils";
 
 const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" as const },
-  }),
-};
-
-/* ── Animated char-by-char heading ─────────────────────────────────────── */
-function AnimatedHeading({
-  text,
-  className,
-  gradient = false,
-  start = 0.05,
-}: {
-  text: string;
-  className?: string;
-  gradient?: boolean;
-  start?: number;
-}) {
-  return (
-    <span className={className} aria-label={text}>
-      {text.split("").map((ch, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 22, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ delay: start + i * 0.028, duration: 0.45, ease: "easeOut" }}
-          className={cn("inline-block", gradient && "text-gradient")}
-        >
-          {ch === " " ? "\u00A0" : ch}
-        </motion.span>
-      ))}
-    </span>
-  );
-}
-
-/* ── Interactive cyber particles canvas ────────────────────────────────── */
-function CyberParticles() {
+/* ── Subtle particle canvas ─────────────────────────────────────────────── */
+function Particles() {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -95,501 +28,365 @@ function CyberParticles() {
 
     let w = (canvas.width = window.innerWidth);
     let h = (canvas.height = window.innerHeight);
-    const mouse = { x: -9999, y: -9999 };
-    const palette = ["99,102,241", "6,182,212", "168,85,247"];
-    const COUNT = Math.min(70, Math.floor(w / 22));
 
-    const nodes = Array.from({ length: COUNT }, () => ({
+    const pts = Array.from({ length: 45 }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
-      r: Math.random() * 1.8 + 0.6,
-      c: palette[Math.floor(Math.random() * palette.length)],
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      r: Math.random() * 1.2 + 0.4,
+      color: Math.random() > 0.5 ? "99,102,241" : "34,211,238",
     }));
 
     const onResize = () => {
       w = canvas.width = window.innerWidth;
       h = canvas.height = window.innerHeight;
     };
-    const onMove = (e: MouseEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    };
-    const onLeave = () => {
-      mouse.x = -9999;
-      mouse.y = -9999;
-    };
-
     window.addEventListener("resize", onResize);
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseout", onLeave);
 
     let raf = 0;
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
-
-      for (const p of nodes) {
+      for (const p of pts) {
         p.x += p.vx;
         p.y += p.vy;
         if (p.x < 0 || p.x > w) p.vx *= -1;
         if (p.y < 0 || p.y > h) p.vy *= -1;
-
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist < 140 && dist > 0.01) {
-          p.x += (dx / dist) * 0.6;
-          p.y += (dy / dist) * 0.6;
-        }
-
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.c},0.85)`;
+        ctx.fillStyle = `rgba(${p.color},0.6)`;
         ctx.fill();
       }
-
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const a = nodes[i];
-          const b = nodes[j];
-          const d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d < 110) {
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x;
+          const dy = pts[i].y - pts[j].y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 120) {
             ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(${a.c},${(1 - d / 110) * 0.22})`;
-            ctx.lineWidth = 1;
+            ctx.moveTo(pts[i].x, pts[i].y);
+            ctx.lineTo(pts[j].x, pts[j].y);
+            ctx.strokeStyle = `rgba(${pts[i].color},${(1 - d / 120) * 0.12})`;
+            ctx.lineWidth = 0.8;
             ctx.stroke();
           }
         }
       }
-
       raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
-
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseout", onLeave);
     };
   }, []);
 
-  return <canvas ref={ref} aria-hidden className="fixed inset-0 z-0 pointer-events-none" />;
+  return <canvas ref={ref} aria-hidden className="fixed inset-0 z-0 pointer-events-none opacity-50" />;
 }
 
-/* ── CountUp ───────────────────────────────────────────────────────────── */
-function CountUp({ to, decimals = 0, suffix = "" }: { to: number; decimals?: number; suffix?: string }) {
+/* ── CountUp ────────────────────────────────────────────────────────────── */
+function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const value = useMotionValue(0);
-  const spring = useSpring(value, { stiffness: 90, damping: 24 });
+  const inView = useInView(ref, { once: true });
+  const val = useMotionValue(0);
+  const spring = useSpring(val, { stiffness: 80, damping: 22 });
 
   useEffect(() => {
     if (!inView) return;
-    value.set(to);
-    const unsub = spring.on("change", (v) => {
-      if (ref.current) {
-        ref.current.textContent = v.toFixed(decimals) + suffix;
-      }
+    val.set(to);
+    return spring.on("change", (v) => {
+      if (ref.current) ref.current.textContent = Math.round(v).toLocaleString() + suffix;
     });
-    return unsub;
-  }, [inView, to, decimals, suffix, value, spring]);
+  }, [inView, to, suffix, val, spring]);
 
-  return <span ref={ref}>{`0${suffix}`}</span>;
+  return <span ref={ref}>0{suffix}</span>;
 }
 
-/* ── Neon toggle row (mock panels) ─────────────────────────────────────── */
-function ToggleRow({ label, desc, initial = true }: { label: string; desc?: string; initial?: boolean }) {
-  const [on, setOn] = useState(initial);
-  return (
-    <div className="flex items-center justify-between gap-4 py-2.5">
-      <div className="min-w-0">
-        <p className="text-[11px] font-semibold text-slate-200 truncate">{label}</p>
-        {desc && <p className="text-[9px] text-slate-500 mt-0.5 truncate">{desc}</p>}
-      </div>
-      <button
-        type="button"
-        aria-pressed={on}
-        onClick={() => setOn(!on)}
-        className={cn(
-          "relative h-5 w-9 shrink-0 rounded-full transition-colors duration-300",
-          on
-            ? "bg-gradient-to-r from-primary to-accent shadow-[0_0_12px_rgba(99,102,241,0.55)]"
-            : "bg-slate-800"
-        )}
-      >
-        <motion.span
-          animate={{ left: on ? 18 : 2 }}
-          transition={{ type: "spring", stiffness: 500, damping: 32 }}
-          className="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-md"
-        />
-      </button>
-    </div>
-  );
-}
-
-function SliderRow({ label, value, suffix = "%" }: { label: string; value: number; suffix?: string }) {
-  return (
-    <div className="py-2.5">
-      <div className="flex items-center justify-between mb-1.5">
-        <p className="text-[11px] font-semibold text-slate-200">{label}</p>
-        <p className="text-[10px] font-mono text-accent-hover tabular-nums">
-          {value}
-          {suffix}
-        </p>
-      </div>
-      <div className="relative h-1.5 rounded-full bg-slate-800">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${value}%` }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-accent shadow-[0_0_10px_rgba(99,102,241,0.6)]"
-        />
-      </div>
-    </div>
-  );
-}
-
-/* ── Live simulated security console ───────────────────────────────────── */
-const CONSOLE_LINES: { time: string; tag: string; tone: string; text: string }[] = [
-  { time: "20:41:07", tag: "CORE", tone: "text-violet-400", text: "Security shield armed — 18 modules online" },
-  { time: "20:41:09", tag: "AUTO-MOD", tone: "text-cyan-400", text: "Deleted spam message in #general (score 96)" },
-  { time: "20:41:11", tag: "ANTI-NUKE", tone: "text-rose-400", text: "Blocked role-deletion attempt by @mallory" },
-  { time: "20:41:14", tag: "ANTI-SPAM+", tone: "text-cyan-400", text: "Purged 3 duplicate messages from #giveaways" },
-  { time: "20:41:16", tag: "VERIFY", tone: "text-emerald-400", text: "@nova passed verification in 1.8s" },
-  { time: "20:41:20", tag: "LOGGING", tone: "text-slate-400", text: "Audit snapshot synced — 12,440 events" },
-  { time: "20:41:24", tag: "TICKETS", tone: "text-violet-400", text: "Ticket #42 opened by @rayexo" },
-  { time: "20:41:28", tag: "LEVELING", tone: "text-amber-400", text: "@kira reached level 24 — reward role granted" },
-  { time: "20:41:31", tag: "WELCOMER", tone: "text-cyan-400", text: "Welcome card rendered for @nova" },
-  { time: "20:41:35", tag: "INSTA-DL", tone: "text-violet-400", text: "Saved reel from #media → media/8.2MB.mp4" },
-  { time: "20:41:39", tag: "ANTI-RAID", tone: "text-emerald-400", text: "Join scan complete — 0 suspicious (2.0s)" },
-  { time: "20:41:42", tag: "AUTO-REACT", tone: "text-slate-400", text: "Added reactions in #announcements" },
+/* ── Security terminal ──────────────────────────────────────────────────── */
+const LOGS = [
+  { tag: "SHIELD",    tone: "text-primary-light",  text: "Anti-Nuke armed — 18 modules online" },
+  { tag: "AUTOMOD",   tone: "text-cyan-400",        text: "Deleted spam in #general (score 97)" },
+  { tag: "ANTINUKE",  tone: "text-rose-400",        text: "Blocked role-delete by @mallory#1337" },
+  { tag: "VERIFY",    tone: "text-emerald-400",     text: "@nova passed gateway in 1.8s" },
+  { tag: "TICKETS",   tone: "text-violet-400",      text: "Ticket #42 opened by @rayexo" },
+  { tag: "LEVELING",  tone: "text-amber-400",       text: "@kira reached level 24, role granted" },
+  { tag: "INSTA-DL",  tone: "text-primary-light",   text: "Saved reel → #media/clip-8.2MB.mp4" },
+  { tag: "ANTI-SPAM", tone: "text-cyan-400",        text: "Purged 3 duplicates from #giveaways" },
+  { tag: "RAID-SCAN", tone: "text-emerald-400",     text: "Join scan complete — 0 suspicious (2s)" },
+  { tag: "WELCOMER",  tone: "text-violet-400",      text: "Welcome card rendered for @nova" },
 ];
 
-function SecurityConsole({ compact = false }: { compact?: boolean }) {
-  const [lineIdx, setLineIdx] = useState(0);
+function Terminal_() {
+  const [lines, setLines] = useState<typeof LOGS>([]);
+  const [current, setCurrent] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
   const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let cancelled = false;
-    let line = 0;
+    let idx = 0;
     let chars = 0;
+    let cancelled = false;
     let timer: ReturnType<typeof setTimeout>;
 
     const tick = () => {
       if (cancelled) return;
-      const current = CONSOLE_LINES[line % CONSOLE_LINES.length];
-      chars += 1;
-      setLineIdx(line % CONSOLE_LINES.length);
+      chars++;
       setCharIdx(chars);
-      if (chars >= current.text.length) {
-        line += 1;
+      const len = LOGS[idx % LOGS.length].text.length;
+      if (chars >= len) {
+        setLines((prev) => {
+          const next = [...prev, LOGS[idx % LOGS.length]];
+          return next.slice(-9);
+        });
+        idx++;
         chars = 0;
-        timer = setTimeout(tick, 700);
+        setCurrent(idx % LOGS.length);
+        setCharIdx(0);
+        timer = setTimeout(tick, 900);
       } else {
-        timer = setTimeout(tick, 26);
+        timer = setTimeout(tick, 28);
       }
     };
-    timer = setTimeout(tick, 400);
-
-    return () => {
-      cancelled = true;
-      clearTimeout(timer);
-    };
+    timer = setTimeout(tick, 600);
+    return () => { cancelled = true; clearTimeout(timer); };
   }, []);
 
   useEffect(() => {
-    if (boxRef.current) {
-      boxRef.current.scrollTop = boxRef.current.scrollHeight;
-    }
-  }, [lineIdx, charIdx]);
-
-  const visibleLines = CONSOLE_LINES.map((l, i) => ({ ...l, i }));
-  const start = Math.max(0, lineIdx - 8);
+    if (boxRef.current) boxRef.current.scrollTop = boxRef.current.scrollHeight;
+  }, [lines, charIdx]);
 
   return (
-    <div
-      className={cn(
-        "relative overflow-hidden rounded-xl border border-slate-800 bg-[#030308]/90 shadow-[0_0_40px_-12px_rgba(99,102,241,0.25)]",
-        compact ? "text-[8.5px] leading-[1.7]" : "text-[11px] leading-[1.8]"
-      )}
-    >
-      {/* Chrome bar */}
-      <div className="flex items-center gap-2 border-b border-slate-800 bg-slate-950/80 px-3 py-1.5">
-        <span className="h-2 w-2 rounded-full bg-rose-500/80" />
-        <span className="h-2 w-2 rounded-full bg-amber-500/80" />
-        <span className="h-2 w-2 rounded-full bg-emerald-500/80" />
-        <span className="ml-2 flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-[0.2em] text-slate-500">
-          <Terminal className="h-2.5 w-2.5 text-accent-hover" />
-          zyrox — security ops
+    <div className="rounded-xl overflow-hidden border border-white/[0.07] bg-[#06060f] shadow-2xl shadow-black/60">
+      {/* chrome */}
+      <div className="flex items-center gap-2 px-4 py-2.5 bg-[#09090f] border-b border-white/[0.06]">
+        <span className="h-2.5 w-2.5 rounded-full bg-rose-500/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+        <span className="ml-3 font-mono text-[9px] uppercase tracking-widest text-white/25">
+          {BRAND.toLowerCase()} — security ops
         </span>
-        <span className="ml-auto flex items-center gap-1 font-mono text-[8px] text-emerald-400">
+        <span className="ml-auto flex items-center gap-1.5 font-mono text-[9px] text-emerald-400">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-60" />
+            <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-400" />
           </span>
           LIVE
         </span>
       </div>
 
-      {/* Scanline */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-transparent via-primary/10 to-transparent animate-scan" />
+      {/* scanline */}
+      <div className="pointer-events-none absolute inset-x-0 h-6 bg-gradient-to-b from-primary/10 to-transparent animate-scan" />
 
-      {/* Log body */}
-      <div ref={boxRef} className={cn("overflow-hidden px-3 py-2 font-mono", compact ? "h-28" : "h-56")}>
-        {visibleLines.slice(start, start + 9).map((l) => {
-          const isCurrent = l.i === lineIdx;
-          const text = isCurrent ? l.text.slice(0, charIdx) : l.text;
-          return (
-            <div key={l.i} className="flex items-baseline gap-2 whitespace-nowrap">
-              <span className="text-slate-600">[{l.time}]</span>
-              <span className={cn("shrink-0 font-bold", l.tone)}>{l.tag}</span>
-              <span className={cn("text-slate-300", isCurrent && "text-slate-100")}>{text}</span>
-              {isCurrent && <span className="ml-0.5 inline-block h-2.5 w-1 bg-cyan-400 animate-blink" />}
-            </div>
-          );
-        })}
+      {/* log body */}
+      <div ref={boxRef} className="h-52 overflow-y-hidden px-4 py-3 font-mono text-[10.5px] leading-[1.85] space-y-0.5">
+        {lines.map((l, i) => (
+          <div key={i} className="flex items-baseline gap-2.5">
+            <span className="text-white/20 shrink-0 select-none">›</span>
+            <span className={cn("font-bold shrink-0 min-w-[68px]", l.tone)}>{l.tag}</span>
+            <span className="text-white/55">{l.text}</span>
+          </div>
+        ))}
+        {/* typing line */}
+        <div className="flex items-baseline gap-2.5">
+          <span className="text-white/20 shrink-0 select-none">›</span>
+          <span className={cn("font-bold shrink-0 min-w-[68px]", LOGS[current].tone)}>{LOGS[current].tag}</span>
+          <span className="text-white/80">
+            {LOGS[current].text.slice(0, charIdx)}
+            <span className="inline-block h-2.5 w-0.5 bg-cyan-400 ml-0.5 animate-blink" />
+          </span>
+        </div>
       </div>
     </div>
   );
 }
 
-/* ── Interactive dashboard mockup ──────────────────────────────────────── */
-type ViewKey = "overview" | "security" | "leveling" | "tickets";
-
-const SIDEBAR_ITEMS: { key: ViewKey; label: string; icon: typeof LayoutDashboard }[] = [
-  { key: "overview", label: "Overview", icon: LayoutDashboard },
-  { key: "security", label: "Security", icon: ShieldCheck },
-  { key: "leveling", label: "Leveling", icon: BarChart4 },
-  { key: "tickets", label: "Tickets", icon: Ticket },
-];
+/* ── Interactive dashboard mockup ───────────────────────────────────────── */
+type View = "overview" | "security" | "leveling" | "tickets";
 
 function DashboardMockup() {
-  const [view, setView] = useState<ViewKey>("overview");
+  const [view, setView] = useState<View>("overview");
 
-  const metrics = [
-    { label: "Guilds", value: 128, icon: Server, color: "text-primary-light" },
-    { label: "Members", value: 48213, icon: Users2, color: "text-cyan-400" },
-    { label: "API Latency", value: 34, icon: Zap, color: "text-emerald-400", suffix: "ms" },
+  const views: { key: View; label: string; icon: typeof LayoutDashboard }[] = [
+    { key: "overview",  label: "Overview",  icon: LayoutDashboard },
+    { key: "security",  label: "Security",  icon: ShieldCheck },
+    { key: "leveling",  label: "Leveling",  icon: BarChart4 },
+    { key: "tickets",   label: "Tickets",   icon: Ticket },
   ];
 
-  const bars = [34, 58, 42, 76, 51, 88, 64, 95, 72, 84, 61, 90];
-
-  const events = [
-    { icon: Ban, text: "Anti-Spam+ deleted 3 messages in #general", time: "2m ago", tone: "text-rose-400" },
-    { icon: Download, text: "Instagram reel saved from #media", time: "5m ago", tone: "text-primary-light" },
-    { icon: Ticket, text: "New ticket #42 created by @rayexo", time: "11m ago", tone: "text-amber-400" },
-  ];
-
+  const bars = [38, 55, 42, 78, 52, 88, 65, 95, 74, 85, 62, 91];
   const ranks = [
-    { name: "rayexo", xp: "12,840 XP", pct: 92 },
-    { name: "kira", xp: "11,205 XP", pct: 81 },
-    { name: "nova", xp: "9,478 XP", pct: 68 },
-    { name: "ash", xp: "7,112 XP", pct: 52 },
+    { name: "rayexo", xp: "12,840", pct: 92 },
+    { name: "kira",   xp: "11,205", pct: 81 },
+    { name: "nova",   xp: "9,478",  pct: 68 },
+    { name: "ash",    xp: "7,112",  pct: 52 },
   ];
-
-  const tickets = [
-    { id: "#42", subject: "API rate limit bug", status: "Open", tone: "text-cyan-400 border-cyan-400/30 bg-cyan-400/10" },
-    { id: "#41", subject: "Invite link request", status: "Solved", tone: "text-emerald-400 border-emerald-400/30 bg-emerald-400/10" },
-    { id: "#40", subject: "Premium refund", status: "In Progress", tone: "text-violet-400 border-violet-400/30 bg-violet-400/10" },
+  const tickets_ = [
+    { id: "#42", sub: "API rate limit bug",  status: "Open",        cls: "text-cyan-400 bg-cyan-400/10 border-cyan-400/25" },
+    { id: "#41", sub: "Invite link request", status: "Closed",      cls: "text-emerald-400 bg-emerald-400/10 border-emerald-400/25" },
+    { id: "#40", sub: "Premium refund",      status: "In Progress", cls: "text-violet-400 bg-violet-400/10 border-violet-400/25" },
   ];
-
-  const panelMeta: Record<ViewKey, { title: string; sub: string }> = {
-    overview: { title: "Overview", sub: "Live metrics" },
-    security: { title: "Security Console", sub: "Real-time shield activity" },
-    leveling: { title: "Leveling", sub: "Top members this week" },
-    tickets: { title: "Tickets", sub: "Open support threads" },
-  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40, rotateX: 8 }}
+      initial={{ opacity: 0, y: 48, rotateX: 6 }}
       animate={{ opacity: 1, y: 0, rotateX: 0 }}
-      transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      style={{ perspective: 1400 }}
       className="relative mx-auto w-full max-w-5xl"
-      style={{ perspective: 1200 }}
     >
-      {/* Glow under the window */}
-      <div className="absolute inset-x-8 -bottom-8 h-24 rounded-full bg-primary/25 blur-[80px]" />
-      <div className="absolute inset-x-24 -bottom-12 h-16 rounded-full bg-accent/15 blur-[70px]" />
+      {/* glow under */}
+      <div className="absolute inset-x-16 -bottom-10 h-20 rounded-full bg-primary/20 blur-[72px]" />
 
-      <div className="border-gradient relative overflow-hidden rounded-2xl shadow-2xl shadow-primary/15">
-        {/* Browser chrome */}
-        <div className="flex items-center gap-3 border-b border-slate-800 bg-[#050509] px-4 py-3">
+      <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] bg-[#08080f] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)]">
+        {/* browser chrome */}
+        <div className="flex items-center gap-3 px-4 py-3 bg-[#060610] border-b border-white/[0.06]">
           <div className="flex gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-rose-500/80" />
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-500/80" />
-            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
+            <span className="h-2.5 w-2.5 rounded-full bg-rose-500/75" />
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-400/75" />
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/75" />
           </div>
-          <div className="mx-auto flex max-w-md flex-1 items-center gap-2 rounded-md border border-slate-800 bg-slate-900 px-3 py-1">
-            <Lock className="h-3 w-3 text-slate-600" />
-            <span className="font-mono text-[10px] text-slate-500">zyrox.app/dashboard</span>
+          <div className="flex-1 max-w-sm mx-auto flex items-center gap-2 rounded-md px-3 py-1 bg-white/[0.04] border border-white/[0.06]">
+            <Lock className="h-2.5 w-2.5 text-white/25" />
+            <span className="font-mono text-[10px] text-white/30">{BRAND.toLowerCase()}.app/dashboard</span>
           </div>
-          <Bell className="h-3.5 w-3.5 text-slate-600" />
+          <Bell className="h-3.5 w-3.5 text-white/20" />
         </div>
 
         <div className="flex">
-          {/* Mini sidebar */}
-          <div className="hidden w-40 flex-col gap-1 border-r border-slate-800 bg-[#050509]/80 p-3 sm:flex">
-            <div className="mb-3 flex items-center gap-2 px-2 py-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-primary to-accent shadow-[0_0_12px_rgba(99,102,241,0.5)]">
+          {/* sidebar */}
+          <div className="hidden sm:flex flex-col w-40 shrink-0 bg-[#070712] border-r border-white/[0.05] p-3 gap-0.5">
+            <div className="flex items-center gap-2 px-2 py-2.5 mb-2">
+              <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-[0_0_12px_rgba(99,102,241,0.5)]">
                 <Bot className="h-3.5 w-3.5 text-white" />
               </div>
-              <span className="text-xs font-bold text-slate-50">{BRAND}</span>
+              <span className="text-xs font-bold text-white">{BRAND}</span>
             </div>
 
-            {SIDEBAR_ITEMS.map((item) => {
-              const active = view === item.key;
+            {views.map((v) => {
+              const active = v.key === view;
               return (
                 <button
-                  key={item.key}
-                  type="button"
-                  onClick={() => setView(item.key)}
+                  key={v.key}
+                  onClick={() => setView(v.key)}
                   className={cn(
-                    "relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[10px] font-semibold uppercase tracking-wider transition-colors duration-200",
-                    active ? "text-primary-light" : "text-slate-500 hover:text-slate-300"
+                    "relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[10px] font-semibold uppercase tracking-wide transition-all duration-200",
+                    active ? "text-white" : "text-white/30 hover:text-white/60"
                   )}
                 >
                   {active && (
                     <motion.span
-                      layoutId="mock-tab"
+                      layoutId="sidebar-pill"
                       transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                      className="absolute inset-0 rounded-lg border border-primary/30 bg-primary/15"
+                      className="absolute inset-0 rounded-lg bg-white/[0.07] border border-white/[0.1]"
                     />
                   )}
-                  <item.icon className={cn("relative z-10 h-3.5 w-3.5", active && "text-primary-light")} />
-                  <span className="relative z-10">{item.label}</span>
+                  <v.icon className="relative z-10 h-3.5 w-3.5" />
+                  <span className="relative z-10">{v.label}</span>
                 </button>
               );
             })}
 
-            <div className="mt-auto flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-2">
-              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-[8px] font-bold text-white">
-                R
-              </div>
-              <span className="text-[9px] font-semibold text-slate-400">rayexo</span>
-              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
+            <div className="mt-auto flex items-center gap-2 rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.06]">
+              <div className="h-5 w-5 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-[8px] font-bold text-white">R</div>
+              <span className="text-[9px] font-semibold text-white/40">rayexo</span>
+              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
             </div>
           </div>
 
-          {/* Main panel */}
-          <div className="flex-1 space-y-4 bg-slate-900/40 p-4 sm:p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-50">{panelMeta[view].title}</p>
-                <p className="mt-0.5 text-[9px] text-slate-500">{panelMeta[view].sub}</p>
-              </div>
-              <div className="hidden items-center gap-2 rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-slate-600 md:flex">
-                <Search className="h-3 w-3" />
-                <span className="text-[9px]">Search…</span>
-              </div>
-            </div>
-
+          {/* main panel */}
+          <div className="flex-1 p-4 space-y-3 bg-[#08080f]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={view}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className="space-y-4"
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-3"
               >
                 {view === "overview" && (
                   <>
-                    <div className="grid grid-cols-3 gap-3">
-                      {metrics.map((m, i) => (
-                        <motion.div
-                          key={m.label}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.1 + i * 0.08, duration: 0.4 }}
-                          className="rounded-xl border border-slate-800 bg-slate-950 p-3"
-                        >
-                          <div className="mb-2 flex items-center gap-1.5">
+                    <div className="grid grid-cols-3 gap-2.5">
+                      {[
+                        { label: "Guilds",  value: 128,   icon: Server,  color: "text-primary-light" },
+                        { label: "Members", value: 48213, icon: Users2,  color: "text-cyan-400" },
+                        { label: "Latency", value: 34,    icon: Zap,     color: "text-emerald-400", suffix: "ms" },
+                      ].map((m) => (
+                        <div key={m.label} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
+                          <div className="flex items-center gap-1.5 mb-1.5">
                             <m.icon className={cn("h-3 w-3", m.color)} />
-                            <span className="text-[8px] font-semibold uppercase tracking-widest text-slate-600">
-                              {m.label}
-                            </span>
+                            <span className="font-mono text-[8px] uppercase tracking-widest text-white/25">{m.label}</span>
                           </div>
-                          <p className="font-mono text-lg font-bold tabular-nums text-slate-50">
+                          <p className="font-mono text-lg font-bold text-white tabular-nums">
                             <CountUp to={m.value} suffix={m.suffix || ""} />
                           </p>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
 
-                    <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                      <div className="mb-3 flex items-center justify-between">
-                        <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-600">
-                          Message volume
-                        </span>
+                    {/* chart */}
+                    <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3.5">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="font-mono text-[8px] uppercase tracking-widest text-white/25">Message volume</span>
                         <span className="flex items-center gap-1 text-[9px] font-semibold text-emerald-400">
-                          <TrendingUp className="h-3 w-3" /> +12.4%
+                          <TrendingUp className="h-2.5 w-2.5" /> +12.4%
                         </span>
                       </div>
-                      <div className="flex h-20 items-end gap-1.5">
+                      <div className="flex items-end gap-1 h-16">
                         {bars.map((h, i) => (
                           <motion.div
                             key={i}
                             initial={{ height: 0 }}
                             animate={{ height: `${h}%` }}
-                            transition={{ delay: 0.25 + i * 0.04, duration: 0.5, ease: "easeOut" }}
+                            transition={{ delay: 0.4 + i * 0.04, duration: 0.5, ease: "easeOut" }}
                             className={cn(
                               "flex-1 rounded-sm",
                               i >= 7
-                                ? "bg-gradient-to-t from-primary via-violet-400 to-accent-hover shadow-[0_0_14px_rgba(99,102,241,0.45)]"
-                                : "bg-gradient-to-t from-primary/40 to-accent/25"
+                                ? "bg-gradient-to-t from-primary to-accent shadow-[0_0_8px_rgba(99,102,241,0.4)]"
+                                : "bg-white/[0.08]"
                             )}
                           />
                         ))}
                       </div>
                     </div>
 
+                    {/* events */}
                     <div className="space-y-1.5">
-                      {events.map((e) => (
-                        <div
-                          key={e.text}
-                          className="flex items-center gap-2.5 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2"
-                        >
-                          <e.icon className={cn("h-3 w-3 shrink-0", e.tone)} />
-                          <span className="flex-1 truncate text-[10px] text-slate-400">{e.text}</span>
-                          <span className="font-mono text-[8px] text-slate-600">{e.time}</span>
+                      {[
+                        { icon: Ban,      text: "Anti-Spam+ deleted 3 messages in #general", time: "2m", tone: "text-rose-400" },
+                        { icon: Download, text: "Instagram reel saved from #media",          time: "5m", tone: "text-primary-light" },
+                        { icon: Ticket,   text: "Ticket #42 opened by @rayexo",             time: "11m", tone: "text-amber-400" },
+                      ].map((e) => (
+                        <div key={e.text} className="flex items-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2">
+                          <e.icon className={cn("h-2.5 w-2.5 shrink-0", e.tone)} />
+                          <span className="flex-1 text-[10px] text-white/40 truncate">{e.text}</span>
+                          <span className="font-mono text-[8px] text-white/20">{e.time}</span>
                         </div>
                       ))}
                     </div>
                   </>
                 )}
 
-                {view === "security" && <SecurityConsole compact />}
+                {view === "security" && <Terminal_ />}
 
                 {view === "leveling" && (
                   <div className="space-y-2">
                     {ranks.map((r, i) => (
-                      <div key={r.name} className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2.5">
-                        <div className="mb-1.5 flex items-center gap-2">
-                          <span
-                            className={cn(
-                              "flex h-5 w-5 items-center justify-center rounded-md font-mono text-[8px] font-bold",
-                              i === 0
-                                ? "bg-gradient-to-br from-primary to-accent text-white shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-                                : "bg-slate-800 text-slate-500"
-                            )}
-                          >
-                            {i + 1}
-                          </span>
-                          <span className="text-[10px] font-semibold text-slate-200">{r.name}</span>
-                          <span className="ml-auto font-mono text-[8px] text-slate-500">{r.xp}</span>
+                      <div key={r.name} className="rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2.5">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className={cn(
+                            "flex h-5 w-5 items-center justify-center rounded font-mono text-[8px] font-bold",
+                            i === 0 ? "bg-primary/80 text-white" : "bg-white/[0.06] text-white/30"
+                          )}>{i + 1}</span>
+                          <span className="text-[10px] font-semibold text-white/70">{r.name}</span>
+                          <span className="ml-auto font-mono text-[8px] text-white/30">{r.xp} XP</span>
                         </div>
-                        <div className="h-1.5 rounded-full bg-slate-800">
+                        <div className="h-1 rounded-full bg-white/[0.07]">
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${r.pct}%` }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="h-full rounded-full bg-gradient-to-r from-primary to-accent shadow-[0_0_8px_rgba(6,182,212,0.5)]"
+                            className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
                           />
                         </div>
                       </div>
@@ -599,27 +396,13 @@ function DashboardMockup() {
 
                 {view === "tickets" && (
                   <div className="space-y-1.5">
-                    {tickets.map((t) => (
-                      <div
-                        key={t.id}
-                        className="flex items-center gap-2.5 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2"
-                      >
+                    {tickets_.map((t) => (
+                      <div key={t.id} className="flex items-center gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2.5">
                         <span className="font-mono text-[10px] font-bold text-primary-light">{t.id}</span>
-                        <span className="flex-1 truncate text-[10px] text-slate-400">{t.subject}</span>
-                        <span
-                          className={cn(
-                            "rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-wider",
-                            t.tone
-                          )}
-                        >
-                          {t.status}
-                        </span>
+                        <span className="flex-1 text-[10px] text-white/50 truncate">{t.sub}</span>
+                        <span className={cn("rounded-full border px-2.5 py-0.5 font-mono text-[8px] font-semibold", t.cls)}>{t.status}</span>
                       </div>
                     ))}
-                    <div className="flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 opacity-70">
-                      <Radar className="h-3 w-3 text-slate-600" />
-                      <span className="text-[9px] text-slate-500">Transcripts archived to #support-logs</span>
-                    </div>
                   </div>
                 )}
               </motion.div>
@@ -628,382 +411,261 @@ function DashboardMockup() {
         </div>
       </div>
 
-      {/* Floating toast */}
+      {/* floating badges */}
       <motion.div
-        initial={{ opacity: 0, x: 24 }}
+        initial={{ opacity: 0, x: 28 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1.9, duration: 0.5, ease: "easeOut" }}
-        className="glass-cyber absolute -right-2 top-24 flex items-center gap-3 rounded-xl px-3.5 py-2.5 sm:-right-6"
+        transition={{ delay: 1.6, duration: 0.6, ease: "easeOut" }}
+        className="absolute -right-3 sm:-right-8 top-28 flex items-center gap-3 rounded-xl border border-white/[0.1] bg-[#0d0d1c]/90 backdrop-blur-xl px-3.5 py-2.5 shadow-2xl"
       >
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15 neon-glow-primary">
+        <div className="h-7 w-7 rounded-lg bg-primary/20 flex items-center justify-center">
           <Download className="h-3.5 w-3.5 text-primary-light" />
         </div>
         <div>
-          <p className="text-[10px] font-semibold text-slate-50">Reel downloaded</p>
-          <p className="text-[9px] text-slate-500">#media → 8.2 MB mp4</p>
+          <p className="text-[10px] font-semibold text-white">Reel downloaded</p>
+          <p className="text-[9px] text-white/35">#media → 8.2 MB mp4</p>
         </div>
       </motion.div>
 
-      {/* Floating module pill */}
       <motion.div
-        initial={{ opacity: 0, x: -24 }}
+        initial={{ opacity: 0, x: -28 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 2.2, duration: 0.5, ease: "easeOut" }}
-        className="glass-cyber absolute -bottom-5 -left-2 flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 sm:-left-6"
+        transition={{ delay: 2.0, duration: 0.6, ease: "easeOut" }}
+        className="absolute -left-3 sm:-left-8 -bottom-4 flex items-center gap-2 rounded-xl border border-white/[0.1] bg-[#0d0d1c]/90 backdrop-blur-xl px-3.5 py-2.5 shadow-2xl"
       >
         <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+          <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-60" />
+          <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
         </span>
-        <span className="text-[10px] font-semibold text-slate-300">18 modules online</span>
+        <span className="text-[10px] font-semibold text-white/70">18 modules online</span>
       </motion.div>
     </motion.div>
   );
 }
 
-/* ── Interactive modules showcase ──────────────────────────────────────── */
-const MODULE_TABS = [
-  {
-    key: "antinuke",
-    name: "Anti-Nuke",
-    desc: "Server lockdown protection",
-    icon: ShieldAlert,
-    rows: [
-      { type: "toggle", label: "Server Lockdown", desc: "Freeze all destructive actions", initial: true },
-      { type: "toggle", label: "Ban Blast Protection", desc: "Blocks mass-ban attacks", initial: true },
-      { type: "toggle", label: "Whitelist Admins", desc: "Exempt trusted roles", initial: false },
-      { type: "slider", label: "Sensitivity", value: 85 },
-      { type: "toggle", label: "Auto-Kick on Alert", desc: "Removes flagged members", initial: true },
-    ],
-  },
-  {
-    key: "leveling",
-    name: "Leveling",
-    desc: "XP, ranks and leaderboards",
-    icon: BarChart4,
-    rows: [
-      { type: "toggle", label: "XP Enabled", desc: "Earn XP per message", initial: true },
-      { type: "toggle", label: "Level-up Messages", desc: "Announce in channel", initial: true },
-      { type: "toggle", label: "Reward Roles", desc: "Auto roles on level", initial: false },
-      { type: "slider", label: "XP Rate", value: 1.5, suffix: "x" },
-      { type: "toggle", label: "Leaderboard", desc: "Public /leaderboard", initial: true },
-    ],
-  },
-  {
-    key: "welcomer",
-    name: "Welcomer",
-    desc: "Custom join messages",
-    icon: Sparkles,
-    rows: [
-      { type: "toggle", label: "Welcome Messages", desc: "Embed + image card", initial: true },
-      { type: "toggle", label: "DM on Join", desc: "Personalized DM", initial: true },
-      { type: "toggle", label: "Auto Role", desc: "Assign instantly", initial: true },
-      { type: "slider", label: "Card Delay", value: 2, suffix: "s" },
-      { type: "toggle", label: "Background Image", desc: "Custom banner", initial: false },
-    ],
-  },
-  {
-    key: "antispam",
-    name: "Anti-Spam+",
-    desc: "Message and command filtering",
-    icon: Activity,
-    rows: [
-      { type: "toggle", label: "Message Filter", desc: "Deletes flagged content", initial: true },
-      { type: "toggle", label: "Link Scanning", desc: "Suspicious URL detection", initial: true },
-      { type: "toggle", label: "Caps Lock Filter", desc: "SHOUTING punishment", initial: false },
-      { type: "slider", label: "Strictness", value: 70 },
-      { type: "toggle", label: "Auto Deletion", desc: "Clean history instantly", initial: true },
-    ],
-  },
-] as const;
-
-function ModuleShowcase() {
-  const [active, setActive] = useState<(typeof MODULE_TABS)[number]["key"]>("antinuke");
-  const tab = MODULE_TABS.find((t) => t.key === active)!;
+/* ── Feature card ────────────────────────────────────────────────────────── */
+function FeatureCard({
+  icon: Icon, title, desc, delay = 0, accent = "indigo",
+}: {
+  icon: typeof ShieldCheck; title: string; desc: string; delay?: number; accent?: "indigo" | "cyan" | "violet";
+}) {
+  const accentMap = {
+    indigo: { bg: "bg-primary/10", border: "border-primary/20", text: "text-primary-light", hover: "hover:border-primary/35" },
+    cyan:   { bg: "bg-cyan-500/10", border: "border-cyan-500/20", text: "text-cyan-400", hover: "hover:border-cyan-400/35" },
+    violet: { bg: "bg-violet-500/10", border: "border-violet-500/20", text: "text-violet-400", hover: "hover:border-violet-400/35" },
+  };
+  const a = accentMap[accent];
 
   return (
-    <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[280px_1fr]">
-      {/* Tab list */}
-      <div className="glass-cyber flex gap-2 overflow-x-auto p-2 no-scrollbar lg:flex-col">
-        {MODULE_TABS.map((t) => {
-          const isActive = t.key === active;
-          return (
-            <button
-              key={t.key}
-              type="button"
-              onClick={() => setActive(t.key)}
-              className={cn(
-                "relative flex shrink-0 items-center gap-3 rounded-xl px-3.5 py-3 text-left transition-colors duration-200 lg:w-full",
-                isActive ? "text-slate-50" : "text-slate-500 hover:text-slate-300"
-              )}
-            >
-              {isActive && (
-                <motion.span
-                  layoutId="module-tab"
-                  transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                  className="absolute inset-0 rounded-xl border border-primary/40 bg-primary/15 neon-glow-primary"
-                />
-              )}
-              <span
-                className={cn(
-                  "relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-colors duration-300",
-                  isActive
-                    ? "border-primary/40 bg-gradient-to-br from-primary/30 to-accent/20 text-primary-light"
-                    : "border-slate-800 bg-slate-900 text-slate-500"
-                )}
-              >
-                <t.icon className="h-4 w-4" />
-              </span>
-              <span className="relative z-10 min-w-0">
-                <span className="block text-xs font-bold">{t.name}</span>
-                <span className="block truncate text-[10px] text-slate-500">{t.desc}</span>
-              </span>
-            </button>
-          );
-        })}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ delay, duration: 0.5, ease: "easeOut" }}
+      className={cn(
+        "group relative rounded-xl p-6 border transition-all duration-300",
+        "bg-[#0c0c1a] border-white/[0.07]",
+        "hover:border-white/[0.13] hover:-translate-y-1",
+        "hover:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.6)]"
+      )}
+    >
+      {/* corner accent on hover */}
+      <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
+      <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center mb-5 border transition-all duration-300 group-hover:scale-110", a.bg, a.border)}>
+        <Icon className={cn("h-4.5 w-4.5", a.text)} />
       </div>
+      <h3 className="text-sm font-bold text-white mb-2 tracking-tight">{title}</h3>
+      <p className="text-sm text-white/40 leading-relaxed">{desc}</p>
+    </motion.div>
+  );
+}
 
-      {/* Preview panel */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={tab.key}
-          initial={{ opacity: 0, y: 14, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -10, scale: 0.98 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="glass-cyber overflow-hidden"
-        >
-          <div className="flex items-center justify-between border-b border-white/10 px-5 py-3.5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary/30 to-accent/20 border border-primary/30">
-                <tab.icon className="h-4 w-4 text-primary-light" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-50">{tab.name}</p>
-                <p className="text-[10px] text-slate-500">Live settings preview</p>
-              </div>
-            </div>
-            <span className="hidden items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-widest text-emerald-400 sm:flex">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              Synced
-            </span>
-          </div>
+/* ── Module pill ─────────────────────────────────────────────────────────── */
+function ModulePill({ name, icon: Icon, idx }: { name: string; icon: typeof ShieldAlert; idx: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-20px" }}
+      transition={{ delay: idx * 0.04, duration: 0.4 }}
+      className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 bg-white/[0.04] border border-white/[0.07] hover:bg-white/[0.07] hover:border-white/[0.12] transition-all duration-200 group cursor-default"
+    >
+      <Icon className="h-3.5 w-3.5 text-primary-light/70 group-hover:text-primary-light transition-colors" />
+      <span className="text-xs font-medium text-white/55 group-hover:text-white/80 transition-colors">{name}</span>
+    </motion.div>
+  );
+}
 
-          <div className="space-y-1 px-5 py-4">
-            {tab.rows.map((row) =>
-              row.type === "toggle" ? (
-                <ToggleRow
-                  key={row.label}
-                  label={row.label}
-                  desc={(row as { desc?: string }).desc}
-                  initial={(row as { initial?: boolean }).initial}
-                />
-              ) : (
-                <SliderRow
-                  key={row.label}
-                  label={row.label}
-                  value={(row as { value: number }).value}
-                  suffix={(row as { suffix?: string }).suffix}
-                />
-              )
-            )}
-          </div>
-
-          <div className="border-t border-white/10 px-5 py-3">
-            <Button size="sm" className="btn-slide w-full gap-2 font-semibold neon-glow-primary">
-              <Settings className="h-3.5 w-3.5" />
-              Open in Dashboard
-            </Button>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+/* ── Stat card ───────────────────────────────────────────────────────────── */
+function StatCard({ value, label, sub, icon: Icon }: { value: string; label: string; sub?: string; icon: typeof Server }) {
+  return (
+    <div className="flex flex-col gap-1 p-6 rounded-xl border border-white/[0.07] bg-white/[0.03]">
+      <Icon className="h-4 w-4 text-primary-light/60 mb-1" />
+      <p className="text-3xl font-bold text-white tracking-tight">{value}</p>
+      <p className="text-sm font-medium text-white/50">{label}</p>
+      {sub && <p className="text-xs text-white/25 mt-0.5">{sub}</p>}
     </div>
   );
 }
 
-/* ── Landing page ──────────────────────────────────────────────────────── */
+/* ── FAQ item ────────────────────────────────────────────────────────────── */
+function FaqItem({ q, a, idx }: { q: string; a: string; idx: number }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: idx * 0.07, duration: 0.4 }}
+      className="border-b border-white/[0.07] last:border-0"
+    >
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between py-5 text-left group"
+      >
+        <span className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors pr-8">{q}</span>
+        <ChevronRight className={cn("h-4 w-4 text-white/30 shrink-0 transition-transform duration-300", open && "rotate-90")} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            <p className="pb-5 text-sm text-white/40 leading-relaxed">{a}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+/* ── Main landing page ───────────────────────────────────────────────────── */
 export default function LandingPage() {
   const features = [
-    {
-      title: "Server Security",
-      desc: "Anti-nuke, automod, verification and anti-spam tools that protect your community around the clock.",
-      icon: ShieldCheck,
-    },
-    {
-      title: "Engagement",
-      desc: "Welcome messages, leveling, vanity roles and reaction roles that keep members active.",
-      icon: Zap,
-    },
-    {
-      title: "Support Systems",
-      desc: "Ticket management with transcripts, join-to-create voice channels and custom role menus.",
-      icon: MessageSquare,
-    },
-    {
-      title: "Insights",
-      desc: "Invite tracking, member analytics and detailed moderation logs in one place.",
-      icon: BarChart4,
-    },
-    {
-      title: "Automation",
-      desc: "Auto role assignment, join DMs and auto reactions configured in minutes.",
-      icon: Settings,
-    },
-    {
-      title: "Modern Dashboard",
-      desc: "Every module configured from a single, fast dashboard. No commands required.",
-      icon: LayoutDashboard,
-    },
+    { title: "Anti-Nuke",       desc: "Instant lockdown against mass bans, channel wipes, and rogue admin attacks — resolved in milliseconds.",    icon: ShieldAlert,    accent: "indigo" as const },
+    { title: "Smart Automod",   desc: "ML-powered message scoring catches spam, scam links, and NSFW content before anyone sees it.",               icon: ShieldCheck,    accent: "cyan"   as const },
+    { title: "Leveling",        desc: "XP tracking, custom rank cards, reward roles, and a public leaderboard — all configurable per server.",     icon: BarChart4,      accent: "violet" as const },
+    { title: "Ticket System",   desc: "Panel-based support tickets with transcripts, category routing, and staff assignments.",                    icon: MessageSquare,  accent: "indigo" as const },
+    { title: "Engagement",      desc: "Reaction roles, welcome cards, vanity roles and join DMs that keep members coming back.",                   icon: Sparkles,       accent: "cyan"   as const },
+    { title: "One Dashboard",   desc: "Configure every module from a single fast interface — no slash commands, no YAML, no headaches.",           icon: LayoutDashboard, accent: "violet" as const },
   ];
 
   const modules = [
-    { name: "Anti-Nuke", desc: "Lockdown protection", icon: ShieldAlert },
-    { name: "Automod", desc: "Moderation rules", icon: ShieldCheck },
-    { name: "Anti-Spam+", desc: "Message filtering", icon: Activity },
-    { name: "Verification", desc: "Bot-free onboarding", icon: CheckCircle2 },
-    { name: "Welcome", desc: "Custom join messages", icon: Sparkles },
-    { name: "Leveling", desc: "XP, ranks, leaderboards", icon: BarChart4 },
-    { name: "Vanity Roles", desc: "Server identity", icon: Gamepad2 },
-    { name: "Auto Role", desc: "Instant assignment", icon: User },
-    { name: "Reaction Roles", desc: "Role menus by reaction", icon: Layers },
-    { name: "Tickets", desc: "Support with transcripts", icon: MessageSquare },
-    { name: "Join to Create", desc: "Self-serve voice", icon: Music4 },
-    { name: "Invites", desc: "Growth tracking", icon: Globe },
-    { name: "Join DM", desc: "Personalized DMs", icon: Mail },
-    { name: "Custom Roles", desc: "User-purchased roles", icon: Lock },
-    { name: "Logging", desc: "Full audit trail", icon: History },
-    { name: "Insta Downloader", desc: "Auto-save media", icon: Download },
+    { name: "Anti-Nuke",       icon: ShieldAlert  },
+    { name: "Automod",         icon: ShieldCheck  },
+    { name: "Anti-Spam+",      icon: Activity     },
+    { name: "Verification",    icon: CheckCircle2 },
+    { name: "Welcomer",        icon: Sparkles     },
+    { name: "Leveling",        icon: BarChart4    },
+    { name: "Vanity Roles",    icon: Gamepad2     },
+    { name: "Auto Role",       icon: User         },
+    { name: "Reaction Roles",  icon: Layers       },
+    { name: "Tickets",         icon: MessageSquare},
+    { name: "Join to Create",  icon: Music4       },
+    { name: "Invites",         icon: Globe        },
+    { name: "Join DM",         icon: Mail         },
+    { name: "Custom Roles",    icon: Lock         },
+    { name: "Logging",         icon: History      },
+    { name: "Insta Downloader",icon: Download     },
   ];
 
   const faqs = [
-    {
-      q: "Is the bot free to use?",
-      a: "The core engine is 100% free for all communities. Premium features are available for larger servers.",
-    },
-    {
-      q: "How do I configure modules?",
-      a: "Invite the bot, then manage every module from the web dashboard — no commands needed.",
-    },
-    {
-      q: "Can I migrate from other bots?",
-      a: "Yes. Leveling and configuration data can be imported from most popular bots in minutes.",
-    },
-    {
-      q: "Where is my server data stored?",
-      a: "Configuration data is stored securely and encrypted at rest. We never store personal user data beyond Discord's requirements.",
-    },
+    { q: "Is the bot free?",                a: "The full core feature set is free for any server. We may offer priority support or extended limits for premium plans in future." },
+    { q: "How do I configure modules?",     a: "Invite the bot, authenticate with Discord on this site, select your server, and configure everything from the visual dashboard — no commands required." },
+    { q: "Can I migrate from other bots?",  a: "Leveling data from MEE6 and other common bots can be imported via the dashboard in a few clicks." },
+    { q: "Is my server data safe?",         a: "Configuration is stored encrypted at rest. We only retain what Discord requires us to — no message content, no personal data beyond what you can see." },
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background font-sans text-slate-200">
-      {/* Cyber grid + interactive particles */}
-      <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute inset-0 cyber-grid-bg opacity-70" />
-      </div>
-      <CyberParticles />
+    <div className="relative min-h-screen overflow-x-hidden bg-aurora font-sans text-white">
+      <Particles />
 
-      {/* Navigation */}
-      <nav className="fixed top-0 z-50 w-full border-b border-slate-800/80 bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[0_0_18px_rgba(99,102,241,0.45)]">
-              <Bot className="h-5 w-5 text-white" />
+      {/* dot grid overlay */}
+      <div className="pointer-events-none fixed inset-0 z-0 dot-grid opacity-80" />
+
+      {/* ── NAV ──────────────────────────────────────────────────────────── */}
+      <nav className="fixed top-0 z-50 w-full">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex h-16 items-center justify-between border-b border-white/[0.07] bg-[#080810]/75 backdrop-blur-xl -mx-6 px-6">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-[0_0_18px_rgba(99,102,241,0.45)]">
+                <Bot className="h-4 w-4 text-white" />
+              </div>
+              <span className="font-bold text-[15px] text-white tracking-tight">{BRAND}</span>
             </div>
-            <div className="flex flex-col">
-              <h1 className="text-base font-bold leading-none tracking-tight text-slate-50">{BRAND}</h1>
-              <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Discord Bot
-              </span>
+
+            <div className="hidden lg:flex items-center gap-7 text-[11px] font-semibold uppercase tracking-[0.1em] text-white/35">
+              {[["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
+                <Link key={l} href={h} className="hover:text-white/80 transition-colors">{l}</Link>
+              ))}
             </div>
-          </div>
 
-          <div className="hidden items-center gap-8 text-[11px] font-semibold uppercase tracking-widest text-slate-500 lg:flex">
-            <Link href="#features" className="transition-colors hover:text-primary-light">
-              Features
-            </Link>
-            <Link href="#modules" className="transition-colors hover:text-primary-light">
-              Modules
-            </Link>
-            <Link href="#faq" className="transition-colors hover:text-primary-light">
-              FAQ
-            </Link>
+            <Button
+              onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
+              className="btn-sheen h-9 gap-2 px-5 text-xs font-semibold bg-primary hover:bg-primary-hover shadow-[0_0_20px_rgba(99,102,241,0.35)]"
+            >
+              <LogIn className="h-3.5 w-3.5" />
+              Sign in
+            </Button>
           </div>
-
-          <Button
-            onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
-            className="btn-slide gap-2 px-5 text-[10px] font-semibold uppercase tracking-wider neon-glow-primary"
-          >
-            <LogIn className="h-3.5 w-3.5" />
-            Login
-          </Button>
         </div>
       </nav>
 
-      {/* Hero */}
-      <header className="relative z-10 px-6 pb-16 pt-32">
-        <div className="mx-auto max-w-4xl text-center">
-          {/* Floating mascot */}
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      <section className="relative z-10 pt-36 pb-20 px-6 text-center">
+        <div className="mx-auto max-w-4xl">
+          {/* badge */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.7, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="mb-6 flex justify-center"
-          >
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-              className="relative"
-            >
-              <div className="absolute inset-[-30px] rounded-full bg-primary/25 blur-2xl" />
-              <CyberBotMascot className="relative h-28 w-28 drop-shadow-[0_0_24px_rgba(99,102,241,0.5)] md:h-36 md:w-36" />
-            </motion.div>
-          </motion.div>
-
-          {/* Status badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-8 flex justify-center"
+            className="inline-flex items-center gap-2 mb-8"
           >
-            <motion.div
-              animate={{ y: [0, -5, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="glass-cyber flex items-center gap-2.5 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.25em] text-primary-light neon-glow-primary"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
+            <span className="badge">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
+                <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-400" />
               </span>
-              System online — trusted by 120+ servers
-            </motion.div>
+              Trusted by 120+ Discord servers
+            </span>
           </motion.div>
 
-          <h1 className="mb-6 text-5xl font-bold leading-[1.05] tracking-tight text-slate-50 sm:text-6xl md:text-7xl">
-            <AnimatedHeading text="Everything your server needs." />
-            <AnimatedHeading text="One dashboard." gradient start={0.7} className="mt-2 block" />
-          </h1>
+          {/* headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="heading-xl text-white mb-6"
+          >
+            Your server needs one bot.{" "}
+            <span className="text-gradient">Not fifteen.</span>
+          </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-400"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg text-white/45 max-w-xl mx-auto leading-relaxed mb-10"
           >
-            Anti-nuke, automod, tickets, leveling and Instagram media saving — configured visually from a
-            single dashboard. No commands required.
+            Anti-nuke, automod, leveling, tickets, and Instagram media — all in one bot,
+            configured from a single fast dashboard.
           </motion.p>
 
+          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3"
           >
             <Button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
               size="lg"
-              className="btn-slide w-full gap-2.5 font-semibold neon-glow-primary sm:w-auto"
+              className="btn-sheen h-12 px-8 gap-2.5 font-semibold text-sm bg-primary hover:bg-primary-hover shadow-[0_0_32px_rgba(99,102,241,0.35)] w-full sm:w-auto"
             >
               <LayoutDashboard className="h-4 w-4" />
               Open Dashboard
@@ -1012,206 +674,176 @@ export default function LandingPage() {
               variant="outline"
               size="lg"
               asChild
-              className="btn-slide w-full gap-2.5 border-slate-700 font-semibold transition-colors duration-300 hover:border-accent/50 hover-neon-cyan sm:w-auto"
+              className="h-12 px-8 gap-2 font-semibold text-sm w-full sm:w-auto border-white/[0.1] bg-transparent hover:bg-white/[0.05] hover:border-white/[0.18] text-white/70 hover:text-white"
             >
               <Link href="#features">
-                View Features
-                <ChevronRight className="h-4 w-4" />
+                See what&apos;s inside
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
           </motion.div>
         </div>
 
-        <div className="mt-16 px-6">
+        {/* quick stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
+          className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-white/35"
+        >
+          {[
+            ["120+ servers", "and growing"],
+            ["18 modules",   "out of the box"],
+            ["< 50ms latency","avg response"],
+            ["Free forever", "core features"],
+          ].map(([v, l]) => (
+            <div key={v} className="flex items-center gap-1.5">
+              <span className="font-semibold text-white/65">{v}</span>
+              <span>·</span>
+              <span>{l}</span>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* mockup */}
+        <div className="mt-20">
           <DashboardMockup />
         </div>
-      </header>
+      </section>
 
-      {/* Live Security Ops */}
-      <section className="relative z-10 px-6 py-20">
+      {/* ── LIVE TERMINAL ───────────────────────────────────────────────── */}
+      <section className="relative z-10 py-24 px-6">
         <div className="mx-auto max-w-5xl">
-          <div className="mb-10 text-center">
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-accent-hover">
-              Live Security Ops
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-50 md:text-4xl">
-              Watch the shield <span className="neon-text">working in real time</span>
-            </h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-slate-500">
-              Every event the bot handles is streamed to a live terminal — spam, raids, verifications and
-              downloads, as they happen.
-            </p>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.6 }}
-            className="relative"
-          >
-            <div className="absolute -inset-6 rounded-3xl bg-gradient-to-r from-primary/15 via-transparent to-accent/15 blur-2xl" />
-            <SecurityConsole />
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-              {[
-                { icon: Shield, label: "Shield uptime 99.98%", tone: "text-emerald-400 border-emerald-400/30 bg-emerald-400/10" },
-                { icon: Activity, label: "12,440 events / day", tone: "text-cyan-400 border-cyan-400/30 bg-cyan-400/10" },
-                { icon: Radar, label: "Scan: 2.0s average", tone: "text-violet-400 border-violet-400/30 bg-violet-400/10" },
-              ].map((s) => (
-                <span
-                  key={s.label}
-                  className={cn("flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-widest", s.tone)}
-                >
-                  <s.icon className="h-3.5 w-3.5" />
-                  {s.label}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Feature Grid */}
-      <section id="features" className="relative z-10 px-6 py-20">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-primary-light">
-                Features
-              </p>
-              <h2 className="text-3xl font-bold tracking-tight text-slate-50 md:text-4xl">
-                Built for communities that take moderation seriously
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="label mb-4">Real-time security ops</p>
+              <h2 className="heading-lg text-white mb-5">
+                The shield never sleeps
               </h2>
+              <p className="text-base text-white/40 leading-relaxed mb-8">
+                Every action — spam deletion, raid detection, ticket creation, file saves —
+                is logged and processed in real time. You see exactly what the bot is doing, always.
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { icon: Cpu,      label: "99.98% uptime" },
+                  { icon: Wifi,     label: "Sub-50ms response" },
+                  { icon: HardDrive,label: "12k+ events / day" },
+                  { icon: Shield,   label: "Zero false positives" },
+                ].map(({ icon: I, label }) => (
+                  <div key={label} className="flex items-center gap-2.5 text-sm text-white/50">
+                    <I className="h-3.5 w-3.5 text-primary-light/60 shrink-0" />
+                    {label}
+                  </div>
+                ))}
+              </div>
             </div>
-            <p className="max-w-sm text-sm text-slate-500">
-              Every module is production-tested and configurable through a clean, fast interface.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature, i) => (
-              <motion.div
-                key={feature.title}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-40px" }}
-                variants={fadeUp}
-                className="glass-cyber card-3d group overflow-hidden p-6"
-              >
-                <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/20 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                <div className="hover-neon-primary mb-5 flex h-11 w-11 items-center justify-center rounded-xl border border-primary/30 bg-gradient-to-br from-primary/25 to-accent/15 transition-transform duration-300 group-hover:scale-105">
-                  <feature.icon className="h-5 w-5 text-primary-light transition-colors duration-300 group-hover:text-white" />
-                </div>
-                <h3 className="mb-2 text-base font-bold tracking-tight text-slate-50">{feature.title}</h3>
-                <p className="text-sm leading-relaxed text-slate-500">{feature.desc}</p>
-                <div className="mt-5 h-px w-full bg-gradient-to-r from-primary/50 via-accent/30 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-              </motion.div>
-            ))}
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <Terminal_ />
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Interactive Modules Showcase */}
-      <section id="modules" className="relative z-10 px-6 py-20">
+      {/* ── FEATURES ─────────────────────────────────────────────────────── */}
+      <section id="features" className="relative z-10 py-24 px-6">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-12 text-center">
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-primary-light">
-              Modules
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-50 md:text-4xl">
-              17 modules. Fully configurable.
+          <div className="max-w-2xl mb-14">
+            <p className="label mb-4">Features</p>
+            <h2 className="heading-lg text-white">
+              Everything communities need, nothing they don&apos;t
             </h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-slate-500">
-              Click a module to preview its actual settings panel — every toggle below is live.
-            </p>
           </div>
 
-          <ModuleShowcase />
-
-          <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {modules.map((mod, i) => (
-              <motion.div
-                key={mod.name}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-40px" }}
-                variants={fadeUp}
-                className="glass-cyber group p-5 transition-transform duration-300 hover:-translate-y-1"
-              >
-                <div
-                  className={cn(
-                    "mb-4 flex h-10 w-10 items-center justify-center rounded-lg border transition-all duration-300 group-hover:scale-110",
-                    i % 2 === 0
-                      ? "border-primary/30 bg-primary/10 group-hover-glow-primary"
-                      : "border-accent/30 bg-accent/10 group-hover-glow-cyan"
-                  )}
-                >
-                  <mod.icon
-                    className={cn(
-                      "h-5 w-5 transition-colors duration-300",
-                      i % 2 === 0 ? "text-primary-light" : "text-accent-hover"
-                    )}
-                  />
-                </div>
-                <h4 className="mb-1 text-sm font-bold tracking-tight text-slate-50">{mod.name}</h4>
-                <p className="text-[11px] font-medium uppercase tracking-wider text-slate-600">{mod.desc}</p>
-              </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {features.map((f, i) => (
+              <FeatureCard key={f.title} {...f} delay={i * 0.07} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative z-10 px-6 py-20">
+      {/* ── STATS ────────────────────────────────────────────────────────── */}
+      <section className="relative z-10 py-16 px-6">
+        <div className="mx-auto max-w-5xl">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard value="120+" label="Active servers"   sub="growing weekly"     icon={Server} />
+            <StatCard value="18"   label="Bot modules"      sub="fully configurable" icon={Layers} />
+            <StatCard value="48k+" label="Members managed"  sub="across all guilds"  icon={Users2} />
+            <StatCard value="99.98%" label="Uptime SLA"     sub="last 90 days"       icon={Activity} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── MODULES ──────────────────────────────────────────────────────── */}
+      <section id="modules" className="relative z-10 py-24 px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <p className="label mb-4">Modules</p>
+              <h2 className="heading-lg text-white">16 modules. One bot.</h2>
+            </div>
+            <p className="text-sm text-white/35 max-w-xs">
+              Every module is production-tested and toggled from a single dashboard panel.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2.5">
+            {modules.map((m, i) => (
+              <ModulePill key={m.name} name={m.name} icon={m.icon} idx={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ──────────────────────────────────────────────────────────── */}
+      <section className="relative z-10 py-24 px-6">
         <div className="mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
+            viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="neon-panel border-gradient relative overflow-hidden rounded-3xl p-12 text-center md:p-16"
+            className="relative rounded-2xl border border-white/[0.09] bg-[#0c0c1c] overflow-hidden p-12 md:p-16 text-center"
           >
-            <div className="absolute -top-20 left-1/2 h-48 w-96 -translate-x-1/2 rounded-full bg-primary/25 blur-[100px]" />
-            <div className="absolute -bottom-24 -right-16 h-56 w-56 rounded-full bg-accent/20 blur-[100px]" />
-
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-14 right-8 hidden md:block"
-            >
-              <CyberBotMascot className="h-32 w-32 drop-shadow-[0_0_28px_rgba(6,182,212,0.45)]" />
-            </motion.div>
+            {/* background glow */}
+            <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-48 w-[500px] bg-primary/15 blur-[80px] rounded-full pointer-events-none" />
+            <div className="absolute -bottom-16 right-0 h-40 w-64 bg-cyan-500/10 blur-[70px] rounded-full pointer-events-none" />
 
             <div className="relative z-10">
-              <p className="mb-4 font-mono text-[10px] font-bold uppercase tracking-[0.35em] text-accent-hover">
-                {"// zero commands required"}
-              </p>
-              <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-50 md:text-5xl">
-                Ready to upgrade <span className="neon-text">your server?</span>
+              <div className="inline-flex items-center gap-2 mb-8">
+                <span className="badge">Free to start · No credit card</span>
+              </div>
+              <h2 className="heading-lg text-white mb-5">
+                Set up in under a minute.
               </h2>
-              <p className="mx-auto mb-8 max-w-xl leading-relaxed text-slate-400">
-                Set up takes less than a minute. Invite the bot and configure everything from the dashboard.
+              <p className="text-lg text-white/40 max-w-xl mx-auto mb-10 leading-relaxed">
+                Invite the bot, log in, select your server, and configure every module visually.
+                No commands. No config files.
               </p>
-              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Button
                   onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
                   size="lg"
-                  className="btn-slide gap-2.5 px-10 font-semibold neon-glow-primary"
+                  className="btn-sheen h-12 px-10 gap-2.5 font-semibold bg-primary hover:bg-primary-hover shadow-[0_0_32px_rgba(99,102,241,0.4)] w-full sm:w-auto"
                 >
-                  Get Started Free
+                  Get started free
                   <ArrowRight className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
                   asChild
-                  className="btn-slide gap-2.5 border-slate-700 font-semibold transition-colors duration-300 hover:border-primary/50 hover-neon-primary"
+                  className="h-12 px-8 gap-2 font-semibold border-white/[0.1] bg-transparent hover:bg-white/[0.05] text-white/60 hover:text-white w-full sm:w-auto"
                 >
                   <Link href="/docs">
-                    <Shield className="h-4 w-4" />
-                    Read the Docs
+                    Read the docs
+                    <ArrowUpRight className="h-4 w-4" />
                   </Link>
                 </Button>
               </div>
@@ -1220,98 +852,64 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section id="faq" className="relative z-10 px-6 py-20">
-        <div className="mx-auto max-w-3xl">
-          <div className="mb-12 text-center">
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-primary-light">
-              FAQ
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-50">Frequently asked questions</h2>
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <section id="faq" className="relative z-10 py-24 px-6">
+        <div className="mx-auto max-w-2xl">
+          <div className="mb-12">
+            <p className="label mb-4">FAQ</p>
+            <h2 className="heading-lg text-white">Common questions</h2>
           </div>
-          <div className="space-y-4">
-            {faqs.map((item, i) => (
-              <motion.div
-                key={item.q}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-40px" }}
-                variants={fadeUp}
-                className="glass-cyber p-6 transition-transform duration-300 hover:-translate-y-0.5"
-              >
-                <h4 className="mb-2 flex items-center gap-2.5 text-sm font-bold tracking-tight text-slate-50">
-                  <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-primary to-accent" />
-                  {item.q}
-                </h4>
-                <p className="text-sm leading-relaxed text-slate-500">{item.a}</p>
-              </motion.div>
+          <div className="divide-y divide-white/[0.07]">
+            {faqs.map((f, i) => (
+              <FaqItem key={f.q} q={f.q} a={f.a} idx={i} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-slate-800 bg-background-deep py-16">
+      {/* ── FOOTER ───────────────────────────────────────────────────────── */}
+      <footer className="relative z-10 border-t border-white/[0.07] bg-[#060610] py-14">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-10 grid grid-cols-1 gap-10 md:grid-cols-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
             <div className="col-span-1 md:col-span-2">
-              <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[0_0_14px_rgba(99,102,241,0.4)]">
-                  <Bot className="h-4 w-4 text-white" />
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                  <Bot className="h-3.5 w-3.5 text-white" />
                 </div>
-                <span className="text-lg font-bold tracking-tight text-slate-50">{BRAND}</span>
+                <span className="font-bold text-[15px] text-white">{BRAND}</span>
               </div>
-              <p className="max-w-sm text-sm leading-relaxed text-slate-600">
-                The Discord management platform for communities that care about quality moderation.
+              <p className="text-sm text-white/30 max-w-xs leading-relaxed">
+                The Discord management platform for communities that care about quality.
               </p>
             </div>
             <div>
-              <h4 className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-600">
-                Resources
-              </h4>
-              <ul className="space-y-3 text-sm text-slate-500">
-                <li>
-                  <Link href="/docs" className="transition-colors hover:text-primary-light">
-                    Documentation
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/privacy" className="transition-colors hover:text-primary-light">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/terms" className="transition-colors hover:text-primary-light">
-                    Terms of Service
-                  </Link>
-                </li>
+              <p className="label mb-5">Resources</p>
+              <ul className="space-y-3 text-sm text-white/35">
+                {[["Documentation", "/docs"], ["Privacy Policy", "/privacy"], ["Terms of Service", "/terms"]].map(([l, h]) => (
+                  <li key={l}>
+                    <Link href={h} className="hover:text-white/70 transition-colors">{l}</Link>
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
-              <h4 className="mb-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-600">
-                Platform
-              </h4>
-              <ul className="space-y-3 text-sm text-slate-500">
-                <li>
-                  <Link href="/dashboard" className="transition-colors hover:text-primary-light">
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/docs" className="transition-colors hover:text-primary-light">
-                    API
-                  </Link>
-                </li>
+              <p className="label mb-5">Platform</p>
+              <ul className="space-y-3 text-sm text-white/35">
+                {[["Dashboard", "/dashboard"], ["API Docs", "/docs"]].map(([l, h]) => (
+                  <li key={l}>
+                    <Link href={h} className="hover:text-white/70 transition-colors">{l}</Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-6 md:flex-row">
-            <p className="text-xs text-slate-500">
+
+          <div className="pt-8 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-white/25">
               © 2026 {BRAND} Development. All rights reserved.
             </p>
-            <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-slate-600">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+            <div className="flex items-center gap-2 text-xs text-white/25">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
               All systems operational
             </div>
           </div>
