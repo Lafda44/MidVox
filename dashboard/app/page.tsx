@@ -712,7 +712,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2.5">
             <Button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
-              className="btn-sheen h-9 gap-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-5 text-xs font-semibold text-white shadow-[0_0_24px_rgba(99,102,241,0.45)] hover:brightness-110"
+              className="btn-sheen h-9 gap-2 bg-indigo-600 px-5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] hover:bg-indigo-500 transition-colors"
             >
               <LogIn className="h-3.5 w-3.5" />
               Sign in
@@ -803,7 +803,7 @@ export default function LandingPage() {
             <Button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
               size="lg"
-              className="btn-sheen h-12 w-full gap-2.5 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-8 text-sm font-semibold text-white shadow-[0_0_36px_rgba(99,102,241,0.45)] hover:brightness-110 sm:w-auto"
+              className="btn-sheen h-12 w-full gap-2.5 bg-indigo-600 px-8 text-sm font-semibold text-white shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:bg-indigo-500 transition-colors sm:w-auto"
             >
               <LayoutDashboard className="h-4 w-4" />
               Open Dashboard
@@ -977,7 +977,7 @@ export default function LandingPage() {
                 <Button
                   onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
                   size="lg"
-                  className="btn-sheen h-12 w-full gap-2.5 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-10 font-semibold text-white shadow-[0_0_36px_rgba(99,102,241,0.45)] hover:brightness-110 sm:w-auto"
+                  className="btn-sheen h-12 w-full gap-2.5 bg-indigo-600 px-10 font-semibold text-white shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:bg-indigo-500 transition-colors sm:w-auto"
                 >
                   Get started free
                   <ArrowRight className="h-4 w-4" />
