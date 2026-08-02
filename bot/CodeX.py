@@ -13,7 +13,17 @@
 # ╚══════════════════════════════════════════════════════════════════╝
 
 import os
+import sys
 import subprocess
+
+# Windows consoles default to cp1252 and crash on Unicode box-drawing
+# characters (◈ █ …). Force UTF-8 output so the bot runs anywhere.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 # os.system("")
 import asyncio
 import traceback

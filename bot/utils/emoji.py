@@ -20,7 +20,7 @@ All emoji definitions are stored here for easy management and consistency.
 # ============================================================================
 # DISCORD CUSTOM EMOJIS (Static)
 # ============================================================================
-BOOST = "<:Booster:1532243199442030664>"
+BOOST = "<:Booster:1533426732546265128>"
 BUG_HUNTER = "<:BugHunterLevel1:1531959060646203443>"
 CAST = "<:zcast:1531958748569145444>"
 CERTIFIED_MODERATOR = "<:CertifiedDiscordModerator:1531958795318591602>"

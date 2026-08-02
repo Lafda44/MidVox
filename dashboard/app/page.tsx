@@ -499,28 +499,34 @@ function DashboardMockup() {
         initial={{ opacity: 0, x: 28 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1.6, duration: 0.6, ease: "easeOut" }}
-        className="absolute -right-3 sm:-right-8 top-28 flex items-center gap-3 rounded-xl border border-white/[0.1] bg-[#0d0d1c]/90 backdrop-blur-xl px-3.5 py-2.5 shadow-2xl"
+        className="absolute -right-3 sm:-right-8 top-28 flex min-w-[225px] items-center gap-3 rounded-xl border border-[rgba(139,151,255,0.28)] bg-[#0d0d1f]/95 px-4 py-3 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(88,101,242,0.35)]"
       >
-        <div className="h-7 w-7 rounded-lg bg-primary/20 flex items-center justify-center">
-          <Download className="h-3.5 w-3.5 text-primary-light" />
+        <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#6B76F5] to-[#4752C4] shadow-[0_0_14px_rgba(88,101,242,0.5)]">
+          <Download className="h-3.5 w-3.5 text-white" />
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="text-[10px] font-semibold text-white">Reel downloaded</p>
-          <p className="text-[9px] text-white/35">#media → 8.2 MB mp4</p>
+          <p className="mt-0.5 font-mono text-[9px] text-[#98a2c3]">#media → 8.2 MB mp4</p>
         </div>
+        <CheckCircle2 className="ml-auto h-4 w-4 shrink-0 text-emerald-400" />
       </motion.div>
 
       <motion.div
         initial={{ opacity: 0, x: -28 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 2.0, duration: 0.6, ease: "easeOut" }}
-        className="absolute -left-3 sm:-left-8 -bottom-4 flex items-center gap-2 rounded-xl border border-white/[0.1] bg-[#0d0d1c]/90 backdrop-blur-xl px-3.5 py-2.5 shadow-2xl"
+        className="absolute -left-3 sm:-left-8 -bottom-4 flex min-w-[190px] items-center gap-2.5 rounded-xl border border-[rgba(139,151,255,0.28)] bg-[#0d0d1f]/95 px-4 py-3 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(88,101,242,0.35)]"
       >
-        <span className="relative flex h-2 w-2">
+        <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+        <span className="relative flex h-2 w-2 shrink-0">
           <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-60" />
-          <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
+          <span className="relative h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
         </span>
-        <span className="text-[10px] font-semibold text-white/70">18 modules online</span>
+        <span className="text-[10px] font-semibold text-white/85">18 modules online</span>
+        <span className="ml-auto rounded-md border border-primary/30 bg-primary/10 px-1.5 py-0.5 font-mono text-[8px] font-bold text-[#a5affb]">
+          LIVE
+        </span>
       </motion.div>
     </motion.div>
   );
