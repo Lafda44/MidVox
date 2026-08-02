@@ -8,8 +8,8 @@ import {
   ShieldCheck, Zap, BarChart4, MessageSquare, ChevronRight, LayoutDashboard,
   LogIn, Layers, Sparkles, Bot, Activity, History, CheckCircle2, ShieldAlert,
   Globe, Users2, Lock, Gamepad2, Music4, User, Settings, Mail, ArrowRight,
-  Download, Ban, Ticket, Server, TrendingUp, Bell, Search, Shield, Terminal,
-  ArrowUpRight, Cpu, Wifi, HardDrive,
+  Download, Ban, Ticket, Server, TrendingUp, Bell, Search,   Shield, Terminal,
+  ArrowUpRight, Cpu, Wifi, HardDrive, Menu, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -443,6 +443,30 @@ function DashboardMockup() {
   );
 }
 
+/* ── Falling sakura petals ───────────────────────────────────────────────── */
+function Petals({ count = 14 }: { count?: number }) {
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-[5] overflow-hidden">
+      {Array.from({ length: count }).map((_, i) => (
+        <span
+          key={i}
+          className="petal"
+          style={
+            {
+              left: `${(i * 7.3 + 3) % 100}%`,
+              width: `${6 + (i % 4) * 2.5}px`,
+              height: `${6 + (i % 4) * 2.5}px`,
+              animationDuration: `${9 + (i % 7) * 2.6}s`,
+              animationDelay: `${-i * 1.9}s`,
+              "--sway": `${(i % 5) * 22 - 44}px`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </div>
+  );
+}
+
 /* ── Feature card ────────────────────────────────────────────────────────── */
 function FeatureCard({
   icon: Icon, title, desc, delay = 0, accent = "indigo", index = 0,
@@ -574,6 +598,8 @@ function FaqItem({ q, a, idx }: { q: string; a: string; idx: number }) {
 
 /* ── Main landing page ───────────────────────────────────────────────────── */
 export default function LandingPage() {
+  const [navOpen, setNavOpen] = useState(false);
+
   const features = [
     { title: "Anti-Nuke",       desc: "Instant lockdown against mass bans, channel wipes, and rogue admin attacks — resolved in milliseconds.",    icon: ShieldAlert,    accent: "indigo" as const },
     { title: "Smart Automod",   desc: "ML-powered message scoring catches spam, scam links, and NSFW content before anyone sees it.",               icon: ShieldCheck,    accent: "cyan"   as const },
@@ -612,35 +638,93 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-aurora font-sans text-white">
       <Particles />
+      <Petals />
 
       {/* dot grid overlay */}
       <div className="pointer-events-none fixed inset-0 z-0 dot-grid opacity-80" />
 
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 z-50 w-full">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="flex h-16 items-center justify-between border-b border-white/[0.07] bg-[#080810]/75 backdrop-blur-xl -mx-6 px-6">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-[0_0_18px_rgba(99,102,241,0.45)]">
-                <Bot className="h-4 w-4 text-white" />
+      <nav className="fixed top-0 z-50 w-full px-4 pt-4">
+        <div className="mx-auto max-w-7xl">
+          {/* floating glass pill */}
+          <div className="relative flex h-14 items-center justify-between rounded-2xl border border-white/[0.08] bg-[#05050b]/70 px-5 backdrop-blur-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.7)]">
+            {/* gradient hairlines */}
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#ff8fab]/70 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-8 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+            {/* soft inner glow */}
+            <div className="pointer-events-none absolute -top-8 left-1/4 h-16 w-40 bg-pink-500/15 blur-2xl rounded-full" />
+
+            {/* logo */}
+            <div className="relative flex items-center gap-3">
+              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 shadow-[0_0_22px_rgba(255,93,143,0.45)]">
+                <Bot className="h-4.5 w-4.5 text-white" />
+                <div className="absolute inset-0 rounded-xl border border-white/25" />
               </div>
-              <span className="font-bold text-[15px] text-white tracking-tight">{BRAND}</span>
+              <div className="flex flex-col leading-none">
+                <span className="text-[15px] font-bold tracking-tight text-white">{BRAND}</span>
+                <span className="mt-1 text-[8px] font-semibold uppercase tracking-[0.3em] text-white/30">
+                  Discord Bot
+                </span>
+              </div>
             </div>
 
-            <div className="hidden lg:flex items-center gap-7 text-[11px] font-semibold uppercase tracking-[0.1em] text-white/35">
+            {/* links */}
+            <div className="hidden items-center gap-1 lg:flex">
               {[["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
-                <Link key={l} href={h} className="hover:text-white/80 transition-colors">{l}</Link>
+                <Link
+                  key={l}
+                  href={h}
+                  className="group relative px-4 py-2 text-xs font-semibold text-white/45 transition-colors hover:text-white"
+                >
+                  {l}
+                  <span className="absolute inset-x-4 bottom-0.5 h-px origin-left scale-x-0 bg-gradient-to-r from-primary via-pink-500 to-accent transition-transform duration-300 group-hover:scale-x-100" />
+                </Link>
               ))}
             </div>
 
-            <Button
-              onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
-              className="btn-sheen h-9 gap-2 px-5 text-xs font-semibold bg-primary hover:bg-primary-hover shadow-[0_0_20px_rgba(99,102,241,0.35)]"
-            >
-              <LogIn className="h-3.5 w-3.5" />
-              Sign in
-            </Button>
+            {/* actions */}
+            <div className="flex items-center gap-2.5">
+              <Button
+                onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
+                className="btn-sheen h-9 gap-2 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-5 text-xs font-semibold text-white shadow-[0_0_24px_rgba(236,72,153,0.4)] hover:brightness-110"
+              >
+                <LogIn className="h-3.5 w-3.5" />
+                Sign in
+              </Button>
+              <button
+                type="button"
+                aria-label="Toggle menu"
+                onClick={() => setNavOpen((v) => !v)}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 transition-colors hover:text-white lg:hidden"
+              >
+                {navOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
+              </button>
+            </div>
           </div>
+
+          {/* mobile menu */}
+          <AnimatePresence>
+            {navOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                transition={{ duration: 0.2 }}
+                className="mt-2 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#05050b]/85 p-2 backdrop-blur-xl shadow-2xl lg:hidden"
+              >
+                {[["Features", "#features"], ["Modules", "#modules"], ["FAQ", "#faq"]].map(([l, h]) => (
+                  <Link
+                    key={l}
+                    href={h}
+                    onClick={() => setNavOpen(false)}
+                    className="block rounded-xl px-4 py-3 text-sm font-semibold text-white/60 transition-colors hover:bg-white/[0.05] hover:text-white"
+                  >
+                    {l}
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </nav>
 
@@ -694,7 +778,7 @@ export default function LandingPage() {
             <Button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
               size="lg"
-              className="btn-sheen h-12 px-8 gap-2.5 font-semibold text-sm bg-primary hover:bg-primary-hover shadow-[0_0_32px_rgba(99,102,241,0.35)] w-full sm:w-auto"
+              className="btn-sheen h-12 w-full gap-2.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-8 text-sm font-semibold text-white shadow-[0_0_36px_rgba(236,72,153,0.4)] hover:brightness-110 sm:w-auto"
             >
               <LayoutDashboard className="h-4 w-4" />
               Open Dashboard
@@ -851,6 +935,7 @@ export default function LandingPage() {
             {/* background glow */}
             <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-48 w-[500px] bg-primary/15 blur-[80px] rounded-full pointer-events-none" />
             <div className="absolute -bottom-16 right-0 h-40 w-64 bg-cyan-500/10 blur-[70px] rounded-full pointer-events-none" />
+            <div className="absolute -bottom-10 left-0 h-36 w-56 bg-pink-500/10 blur-[70px] rounded-full pointer-events-none" />
 
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 mb-8">
@@ -867,7 +952,7 @@ export default function LandingPage() {
                 <Button
                   onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
                   size="lg"
-                  className="btn-sheen h-12 px-10 gap-2.5 font-semibold bg-primary hover:bg-primary-hover shadow-[0_0_32px_rgba(99,102,241,0.4)] w-full sm:w-auto"
+                  className="btn-sheen h-12 w-full gap-2.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-10 font-semibold text-white shadow-[0_0_36px_rgba(236,72,153,0.4)] hover:brightness-110 sm:w-auto"
                 >
                   Get started free
                   <ArrowRight className="h-4 w-4" />

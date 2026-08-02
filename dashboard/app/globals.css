@@ -4,9 +4,9 @@
 
 /* ─── Design tokens ───────────────────────────────────────────────────────── */
 :root {
-  --bg:           #080810;
-  --bg-raise:     #0d0d18;
-  --bg-panel:     #0f0f1c;
+  --bg:           #05050b;
+  --bg-raise:     #08080f;
+  --bg-panel:     #0a0a16;
   --border:       rgba(255,255,255,0.07);
   --border-mid:   rgba(255,255,255,0.12);
 
@@ -20,6 +20,8 @@
   --cyan:         #22d3ee;
   --cyan-dim:     rgba(34,211,238,0.15);
   --violet:       #a855f7;
+  --pink:         #ff5d8f;
+  --pink-dim:     rgba(255,93,143,0.18);
 
   --radius-sm:    6px;
   --radius:       10px;
@@ -108,13 +110,13 @@ p, li { line-height: 1.7; }
 
   /* Gradient text */
   .text-gradient {
-    background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 40%, #22d3ee 100%);
+    background: linear-gradient(135deg, #ff8fab 0%, #a855f7 40%, #22d3ee 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .text-gradient-warm {
-    background: linear-gradient(135deg, #f0f0f8 0%, #a5b4fc 60%, #6366f1 100%);
+    background: linear-gradient(135deg, #f0f0f8 0%, #ff8fab 55%, #a855f7 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -176,8 +178,8 @@ p, li { line-height: 1.7; }
   /* Animated bg gradient */
   .bg-aurora {
     background-image:
-      linear-gradient(rgba(8, 8, 16, 0.5), rgba(8, 8, 16, 0.8)),
-      radial-gradient(ellipse 130% 100% at 50% 0%, rgba(8, 8, 16, 0) 35%, rgba(8, 8, 16, 0.8) 100%),
+      linear-gradient(rgba(5, 5, 11, 0.62), rgba(5, 5, 11, 0.86)),
+      radial-gradient(ellipse 130% 100% at 50% 0%, rgba(5, 5, 11, 0) 35%, rgba(5, 5, 11, 0.85) 100%),
       url('/bg-aurora.jpg');
     background-size: cover, cover, cover;
     background-position: center;
@@ -318,10 +320,29 @@ p, li { line-height: 1.7; }
 .animate-blink   { animation: blink 1s step-end infinite; }
 .animate-scan    { animation: scan 3.5s linear infinite; }
 .animate-shimmer {
-  background: linear-gradient(90deg, #a5b4fc, #6366f1, #22d3ee, #a5b4fc);
+  background: linear-gradient(90deg, #ff8fab, #a855f7, #22d3ee, #ff8fab);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   animation: shimmer 5s linear infinite;
+}
+
+/* ─── Falling sakura petals ──────────────────────────────────────────────── */
+.petal {
+  position: fixed;
+  top: -4vh;
+  border-radius: 100% 0 100% 0;
+  background: linear-gradient(135deg, #ff8fab, #ff5d8f);
+  box-shadow: 0 0 6px rgba(255, 93, 143, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  animation: petal-fall linear infinite;
+  z-index: 5;
+}
+@keyframes petal-fall {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  6%   { opacity: 0.75; }
+  60%  { opacity: 0.55; }
+  100% { transform: translate3d(var(--sway, 36px), 108vh, 0) rotate(340deg); opacity: 0; }
 }

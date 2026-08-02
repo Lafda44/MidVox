@@ -43,13 +43,14 @@ export default function RootLayout({
               backgroundImage: "url('/bg-aurora.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
+              filter: "brightness(0.55) saturate(1.15)",
             }}
           />
           <div
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(ellipse 130% 100% at 50% 15%, rgba(8,8,16,0.25) 0%, rgba(8,8,16,0.88) 80%)",
+                "radial-gradient(ellipse 130% 100% at 50% 15%, rgba(5,5,11,0.35) 0%, rgba(5,5,11,0.92) 80%)",
             }}
           />
         </div>
