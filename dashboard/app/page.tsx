@@ -10,13 +10,14 @@ import {
   Globe, Users2, Lock, Gamepad2, Music4, User, Settings, Mail, ArrowRight,
   Download, Ban, Ticket, Server, TrendingUp, Bell, Search,   Shield, Terminal,
   ArrowUpRight, Cpu, Wifi, HardDrive, Menu, X, ArrowUp, Star, Quote, SlidersHorizontal,
+  Trophy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX";
 
-/* ── Subtle particle canvas ─────────────────────────────────────────────── */
+/* ── Cyber particles canvas — reacts to the cursor ──────────────────────── */
 function Particles() {
   const ref = useRef<HTMLCanvasElement>(null);
 
@@ -28,45 +29,83 @@ function Particles() {
 
     let w = (canvas.width = window.innerWidth);
     let h = (canvas.height = window.innerHeight);
+    const mouse = { x: -9999, y: -9999 };
 
-    const pts = Array.from({ length: 45 }, () => ({
+    const pts = Array.from({ length: 60 }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.25,
-      vy: (Math.random() - 0.5) * 0.25,
-      r: Math.random() * 1.2 + 0.4,
-      color: Math.random() > 0.5 ? "99,102,241" : "34,211,238",
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      r: Math.random() * 1.6 + 0.6,
+      base: Math.random() > 0.45 ? "99,102,241" : "6,182,212",
+      pulse: Math.random() * Math.PI * 2,
     }));
 
     const onResize = () => {
       w = canvas.width = window.innerWidth;
       h = canvas.height = window.innerHeight;
     };
+    const onMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+    const onLeave = () => {
+      mouse.x = -9999;
+      mouse.y = -9999;
+    };
     window.addEventListener("resize", onResize);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("mouseout", onLeave);
 
     let raf = 0;
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       for (const p of pts) {
+        /* cursor repulsion — particles flee the pointer */
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const d = Math.hypot(dx, dy);
+        if (d < 140 && d > 0.001) {
+          const f = ((140 - d) / 140) * 0.9;
+          p.x += (dx / d) * f;
+          p.y += (dy / d) * f;
+        }
+
         p.x += p.vx;
         p.y += p.vy;
         if (p.x < 0 || p.x > w) p.vx *= -1;
         if (p.y < 0 || p.y > h) p.vy *= -1;
+
+        p.pulse += 0.03;
+        const glow = 0.45 + Math.sin(p.pulse) * 0.25;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.color},0.6)`;
+        ctx.fillStyle = `rgba(${p.base},${glow.toFixed(2)})`;
+        ctx.shadowColor = `rgba(${p.base},0.9)`;
+        ctx.shadowBlur = 8;
         ctx.fill();
+        ctx.shadowBlur = 0;
+
+        /* link to cursor */
+        if (d < 170) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(${p.base},${((1 - d / 170) * 0.35).toFixed(2)})`;
+          ctx.lineWidth = 0.7;
+          ctx.stroke();
+        }
       }
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
           const dx = pts[i].x - pts[j].x;
           const dy = pts[i].y - pts[j].y;
           const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 120) {
+          if (d < 110) {
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = `rgba(${pts[i].color},${(1 - d / 120) * 0.12})`;
+            ctx.strokeStyle = `rgba(${pts[i].base},${(1 - d / 110) * 0.14})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
@@ -78,10 +117,12 @@ function Particles() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseout", onLeave);
     };
   }, []);
 
-  return <canvas ref={ref} aria-hidden className="fixed inset-0 z-0 pointer-events-none opacity-50" />;
+  return <canvas ref={ref} aria-hidden className="fixed inset-0 z-0 pointer-events-none opacity-60" />;
 }
 
 /* ── CountUp ────────────────────────────────────────────────────────────── */
@@ -126,7 +167,7 @@ function CursorGlow() {
       className="pointer-events-none fixed left-0 top-0 z-[2] h-[520px] w-[520px] rounded-full transition-transform duration-300 ease-out"
       style={{
         background:
-          "radial-gradient(circle, rgba(88,101,242,0.09) 0%, rgba(56,189,248,0.05) 32%, transparent 65%)",
+          "radial-gradient(circle, rgba(99,102,241,0.09) 0%, rgba(6,182,212,0.05) 32%, transparent 65%)",
       }}
     />
   );
@@ -176,7 +217,7 @@ function BackToTop() {
           transition={{ duration: 0.25 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Back to top"
-          className="fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-[rgba(139,151,255,0.3)] bg-[#0d0d1f]/90 text-white/70 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-colors hover:border-[rgba(139,151,255,0.5)] hover:text-white cursor-pointer"
+          className="fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-[rgba(129,140,248,0.3)] bg-[#0d0d1f]/90 text-white/70 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-colors hover:border-[rgba(129,140,248,0.5)] hover:text-white cursor-pointer"
         >
           <ArrowUp className="h-[18px] w-[18px]" />
         </motion.button>
@@ -339,7 +380,7 @@ function DashboardMockup() {
           {/* sidebar */}
           <div className="hidden sm:flex flex-col w-40 shrink-0 bg-[#070712] border-r border-white/[0.05] p-3 gap-0.5">
               <div className="flex items-center gap-2 px-2 py-2.5 mb-2">
-                <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-[#6B76F5] to-[#4752C4] flex items-center justify-center shadow-[0_0_12px_rgba(88,101,242,0.5)]">
+                <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-[#818CF8] to-[#4F46E5] flex items-center justify-center shadow-[0_0_12px_rgba(99,102,241,0.5)]">
                   <Zap className="h-3 w-3 text-white" fill="currentColor" />
                 </div>
                 <span className="text-xs font-bold text-white">{BRAND}</span>
@@ -360,7 +401,7 @@ function DashboardMockup() {
                     <motion.span
                       layoutId="sidebar-pill"
                       transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                      className="absolute inset-0 rounded-lg bg-white/[0.07] border border-white/[0.1]"
+                      className="absolute inset-0 rounded-lg bg-primary/15 border border-primary/30 shadow-[0_0_18px_rgba(99,102,241,0.35)]"
                     />
                   )}
                   <v.icon className="relative z-10 h-3.5 w-3.5" />
@@ -425,7 +466,7 @@ function DashboardMockup() {
                             className={cn(
                               "flex-1 rounded-sm",
                               i >= 7
-                                ? "bg-gradient-to-t from-primary to-accent shadow-[0_0_8px_rgba(88,101,242,0.4)]"
+                                ? "bg-gradient-to-t from-primary to-accent shadow-[0_0_8px_rgba(99,102,241,0.4)]"
                                 : "bg-white/[0.08]"
                             )}
                           />
@@ -499,10 +540,10 @@ function DashboardMockup() {
         initial={{ opacity: 0, x: 28 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1.6, duration: 0.6, ease: "easeOut" }}
-        className="absolute -right-3 sm:-right-8 top-28 flex min-w-[225px] items-center gap-3 rounded-xl border border-[rgba(139,151,255,0.28)] bg-[#0d0d1f]/95 px-4 py-3 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(88,101,242,0.35)]"
+        className="absolute -right-3 sm:-right-8 top-28 flex min-w-[225px] items-center gap-3 rounded-xl border border-[rgba(129,140,248,0.28)] bg-[#0d0d1f]/95 px-4 py-3 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(99,102,241,0.35)]"
       >
         <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#6B76F5] to-[#4752C4] shadow-[0_0_14px_rgba(88,101,242,0.5)]">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#818CF8] to-[#4F46E5] shadow-[0_0_14px_rgba(99,102,241,0.5)]">
           <Download className="h-3.5 w-3.5 text-white" />
         </div>
         <div className="min-w-0">
@@ -516,7 +557,7 @@ function DashboardMockup() {
         initial={{ opacity: 0, x: -28 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 2.0, duration: 0.6, ease: "easeOut" }}
-        className="absolute -left-3 sm:-left-8 -bottom-4 flex min-w-[190px] items-center gap-2.5 rounded-xl border border-[rgba(139,151,255,0.28)] bg-[#0d0d1f]/95 px-4 py-3 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(88,101,242,0.35)]"
+        className="absolute -left-3 sm:-left-8 -bottom-4 flex min-w-[190px] items-center gap-2.5 rounded-xl border border-[rgba(129,140,248,0.28)] bg-[#0d0d1f]/95 px-4 py-3 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(99,102,241,0.35)]"
       >
         <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
         <span className="relative flex h-2 w-2 shrink-0">
@@ -524,7 +565,7 @@ function DashboardMockup() {
           <span className="relative h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
         </span>
         <span className="text-[10px] font-semibold text-white/85">18 modules online</span>
-        <span className="ml-auto rounded-md border border-primary/30 bg-primary/10 px-1.5 py-0.5 font-mono text-[8px] font-bold text-[#a5affb]">
+        <span className="ml-auto rounded-md border border-primary/30 bg-primary/10 px-1.5 py-0.5 font-mono text-[8px] font-bold text-[#a5b4fc]">
           LIVE
         </span>
       </motion.div>
@@ -561,7 +602,7 @@ function LogoMark({ size = "h-9 w-9", iconSize = "h-[18px] w-[18px]" }: { size?:
   return (
     <div
       className={cn(
-        "relative flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#6B76F5] to-[#4752C4] shadow-[0_0_20px_rgba(88,101,242,0.5)]",
+        "relative flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#818CF8] to-[#4F46E5] shadow-[0_0_20px_rgba(99,102,241,0.5)]",
         size
       )}
     >
@@ -580,8 +621,8 @@ function FeatureCard({
   delay?: number; accent?: "indigo" | "cyan" | "violet"; index?: number;
 }) {
   const accentMap = {
-    indigo: { text: "text-[#a5affb]", chip: "bg-[#5865F2]/15 border-[#5865F2]/30", glow: "rgba(88,101,242,0.5)", spot: "rgba(88,101,242,0.15)", orb: "rgba(88,101,242,0.18)", border: "hover:border-[#7C85FD]/40" },
-    cyan:   { text: "text-cyan-300",   chip: "bg-cyan-500/15 border-cyan-500/30",   glow: "rgba(56,189,248,0.45)", spot: "rgba(56,189,248,0.13)", orb: "rgba(56,189,248,0.16)", border: "hover:border-cyan-400/40" },
+    indigo: { text: "text-[#a5b4fc]", chip: "bg-[#6366F1]/15 border-[#6366F1]/30", glow: "rgba(99,102,241,0.5)", spot: "rgba(99,102,241,0.15)", orb: "rgba(99,102,241,0.18)", border: "hover:border-[#818CF8]/40" },
+    cyan:   { text: "text-cyan-300",   chip: "bg-cyan-500/15 border-cyan-500/30",   glow: "rgba(6,182,212,0.45)", spot: "rgba(6,182,212,0.13)", orb: "rgba(6,182,212,0.16)", border: "hover:border-cyan-400/40" },
     violet: { text: "text-violet-300", chip: "bg-violet-500/15 border-violet-500/30", glow: "rgba(168,85,247,0.45)", spot: "rgba(168,85,247,0.13)", orb: "rgba(168,85,247,0.16)", border: "hover:border-violet-400/40" },
   };
   const a = accentMap[accent];
@@ -591,18 +632,26 @@ function FeatureCard({
     const r = el.getBoundingClientRect();
     el.style.setProperty("--mx", `${e.clientX - r.left}px`);
     el.style.setProperty("--my", `${e.clientY - r.top}px`);
+    /* 3D tilt */
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = `perspective(900px) rotateX(${(-py * 5).toFixed(2)}deg) rotateY(${(px * 5).toFixed(2)}deg) translateY(-6px)`;
+  };
+  const handleLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.transform = "";
   };
 
   return (
     <motion.div
       onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ delay, duration: 0.5, ease: "easeOut" }}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(139,151,255,0.16)] bg-[#0d0d1f] p-6 transition-all duration-300 cursor-pointer",
-        "hover:-translate-y-1.5 hover:border-[rgba(139,151,255,0.38)] hover:bg-[#0f0f26] hover:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)]"
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(129,140,248,0.16)] bg-[#0d0d1f] p-6 transition-[border-color,background-color,box-shadow] duration-300 will-change-transform cursor-pointer",
+        "hover:border-[rgba(129,140,248,0.38)] hover:bg-[#0f0f26] hover:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)]"
       )}
     >
       {/* cursor spotlight */}
@@ -643,7 +692,7 @@ function FeatureCard({
           {tags.map((t) => (
             <span
               key={t}
-              className="rounded-md border border-primary/25 bg-primary/[0.08] px-2 py-1 font-mono text-[9px] font-semibold uppercase tracking-wider text-[#a5affb]/70 transition-colors duration-300 group-hover:border-primary/40 group-hover:text-[#a5affb]"
+              className="rounded-md border border-primary/25 bg-primary/[0.08] px-2 py-1 font-mono text-[9px] font-semibold uppercase tracking-wider text-[#a5b4fc]/70 transition-colors duration-300 group-hover:border-primary/40 group-hover:text-[#a5b4fc]"
             >
               {t}
             </span>
@@ -657,7 +706,7 @@ function FeatureCard({
 /* ── Module pill ─────────────────────────────────────────────────────────── */
 function ModulePill({ name, icon: Icon }: { name: string; icon: typeof ShieldAlert }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 bg-[#0d0d1f] border border-[rgba(139,151,255,0.14)] hover:bg-[#12122a] hover:border-[rgba(139,151,255,0.32)] transition-all duration-200 group cursor-pointer">
+    <div className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 bg-[#0d0d1f] border border-[rgba(129,140,248,0.14)] hover:bg-[#12122a] hover:border-[rgba(129,140,248,0.32)] transition-all duration-200 group cursor-pointer">
       <Icon className="h-3.5 w-3.5 text-primary-light/70 group-hover:text-primary-light transition-colors" />
       <span className="text-xs font-medium text-muted group-hover:text-white/85 transition-colors">{name}</span>
     </div>
@@ -682,7 +731,7 @@ function StatCard({ value, suffix = "", decimals = 0, label, sub, icon: Icon }: 
   value: number; suffix?: string; decimals?: number; label: string; sub?: string; icon: typeof Server;
 }) {
   return (
-    <div className="flex flex-col gap-1 p-6 rounded-xl border border-[rgba(139,151,255,0.14)] bg-[#0d0d1f] hover:border-[rgba(139,151,255,0.3)] hover:bg-[#0f0f26] transition-all duration-300">
+    <div className="flex flex-col gap-1 p-6 rounded-xl border border-[rgba(129,140,248,0.14)] bg-[#0d0d1f] hover:border-[rgba(129,140,248,0.3)] hover:bg-[#0f0f26] transition-all duration-300">
       <Icon className="h-4 w-4 text-primary-light/60 mb-1" />
       <p className="text-3xl font-bold text-white tracking-tight tabular-nums">
         <CountUp to={value} suffix={suffix} decimals={decimals} />
@@ -728,6 +777,281 @@ function FaqItem({ q, a, idx }: { q: string; a: string; idx: number }) {
   );
 }
 
+/* ── Interactive modules showcase — click tabs to preview settings ──────── */
+type ShowcaseKey = "antinuke" | "leveling" | "welcomer" | "tickets" | "automod";
+
+const SHOWCASE_MODULES: {
+  key: ShowcaseKey;
+  label: string;
+  icon: typeof ShieldAlert;
+  tagline: string;
+  settings: { icon: typeof ShieldAlert; label: string; enabled: boolean }[];
+  accent: "indigo" | "cyan" | "violet" | "rose" | "amber";
+}[] = [
+  {
+    key: "antinuke", label: "Anti-Nuke", icon: ShieldAlert,
+    tagline: "Mass-ban lockdown in 2ms. One toggle arms 18 guard rails.",
+    settings: [
+      { icon: Ban,      label: "Instant ban mitigation", enabled: true },
+      { icon: Shield,   label: "Role/channel wiper block", enabled: true },
+      { icon: Users2,   label: "Bot-add guard", enabled: true },
+      { icon: Lock,     label: "Webhook creation block", enabled: true },
+    ],
+    accent: "indigo",
+  },
+  {
+    key: "leveling", label: "Leveling", icon: BarChart4,
+    tagline: "XP, rank cards and reward roles — auto-configured per server.",
+    settings: [
+      { icon: BarChart4, label: "XP per message", enabled: true },
+      { icon: Sparkles,  label: "Custom rank cards", enabled: true },
+      { icon: User,      label: "Reward roles", enabled: true },
+      { icon: Trophy,  label: "Public leaderboard", enabled: false },
+    ],
+    accent: "cyan",
+  },
+  {
+    key: "welcomer", label: "Welcomer", icon: Sparkles,
+    tagline: "Render a welcome card, DM the member, assign roles instantly.",
+    settings: [
+      { icon: Sparkles, label: "Welcome card render", enabled: true },
+      { icon: Mail,     label: "Join DM message", enabled: true },
+      { icon: User,     label: "Auto-assign roles", enabled: true },
+      { icon: CheckCircle2, label: "Leave messages", enabled: false },
+    ],
+    accent: "violet",
+  },
+  {
+    key: "tickets", label: "Tickets", icon: Ticket,
+    tagline: "Panel-based support with transcripts and category routing.",
+    settings: [
+      { icon: MessageSquare, label: "Support panel", enabled: true },
+      { icon: History,       label: "Auto transcripts", enabled: true },
+      { icon: Server,        label: "Category routing", enabled: true },
+      { icon: Lock,          label: "Staff-only view", enabled: false },
+    ],
+    accent: "rose",
+  },
+  {
+    key: "automod", label: "Automod", icon: ShieldCheck,
+    tagline: "ML scoring flags spam, scams and NSFW before anyone sees it.",
+    settings: [
+      { icon: ShieldCheck, label: "ML spam scoring", enabled: true },
+      { icon: Ban,         label: "Auto-delete", enabled: true },
+      { icon: Bell,        label: "Mod alerts", enabled: true },
+      { icon: Globe,       label: "Link/domain filter", enabled: false },
+    ],
+    accent: "amber",
+  },
+];
+
+const SHOWCASE_ACCENTS = {
+  indigo: { border: "border-primary/35", glow: "rgba(99,102,241,0.4)", chip: "bg-primary/15 border-primary/35 text-primary-light" },
+  cyan:   { border: "border-accent/35",  glow: "rgba(6,182,212,0.4)",  chip: "bg-accent/15 border-accent/35 text-cyan-300" },
+  violet: { border: "border-violet-500/40", glow: "rgba(168,85,247,0.4)", chip: "bg-violet-500/15 border-violet-500/40 text-violet-300" },
+  rose:   { border: "border-rose-500/40", glow: "rgba(251,113,133,0.4)", chip: "bg-rose-500/15 border-rose-500/40 text-rose-300" },
+  amber:  { border: "border-amber-500/40", glow: "rgba(251,191,36,0.4)", chip: "bg-amber-500/15 border-amber-500/40 text-amber-300" },
+} as const;
+
+function ModulesShowcase() {
+  const [active, setActive] = useState<ShowcaseKey>("antinuke");
+  const mod = SHOWCASE_MODULES.find((m) => m.key === active)!;
+  const acc = SHOWCASE_ACCENTS[mod.accent];
+
+  return (
+    <section id="showcase" className="relative z-10 py-24 px-6">
+      <div className="mx-auto max-w-7xl">
+        <div className="max-w-2xl mb-12">
+          <p className="label mb-4 flex items-center gap-3">
+            <span className="h-px w-10 bg-gradient-to-r from-primary to-transparent" />
+            Module preview
+          </p>
+          <h2 className="heading-lg text-white">
+            Click a module — <span className="text-gradient">see its cockpit</span>
+          </h2>
+          <p className="mt-4 max-w-lg text-base text-muted">
+            Every module ships with a real settings panel. Flip switches, preview
+            cards, and watch the bot react — no commands required.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-[260px_1fr] gap-6">
+          {/* tab rail */}
+          <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 no-scrollbar">
+            {SHOWCASE_MODULES.map((m) => {
+              const isActive = m.key === active;
+              return (
+                <button
+                  key={m.key}
+                  onClick={() => setActive(m.key)}
+                  className={cn(
+                    "group relative flex shrink-0 items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all duration-200 cursor-pointer",
+                    isActive
+                      ? cn(SHOWCASE_ACCENTS[m.accent].border, "bg-[#0d0d1f]")
+                      : "border-white/[0.07] bg-[#0a0a14] hover:border-white/[0.16] hover:bg-[#0d0d1f]"
+                  )}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="showcase-pill"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                      className="absolute inset-0 rounded-xl shadow-[0_0_22px_rgba(99,102,241,0.25)] pointer-events-none"
+                    />
+                  )}
+                  <m.icon
+                    className={cn(
+                      "h-4 w-4 shrink-0 transition-colors",
+                      isActive ? SHOWCASE_ACCENTS[m.accent].chip.split(" ")[2] : "text-slate-500"
+                    )}
+                  />
+                  <span className={cn("text-sm font-semibold transition-colors", isActive ? "text-white" : "text-slate-400 group-hover:text-slate-200")}>
+                    {m.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* preview panel */}
+          <div className="relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={mod.key}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+                className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0b0b18] p-6 sm:p-8"
+              >
+                {/* glow accent */}
+                <div
+                  className="pointer-events-none absolute -top-24 -right-20 h-64 w-64 rounded-full blur-[90px]"
+                  style={{ background: acc.glow }}
+                />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+
+                <div className="relative flex items-start justify-between gap-4 mb-8">
+                  <div className="flex items-center gap-4">
+                    <div className={cn("flex h-12 w-12 items-center justify-center rounded-xl border", acc.chip)}>
+                      <mod.icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">{mod.label}</h3>
+                      <p className="text-sm text-muted">{mod.tagline}</p>
+                    </div>
+                  </div>
+                  <span className="hidden sm:flex items-center gap-1.5 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-1 font-mono text-[10px] font-bold text-emerald-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    CONFIGURED
+                  </span>
+                </div>
+
+                <div className="relative grid sm:grid-cols-2 gap-3">
+                  {mod.settings.map((s, i) => (
+                    <motion.div
+                      key={s.label}
+                      initial={{ opacity: 0, x: 14 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.06 + i * 0.06, duration: 0.3 }}
+                      className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3.5"
+                    >
+                      <s.icon className={cn("h-4 w-4 shrink-0", s.enabled ? acc.chip.split(" ")[2] : "text-slate-600")} />
+                      <span className={cn("flex-1 text-sm font-medium", s.enabled ? "text-white/80" : "text-slate-500 line-through")}>
+                        {s.label}
+                      </span>
+                      {/* toggle */}
+                      <span
+                        className={cn(
+                          "relative h-5 w-9 rounded-full transition-colors duration-300",
+                          s.enabled ? "bg-primary shadow-[0_0_12px_rgba(99,102,241,0.5)]" : "bg-slate-700"
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all duration-300",
+                            s.enabled ? "left-[18px]" : "left-0.5"
+                          )}
+                        />
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Bot mascot — metallic-white + neon-violet illustration (SVG) ───────── */
+function BotMascot({ className = "" }: { className?: string }) {
+  return (
+    <div className={cn("relative select-none", className)} aria-hidden>
+      {/* halo glow */}
+      <div className="absolute inset-0 rounded-full bg-primary/25 blur-[70px] animate-pulse" />
+      <svg viewBox="0 0 200 200" className="relative h-full w-full drop-shadow-[0_0_28px_rgba(99,102,241,0.45)]">
+        <defs>
+          <linearGradient id="mascot-metal" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="55%" stopColor="#e2e8f0" />
+            <stop offset="100%" stopColor="#94a3b8" />
+          </linearGradient>
+          <linearGradient id="mascot-neon" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#818cf8" />
+            <stop offset="100%" stopColor="#4f46e5" />
+          </linearGradient>
+          <linearGradient id="mascot-eye" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#22d3ee" />
+            <stop offset="100%" stopColor="#06b6d4" />
+          </linearGradient>
+        </defs>
+
+        {/* ears */}
+        <rect x="46" y="38" width="26" height="34" rx="8" fill="url(#mascot-metal)" />
+        <rect x="128" y="38" width="26" height="34" rx="8" fill="url(#mascot-metal)" />
+        <rect x="52" y="46" width="14" height="16" rx="4" fill="url(#mascot-neon)" opacity="0.9" />
+        <rect x="134" y="46" width="14" height="16" rx="4" fill="url(#mascot-neon)" opacity="0.9" />
+
+        {/* head */}
+        <rect x="36" y="56" width="128" height="108" rx="26" fill="url(#mascot-metal)" />
+        <rect x="36" y="56" width="128" height="108" rx="26" fill="none" stroke="#cbd5e1" strokeWidth="1.5" />
+
+        {/* face plate */}
+        <rect x="52" y="72" width="96" height="52" rx="14" fill="#0b0b18" stroke="url(#mascot-neon)" strokeWidth="2" />
+
+        {/* eyes */}
+        <circle cx="78" cy="98" r="9" fill="url(#mascot-eye)" />
+        <circle cx="122" cy="98" r="9" fill="url(#mascot-eye)" />
+        <circle cx="78" cy="98" r="9" fill="none" stroke="#22d3ee" strokeWidth="2" opacity="0.6">
+          <animate attributeName="r" values="9;13;9" dur="3s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="122" cy="98" r="9" fill="none" stroke="#22d3ee" strokeWidth="2" opacity="0.6">
+          <animate attributeName="r" values="9;13;9" dur="3s" begin="1.5s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="75.5" cy="95.5" r="2.6" fill="#ffffff" />
+        <circle cx="119.5" cy="95.5" r="2.6" fill="#ffffff" />
+
+        {/* mouth */}
+        <path d="M88 136 h24" stroke="#22d3ee" strokeWidth="3.5" strokeLinecap="round" />
+
+        {/* chest badge */}
+        <circle cx="100" cy="158" r="12" fill="#0b0b18" stroke="url(#mascot-neon)" strokeWidth="2.5" />
+        <circle cx="100" cy="158" r="4" fill="#818cf8" />
+        <circle cx="100" cy="158" r="8" fill="none" stroke="rgba(129,140,248,0.5)" strokeWidth="1.5" opacity="0.7">
+          <animate attributeName="r" values="8;12;8" dur="2.6s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.7;0;0.7" dur="2.6s" repeatCount="indefinite" />
+        </circle>
+      </svg>
+      {/* floating sparkles */}
+      <span className="cyber-particle h-1.5 w-1.5 bg-cyan-400 shadow-[0_0_8px_#06b6d4]" style={{ top: "8%", right: "12%", animationDelay: "-2s" }} />
+      <span className="cyber-particle h-2 w-2 bg-primary shadow-[0_0_10px_#6366f1]" style={{ top: "22%", left: "6%", animationDelay: "-4s" }} />
+      <span className="cyber-particle h-1 w-1 bg-violet-400 shadow-[0_0_8px_#a855f7]" style={{ bottom: "10%", right: "18%", animationDelay: "-1s" }} />
+    </div>
+  );
+}
+
 /* ── Main landing page ───────────────────────────────────────────────────── */
 export default function LandingPage() {
   const [navOpen, setNavOpen] = useState(false);
@@ -748,9 +1072,9 @@ export default function LandingPage() {
   ];
 
   const testimonials = [
-    { quote: "We replaced six bots with ZyroX in one afternoon. Anti-nuke blocked a full raid while I slept — the logs looked like a movie.", name: "Kai",   role: "Owner · 210k member server",  grad: "from-[#5865F2] to-[#38BDF8]", init: "K" },
-    { quote: "The dashboard is the only reason I switched. Everything is clickable, and I haven't written a single slash command since.",    name: "Maya",  role: "Mod team lead · 45k server", grad: "from-[#38BDF8] to-[#5865F2]", init: "M" },
-    { quote: "Leveling import from MEE6 took 30 seconds, and the rank cards look better than anything our paid bots ever did.",               name: "Arjun", role: "Admin · gaming community",  grad: "from-[#4752C4] to-[#7C85FD]", init: "A" },
+    { quote: "We replaced six bots with ZyroX in one afternoon. Anti-nuke blocked a full raid while I slept — the logs looked like a movie.", name: "Kai",   role: "Owner · 210k member server",  grad: "from-[#6366F1] to-[#06B6D4]", init: "K" },
+    { quote: "The dashboard is the only reason I switched. Everything is clickable, and I haven't written a single slash command since.",    name: "Maya",  role: "Mod team lead · 45k server", grad: "from-[#06B6D4] to-[#6366F1]", init: "M" },
+    { quote: "Leveling import from MEE6 took 30 seconds, and the rank cards look better than anything our paid bots ever did.",               name: "Arjun", role: "Admin · gaming community",  grad: "from-[#4F46E5] to-[#818CF8]", init: "A" },
   ];
 
   const modules = [
@@ -825,7 +1149,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2.5">
             <Button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
-              className="btn-sheen h-9 gap-2 bg-primary px-5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(88,101,242,0.35)] hover:bg-primary-hover transition-colors"
+              className="btn-sheen h-9 gap-2 bg-primary px-5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] hover:bg-primary-hover transition-colors"
             >
               <LogIn className="h-3.5 w-3.5" />
               Sign in
@@ -876,7 +1200,7 @@ export default function LandingPage() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 mb-8"
           >
-            <span className="badge">
+            <span className="badge neon-glow-primary">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
                 <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -885,7 +1209,7 @@ export default function LandingPage() {
             </span>
           </motion.div>
 
-          {/* headline */}
+          {/* headline — character-by-character reveal */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -893,7 +1217,19 @@ export default function LandingPage() {
             className="heading-xl text-white mb-6"
           >
             Your server needs one bot.{" "}
-            <span className="text-gradient">Not fifteen.</span>
+            <span className="text-gradient">
+              {Array.from("Not fifteen.").map((ch, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.55 + i * 0.045, duration: 0.35, ease: "easeOut" }}
+                  className="inline-block"
+                >
+                  {ch === " " ? "\u00A0" : ch}
+                </motion.span>
+              ))}
+            </span>
           </motion.h1>
 
           <motion.p
@@ -916,7 +1252,7 @@ export default function LandingPage() {
             <Button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
               size="lg"
-              className="btn-sheen h-12 w-full gap-2.5 bg-primary px-8 text-sm font-semibold text-white shadow-[0_0_32px_rgba(88,101,242,0.4)] hover:bg-primary-hover transition-colors sm:w-auto"
+              className="btn-sheen h-12 w-full gap-2.5 bg-primary px-8 text-sm font-semibold text-white shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:bg-primary-hover hover:shadow-[0_0_40px_rgba(99,102,241,0.55)] transition-all sm:w-auto"
             >
               <LayoutDashboard className="h-4 w-4" />
               Open Dashboard
@@ -956,8 +1292,20 @@ export default function LandingPage() {
           ))}
         </motion.div>
 
+        {/* mascot */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 24 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-16 flex justify-center"
+        >
+          <div className="animate-float">
+            <BotMascot className="h-36 w-36 sm:h-44 sm:w-44" />
+          </div>
+        </motion.div>
+
         {/* mockup */}
-        <div className="mt-20">
+        <div className="mt-12">
           <DashboardMockup />
         </div>
       </section>
@@ -1000,6 +1348,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ── MODULES SHOWCASE (interactive) ───────────────────────────────── */}
+      <ModulesShowcase />
 
       {/* ── FEATURES ─────────────────────────────────────────────────────── */}
       <section id="features" className="relative z-10 py-24 px-6">
@@ -1054,11 +1405,11 @@ export default function LandingPage() {
                 className="relative text-center md:text-left"
               >
                 <div className="relative z-10 mx-auto md:mx-0 mb-6 flex h-24 w-24 items-center justify-center">
-                  <div className="absolute inset-0 rounded-2xl border border-[rgba(139,151,255,0.3)] bg-primary/10" />
-                  <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#6B76F5] to-[#4752C4] shadow-[0_0_24px_rgba(88,101,242,0.45)]">
+                  <div className="absolute inset-0 rounded-2xl border border-[rgba(129,140,248,0.3)] bg-primary/10" />
+                  <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#818CF8] to-[#4F46E5] shadow-[0_0_24px_rgba(99,102,241,0.45)]">
                     <s.icon className="h-6 w-6 text-white" />
                   </div>
-                  <span className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full border border-[rgba(139,151,255,0.3)] bg-[#0d0d1f] font-mono text-[10px] font-bold text-[#a5affb]">
+                  <span className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full border border-[rgba(129,140,248,0.3)] bg-[#0d0d1f] font-mono text-[10px] font-bold text-[#a5b4fc]">
                     0{i + 1}
                   </span>
                 </div>
@@ -1123,7 +1474,7 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="group relative flex flex-col rounded-2xl border border-[rgba(139,151,255,0.16)] bg-[#0d0d1f] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(139,151,255,0.38)] hover:bg-[#0f0f26] hover:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)]"
+                className="group relative flex flex-col rounded-2xl border border-[rgba(129,140,248,0.16)] bg-[#0d0d1f] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(129,140,248,0.38)] hover:bg-[#0f0f26] hover:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)]"
               >
                 <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="mb-4 flex items-center justify-between">
@@ -1153,21 +1504,23 @@ export default function LandingPage() {
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="relative z-10 py-24 px-6">
         <div className="mx-auto max-w-4xl">
-          <motion.div
+<motion.div
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative rounded-2xl border border-[rgba(139,151,255,0.18)] bg-[#0c0c1c] overflow-hidden p-12 md:p-16 text-center"
+            className="relative glass-cyber overflow-hidden p-12 md:p-16 text-center"
           >
             {/* background glow */}
-            <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-48 w-[500px] bg-primary/15 blur-[80px] rounded-full pointer-events-none" />
-            <div className="absolute -bottom-16 right-0 h-40 w-64 bg-cyan-500/10 blur-[70px] rounded-full pointer-events-none" />
-            <div className="absolute -bottom-10 left-0 h-36 w-56 bg-violet-500/10 blur-[70px] rounded-full pointer-events-none" />
+            <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-48 w-[500px] bg-primary/20 blur-[80px] rounded-full pointer-events-none" />
+            <div className="absolute -bottom-16 right-0 h-40 w-64 bg-accent/15 blur-[70px] rounded-full pointer-events-none" />
+            <div className="absolute -bottom-10 left-0 h-36 w-56 bg-violet-500/15 blur-[70px] rounded-full pointer-events-none" />
+            {/* ambience cyber grid */}
+            <div className="pointer-events-none absolute inset-0 cyber-grid-bg opacity-30" />
 
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 mb-8">
-                <span className="badge">Free to start · No credit card</span>
+                <span className="badge neon-glow-primary">Free to start · No credit card</span>
               </div>
               <h2 className="heading-lg text-white mb-5">
                 Set up in under a minute.
@@ -1180,7 +1533,7 @@ export default function LandingPage() {
                 <Button
                   onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
                   size="lg"
-                  className="btn-sheen h-12 w-full gap-2.5 bg-primary px-10 font-semibold text-white shadow-[0_0_32px_rgba(88,101,242,0.4)] hover:bg-primary-hover transition-colors sm:w-auto"
+                  className="btn-sheen neon-glow-primary h-12 w-full gap-2.5 bg-primary px-10 font-semibold text-white hover:bg-primary-hover transition-colors sm:w-auto"
                 >
                   Get started free
                   <ArrowRight className="h-4 w-4" />
@@ -1189,7 +1542,7 @@ export default function LandingPage() {
                   variant="outline"
                   size="lg"
                   asChild
-                  className="h-12 px-8 gap-2 font-semibold border-white/[0.1] bg-transparent hover:bg-white/[0.05] text-white/60 hover:text-white w-full sm:w-auto"
+                  className="h-12 px-8 gap-2 font-semibold border-[rgba(129,140,248,0.25)] bg-transparent hover:bg-white/[0.05] text-white/60 hover:text-white w-full sm:w-auto"
                 >
                   <Link href="/docs">
                     Read the docs

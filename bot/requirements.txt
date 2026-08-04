@@ -15,6 +15,7 @@ slowapi
 psutil
 colorama
 python-dateutil
+pytz
 Pillow
 numpy
 openai

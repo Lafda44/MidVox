@@ -5,14 +5,14 @@
  */
 
 import type { Metadata } from "next";
-import { Unbounded, Outfit, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/auth-provider";
 
-const unbounded     = Unbounded({ subsets: ["latin"], variable: "--font-unbounded", display: "swap", weight: ["400", "500", "600", "700", "800"] });
-const outfit        = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
+const spaceGrotesk  = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap", weight: ["400", "500", "600", "700"] });
+const plusJakarta   = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-plus-jakarta", display: "swap" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "Zyrox";
@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${unbounded.variable} ${outfit.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${spaceGrotesk.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}>
       <body className="antialiased font-sans">
         {/* Fixed aurora background image */}
         <div aria-hidden className="pointer-events-none fixed inset-0 -z-20">
@@ -43,7 +43,7 @@ export default function RootLayout({
               backgroundImage: "url('/bg-aurora.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
-            filter: "brightness(0.6) saturate(1.1)",
+            filter: "brightness(0.6) saturate(1.2) hue-rotate(220deg)",
           }}
         />
         <div
@@ -64,7 +64,7 @@ export default function RootLayout({
               top: "-15%",
               left: "50%",
               transform: "translateX(-50%)",
-              background: "radial-gradient(circle, rgba(88,101,242,0.13) 0%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 70%)",
               animationDuration: "22s",
             }}
           />
@@ -87,7 +87,7 @@ export default function RootLayout({
               height: "380px",
               bottom: "-5%",
               right: "-8%",
-              background: "radial-gradient(circle, rgba(34,211,238,0.07) 0%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(6,182,212,0.09) 0%, transparent 70%)",
               animationDuration: "25s",
               animationDelay: "-14s",
             }}

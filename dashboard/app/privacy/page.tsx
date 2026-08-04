@@ -34,7 +34,7 @@ export default function PrivacyPage() {
           <div className="h-9 w-9 rounded-xl bg-red-600 flex items-center justify-center mr-4">
             <Bot className="h-5 w-5 text-slate-50" />
           </div>
-          <span className="text-xl font-bold text-slate-50 font-outfit uppercase tracking-tighter">ZyroX Engine</span>
+          <span className="text-xl font-bold text-slate-50 font-display uppercase tracking-tighter">ZyroX Engine</span>
         </Link>
         <Link href="/">
           <Button variant="ghost" className="text-slate-400 hover:text-slate-50 gap-2">
@@ -51,7 +51,7 @@ export default function PrivacyPage() {
             Privacy Shield v2.0
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold text-slate-50 font-outfit tracking-tighter uppercase mb-12 italic">
+          <h1 className="text-5xl md:text-7xl font-bold text-slate-50 font-display tracking-tighter uppercase mb-12 italic">
             Privacy <span className="text-red-500 not-italic">Policy.</span>
           </h1>
 
@@ -61,7 +61,7 @@ export default function PrivacyPage() {
                 <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
                    <Eye className="h-5 w-5" />
                 </div>
-                <h2 className="text-2xl font-bold font-outfit uppercase tracking-tight">Data Collection</h2>
+                <h2 className="text-2xl font-bold font-display uppercase tracking-tight">Data Collection</h2>
               </div>
               <p className="text-slate-400 leading-relaxed font-medium">
                 The ZyroX Engine collects only the minimum necessary data to function within Discord. This includes your Discord User ID, Server (Guild) ID, and configuration settings provided during setup. We do not store message content unless explicitly configured for logging purposes by server administrators.
@@ -73,7 +73,7 @@ export default function PrivacyPage() {
                 <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
                    <Lock className="h-5 w-5" />
                 </div>
-                <h2 className="text-2xl font-bold font-outfit uppercase tracking-tight">Data Integrity</h2>
+                <h2 className="text-2xl font-bold font-display uppercase tracking-tight">Data Integrity</h2>
               </div>
               <p className="text-slate-400 leading-relaxed font-medium">
                 All configuration data is AES-256 encrypted at rest. Our neural vaults are distributed across global edge nodes, ensuring that your server settings are both secure and instantly available. We never sell or distribute your data to third parties.
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
                 <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
                    <FileText className="h-5 w-5" />
                 </div>
-                <h2 className="text-2xl font-bold font-outfit uppercase tracking-tight">User Rights</h2>
+                <h2 className="text-2xl font-bold font-display uppercase tracking-tight">User Rights</h2>
               </div>
               <p className="text-slate-400 leading-relaxed font-medium">
                 You have the right to request a full dump of your data or immediate deletion of all configurations associated with your Discord account or guild. These requests can be initialized through our support matrix or directly within the dashboard settings.

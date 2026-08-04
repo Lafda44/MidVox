@@ -80,7 +80,7 @@ export default function DocsPage() {
             <div className="h-8 w-8 rounded-lg bg-red-600 flex items-center justify-center mr-3">
               <Bot className="h-5 w-5 text-slate-50" />
             </div>
-            <span className="text-xl font-bold text-slate-50 font-outfit uppercase tracking-tighter hidden md:block">ZyroX Docs</span>
+            <span className="text-xl font-bold text-slate-50 font-display uppercase tracking-tighter hidden md:block">ZyroX Docs</span>
           </Link>
           
           <div className="hidden lg:flex items-center w-80 relative group">
@@ -150,7 +150,7 @@ export default function DocsPage() {
             V2.4 Runtime Environment
           </div>
 
-          <h1 className="text-6xl font-bold text-slate-50 font-outfit tracking-tighter uppercase mb-8 italic">
+          <h1 className="text-6xl font-bold text-slate-50 font-display tracking-tighter uppercase mb-8 italic">
             {activeTab}<span className="text-red-500 not-italic">.</span>
           </h1>
 
@@ -162,12 +162,12 @@ export default function DocsPage() {
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="p-8 rounded-[32px] glass border-slate-200/70 space-y-4">
                    <Zap className="h-6 w-6 text-red-500" />
-                   <h3 className="text-xl font-bold text-slate-50 font-outfit uppercase">Fast Dispatch</h3>
+                   <h3 className="text-xl font-bold text-slate-50 font-display uppercase">Fast Dispatch</h3>
                    <p className="text-sm text-slate-500 font-bold uppercase tracking-tight">Commands are dispatched via our global edge network in under 12ms.</p>
                 </div>
                 <div className="p-8 rounded-[32px] glass border-slate-200/70 space-y-4">
                    <ShieldCheck className="h-6 w-6 text-emerald-500" />
-                   <h3 className="text-xl font-bold text-slate-50 font-outfit uppercase">Secure Node</h3>
+                   <h3 className="text-xl font-bold text-slate-50 font-display uppercase">Secure Node</h3>
                    <p className="text-sm text-slate-500 font-bold uppercase tracking-tight">Every module runs in a dedicated neural sandbox with AES-256 encryption.</p>
                 </div>
              </div>
@@ -176,7 +176,7 @@ export default function DocsPage() {
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                    <Layers className="h-32 w-32 text-red-500" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-50 font-outfit uppercase tracking-tight mb-4">Neural Architecture</h2>
+                <h2 className="text-2xl font-bold text-slate-50 font-display uppercase tracking-tight mb-4">Neural Architecture</h2>
                   <h3 className="text-slate-50 font-bold">Protocol Overview</h3>
                 <p className="text-slate-500 font-bold leading-relaxed mb-8">
                   The ZyroX Engine utilizes a decentralized event stream processing model. When a Discord event is received, it is instantly routed to the nearest edge cluster.

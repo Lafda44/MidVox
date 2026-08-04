@@ -34,7 +34,7 @@ export default function TermsPage() {
           <div className="h-10 w-10 rounded-xl bg-red-600 flex items-center justify-center group-hover:rotate-12 transition-transform">
             <Bot className="h-5 w-5 text-slate-50" />
           </div>
-          <span className="text-xl font-bold text-slate-50 font-outfit uppercase tracking-tighter">{process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"} Engine</span>
+          <span className="text-xl font-bold text-slate-50 font-display uppercase tracking-tighter">{process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"} Engine</span>
         </Link>
         <Link href="/">
           <Button variant="ghost" className="text-slate-400 hover:text-slate-50 gap-2">
@@ -51,7 +51,7 @@ export default function TermsPage() {
             Neural Protocol v2.4
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold text-slate-50 font-outfit tracking-tighter uppercase mb-12 italic text-right">
+          <h1 className="text-5xl md:text-7xl font-bold text-slate-50 font-display tracking-tighter uppercase mb-12 italic text-right">
             Terms of <span className="text-red-500 not-italic">Service.</span>
           </h1>
 
@@ -61,7 +61,7 @@ export default function TermsPage() {
                 <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
                    <Terminal className="h-5 w-5" />
                 </div>
-                <h2 className="text-2xl font-bold font-outfit uppercase tracking-tight">Acceptance of Protocol</h2>
+                <h2 className="text-2xl font-bold font-display uppercase tracking-tight">Acceptance of Protocol</h2>
               </div>
               <p className="text-slate-400 leading-relaxed font-medium">
                 By integrating the {process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"} Engine into your Discord server, you agree to abide by these terms. The engine is provided &quot;as is,&quot; and while we strive for 100% uptime through our neural edge clusters, we are not liable for any data loss resulting from third-party API disruptions.
@@ -73,7 +73,7 @@ export default function TermsPage() {
                 <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
                    <ShieldAlert className="h-5 w-5" />
                 </div>
-                <h2 className="text-2xl font-bold font-outfit uppercase tracking-tight">Usage Constraints</h2>
+                <h2 className="text-2xl font-bold font-display uppercase tracking-tight">Usage Constraints</h2>
               </div>
               <p className="text-slate-400 leading-relaxed font-medium">
                 You may not use the {process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX"} Engine for any illicit activities, including but not limited to: automated harassment, token logging, or raid coordination. Violation of these constraints will result in immediate neural deauthorization and blacklisting from the global cluster network.
@@ -85,7 +85,7 @@ export default function TermsPage() {
                 <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
                    <Cpu className="h-5 w-5" />
                 </div>
-                <h2 className="text-2xl font-bold font-outfit uppercase tracking-tight">API & Scaling</h2>
+                <h2 className="text-2xl font-bold font-display uppercase tracking-tight">API & Scaling</h2>
               </div>
               <p className="text-slate-400 leading-relaxed font-medium">
                 We reserve the right to throttle or limit API access for guilds that exceed disproportionate resource allocations. High-scale enterprise clusters are available for communities requiring dedicated neural shards.

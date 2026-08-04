@@ -418,7 +418,7 @@ export function TicketsForm({ initialConfig, guildId }: TicketsFormProps) {
                   <div className="p-3 bg-primary/10 rounded-2xl text-primary group-hover:scale-110 transition-transform">
                     <MessageSquare className="h-6 w-6" />
                   </div>
-                  <div className="h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_rgba(88,101,242,0.5)]" />
+                  <div className="h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
               </div>
               <p className="text-sm font-medium text-slate-500">Currently Open</p>
               <h3 className="text-3xl font-black text-slate-50 mt-1">{config.open_ticket_count} Tickets</h3>

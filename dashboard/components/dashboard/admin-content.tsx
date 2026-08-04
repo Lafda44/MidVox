@@ -112,7 +112,7 @@ export function AdminContent() {
               <Shield className="h-8 w-8 text-red-500" />
             </div>
             <div>
-              <h1 className="text-4xl font-black text-slate-50 tracking-tight font-outfit">Admin Control Panel</h1>
+              <h1 className="text-4xl font-black text-slate-50 tracking-tight font-display">Admin Control Panel</h1>
               <p className="text-slate-400 mt-2 font-medium">Restricted access for ZyroX administrators only.</p>
             </div>
           </div>
@@ -141,7 +141,7 @@ export function AdminContent() {
               </span>
             </div>
             <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">{stat.name}</p>
-            <h3 className="text-2xl font-black text-slate-50 mt-1 font-outfit">{stat.value}</h3>
+            <h3 className="text-2xl font-black text-slate-50 mt-1 font-display">{stat.value}</h3>
           </div>
         ))}
       </div>
