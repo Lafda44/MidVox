@@ -540,6 +540,18 @@ class InstaDownloader(commands.Cog):
             def _download():
                 attempts = [opts]
                 if source == "youtube":
+                    # A logged-in request from a flagged IP often gets checked
+                    # harder than an anonymous one. Try anonymous `android`
+                    # / embedded clients FIRST — they usually survive datacenter
+                    # IPs — and only fall back to cookies if those fail.
+                    anon = [
+                        dict(opts, cookiefile=None, extractor_args={"youtube": {"player_client": ["android"]}}),
+                        dict(opts, cookiefile=None, extractor_args={"youtube": {"player_client": ["tv_embedded", "web_embedded", "ios"]}}),
+                    ]
+                    for o in anon:
+                        o.pop("cookiefile", None)
+                    attempts = anon + attempts
+                    # Last-ditch: let yt-dlp use its default client rotation.
                     opts_default = dict(opts)
                     opts_default.pop("extractor_args", None)
                     attempts.append(opts_default)
@@ -578,17 +590,18 @@ class InstaDownloader(commands.Cog):
                 if reason and "not a bot" in reason.lower():
                     await self._send_status(
                         message.channel,
-                        "YouTube is blocking our server's IP (\"not a bot\" check). "
-                        "This is fixed by adding the bot's free `COBALT_API_KEY` "
-                        "(register at cobalt.tools, /api -> create key) — the bot "
-                        "already downloads through cobalt when the key is set.",
+                        "YouTube blocked our server's data-center IP (\"not a bot\" "
+                        "check) — cookies won't fix this. The bot automatically retries "
+                        "YouTube anonymously (Android client) first, which usually "
+                        "works. If it keeps failing, empty the `YT_COOKIES` env var and "
+                        "redeploy, then retry.",
                         reference=message,
                     )
                 elif reason and "requested format is not available" in reason.lower():
                     await self._send_status(
                         message.channel,
-                        "YouTube accepted the request but served no playable "
-                        "formats. If `COBALT_API_KEY` is set, try again shortly.",
+                        "YouTube accepted the request but served no playable formats. "
+                        "Try again shortly.",
                         reference=message,
                     )
                 elif reason:
