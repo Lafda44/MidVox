@@ -46,13 +46,44 @@ YT_SHORTS_URL_RE = re.compile(
 _YT_COOKIES_PATH = None
 
 
+def _json_cookies_to_netscape(content):
+    """Convert a JSON cookie export (Cookie-Editor style) to the Netscape
+    cookies.txt format yt-dlp expects. Returns None if not JSON."""
+    try:
+        import json
+
+        cookies = json.loads(content)
+    except Exception:
+        return None
+    if not isinstance(cookies, list):
+        return None
+    lines = ["# Netscape HTTP Cookie File"]
+    for c in cookies:
+        if not isinstance(c, dict):
+            continue
+        domain = str(c.get("domain", "")).lstrip(".")
+        if not domain:
+            continue
+        include_sub = "TRUE" if not c.get("hostOnly") else "FALSE"
+        path = str(c.get("path") or "/")
+        secure = "TRUE" if c.get("secure") else "FALSE"
+        exp = c.get("expirationDate")
+        expiry = str(int(exp)) if exp and not c.get("session") else "0"
+        lines.append(
+            f"{domain}\t{include_sub}\t{path}\t{secure}\t{expiry}\t"
+            f"{c.get('name') or ''}\t{c.get('value') or ''}"
+        )
+    return "\n".join(lines) + "\n"
+
+
 def _get_yt_cookies_path():
     """Write the YT_COOKIES env var into a temp cookies.txt once.
 
     YouTube blocks downloads from datacenter IPs unless the request carries
     a logged-in browser session. Set YT_COOKIES in Render to the base64 of
-    your cookies.txt (Netscape format, from the "Get cookies.txt LOCALLY"
-    browser extension while signed into YouTube). Returns None if unset.
+    either a Netscape cookies.txt ("Get cookies.txt LOCALLY" extension) or
+    a JSON cookie export (Cookie-Editor) taken while signed into YouTube.
+    Returns None if unset.
     """
     global _YT_COOKIES_PATH
     if _YT_COOKIES_PATH:
@@ -66,6 +97,12 @@ def _get_yt_cookies_path():
         content = base64.b64decode(raw).decode("utf-8", "replace")
     except Exception:
         content = raw
+    if content.lstrip().startswith(("[", "{")):
+        converted = _json_cookies_to_netscape(content)
+        if converted:
+            content = converted
+        else:
+            print("[InstaDL] YT_COOKIES looks like JSON but couldn't be parsed")
     path = os.path.join(tempfile.gettempdir(), "yt_cookies.txt")
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
