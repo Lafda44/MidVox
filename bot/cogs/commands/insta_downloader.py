@@ -542,6 +542,14 @@ class InstaDownloader(commands.Cog):
                     "export, or base64 cookies.txt) to fix this.",
                     reference=message,
                 )
+            elif reason and "requested format is not available" in reason.lower():
+                await self._send_status(
+                    message.channel,
+                    "YouTube accepted the login but served no playable formats — the "
+                    "cookies mix values from different sessions. Re-export ALL cookies "
+                    "from one page load (DevTools / Cookie-Editor) and update `YT_COOKIES`.",
+                    reference=message,
+                )
             elif reason:
                 await self._send_status(
                     message.channel,
