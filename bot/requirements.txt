@@ -16,6 +16,9 @@ psutil
 colorama
 python-dateutil
 pytz
+aiofiles
+typing_extensions
+pydantic
 Pillow
 numpy
 openai
