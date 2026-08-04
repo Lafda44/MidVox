@@ -43,6 +43,36 @@ YT_SHORTS_URL_RE = re.compile(
     re.IGNORECASE,
 )
 
+_YT_COOKIES_PATH = None
+
+
+def _get_yt_cookies_path():
+    """Write the YT_COOKIES env var into a temp cookies.txt once.
+
+    YouTube blocks downloads from datacenter IPs unless the request carries
+    a logged-in browser session. Set YT_COOKIES in Render to the base64 of
+    your cookies.txt (Netscape format, from the "Get cookies.txt LOCALLY"
+    browser extension while signed into YouTube). Returns None if unset.
+    """
+    global _YT_COOKIES_PATH
+    if _YT_COOKIES_PATH:
+        return _YT_COOKIES_PATH
+    raw = os.getenv("YT_COOKIES", "").strip()
+    if not raw:
+        return None
+    try:
+        import base64
+
+        content = base64.b64decode(raw).decode("utf-8", "replace")
+    except Exception:
+        content = raw
+    path = os.path.join(tempfile.gettempdir(), "yt_cookies.txt")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+    _YT_COOKIES_PATH = path
+    print("[InstaDL] using YT_COOKIES session for YouTube downloads")
+    return path
+
 CONFIG_DEFAULTS = {
     "enabled": False,
     "delete_original": False,
@@ -359,11 +389,17 @@ class InstaDownloader(commands.Cog):
                 },
                 # YouTube blocks the `web` player client on datacenter IPs
                 # with a "confirm you're not a bot" wall, which yt-dlp turns
-                # into DownloadError. Try the mobile clients first.
+                # into DownloadError. Try the mobile clients first; a logged
+                # in session (YT_COOKIES) is the reliable fix for servers.
                 "extractor_args": {
-                    "youtube": {"player_client": ["android", "ios", "tv"]},
+                    "youtube": {
+                        "player_client": ["android", "ios", "tv", "web_embedded", "mweb"],
+                    },
                 },
             }
+            cookie_file = _get_yt_cookies_path()
+            if cookie_file:
+                opts["cookiefile"] = cookie_file
             loop = asyncio.get_running_loop()
 
             def _download():
@@ -419,7 +455,9 @@ class InstaDownloader(commands.Cog):
             if reason and "not a bot" in reason.lower():
                 await self._send_status(
                     message.channel,
-                    "YouTube is rate-limiting/download-blocking from our server (\"not a bot\" check). Try again in a minute.",
+                    "YouTube is blocking our server's downloads (\"not a bot\" check). "
+                    "Set the bot's `YT_COOKIES` env var to your browser's cookies.txt "
+                    "(base64) to fix this.",
                     reference=message,
                 )
             elif reason:
