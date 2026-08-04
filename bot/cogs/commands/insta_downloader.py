@@ -351,8 +351,18 @@ class InstaDownloader(commands.Cog):
                 "noplaylist": True,
                 "max_filesize": 24 * 1024 * 1024,
                 "socket_timeout": 25,
-                "retries": 2,
-                "fragment_retries": 2,
+                "retries": 3,
+                "fragment_retries": 3,
+                "geo_bypass": True,
+                "http_headers": {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+                },
+                # YouTube blocks the `web` player client on datacenter IPs
+                # with a "confirm you're not a bot" wall, which yt-dlp turns
+                # into DownloadError. Try the mobile clients first.
+                "extractor_args": {
+                    "youtube": {"player_client": ["android", "ios", "tv"]},
+                },
             }
             loop = asyncio.get_running_loop()
 
@@ -392,6 +402,7 @@ class InstaDownloader(commands.Cog):
                 except Exception:
                     pass
         except Exception as e:
+            reason = str(e).strip()[:300]
             print(f"[InstaDL] download failed for {url}: {e}")
             # yt-dlp can't do image-only posts — fall back to Instagram's
             # /media endpoint which serves the post image directly.
@@ -405,11 +416,24 @@ class InstaDownloader(commands.Cog):
                     return
             except Exception as fb:
                 print(f"[InstaDL] image fallback failed for {url}: {fb}")
-            await self._send_status(
-                message.channel,
-                f"Couldn't download that link: `{type(e).__name__}`",
-                reference=message,
-            )
+            if reason and "not a bot" in reason.lower():
+                await self._send_status(
+                    message.channel,
+                    "YouTube is rate-limiting/download-blocking from our server (\"not a bot\" check). Try again in a minute.",
+                    reference=message,
+                )
+            elif reason:
+                await self._send_status(
+                    message.channel,
+                    f"Couldn't download that link: `{reason}`",
+                    reference=message,
+                )
+            else:
+                await self._send_status(
+                    message.channel,
+                    f"Couldn't download that link: `{type(e).__name__}`",
+                    reference=message,
+                )
         finally:
             if file_path and os.path.exists(file_path):
                 try:
