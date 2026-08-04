@@ -25,6 +25,7 @@ import discord
 from discord.ext import commands
 import aiosqlite
 import asyncio
+import json
 import os
 import re
 import time
@@ -431,20 +432,74 @@ class InstaDownloader(commands.Cog):
         except Exception as e:
             print(f"[InstaDL] on_message error: {e}")
 
-    async def _download_and_send(self, message, url, config, source="instagram"):
-        """Download the media with yt-dlp and repost it in the channel."""
+    def _cobalt_download(self, url):
+        """Download media through the cobalt API — it extracts on its own
+        (clean) infrastructure, so Render's flagged datacenter IP never
+        matters. Returns a temp file path or None."""
+        key = os.getenv("COBALT_API_KEY", "").strip()
+        if not key:
+            return None
         try:
-            import yt_dlp
-        except ImportError:
-            await self._send_status(
-                message.channel,
-                "Insta Downloader is missing the `yt-dlp` dependency.",
-                reference=message,
+            body = json.dumps({"url": url}).encode()
+            req = urllib.request.Request(
+                "https://api.cobalt.tools/api/json",
+                data=body,
+                method="POST",
+                headers={
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {key}",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+                },
             )
-            return
+            with urllib.request.urlopen(req, timeout=40) as resp:
+                data = json.loads(resp.read().decode("utf-8", "replace"))
+            if not isinstance(data, dict):
+                return None
+            status = data.get("status")
+            if status not in ("redirect", "tunnel") or not data.get("url"):
+                print(f"[InstaDL] cobalt error: {data.get('error') or data.get('status')}")
+                return None
+            dreq = urllib.request.Request(
+                data["url"],
+                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "Range": "bytes=0-25165823"},
+            )
+            with urllib.request.urlopen(dreq, timeout=120) as resp:
+                media = resp.read()
+            if not media:
+                return None
+            if len(media) > 25 * 1024 * 1024:
+                print(f"[InstaDL] cobalt media too big ({len(media)} bytes)")
+                return None
+            path = os.path.join(tempfile.gettempdir(), f"cobalt_{int(time.time())}.mp4")
+            with open(path, "wb") as f:
+                f.write(media)
+            print(f"[InstaDL] cobalt download OK: {len(media)} bytes")
+            return path
+        except Exception as e:
+            print(f"[InstaDL] cobalt download failed: {e}")
+            return None
 
+    async def _download_and_send(self, message, url, config, source="instagram"):
+        """Download the media (YouTube via cobalt/youtube-dl, Instagram via
+        youtube-dl) and repost it inline, removing the original link."""
+        loop = asyncio.get_running_loop()
         file_path = None
-        try:
+
+        if source == "youtube":
+            file_path = await loop.run_in_executor(None, self._cobalt_download, url)
+
+        if not file_path:
+            try:
+                import yt_dlp
+            except ImportError:
+                await self._send_status(
+                    message.channel,
+                    "Media Downloader is missing the `yt-dlp` dependency.",
+                    reference=message,
+                )
+                return
+
             tmp = os.path.join(tempfile.gettempdir(), "instadl_%(id)s.%(ext)s")
             opts = {
                 "format": "bv*+ba/b[ext=mp4]/b",
@@ -455,17 +510,12 @@ class InstaDownloader(commands.Cog):
                 "noplaylist": True,
                 "max_filesize": 24 * 1024 * 1024,
                 "socket_timeout": 25,
-                "retries": 3,
-                "fragment_retries": 3,
+                "retries": 2,
+                "fragment_retries": 2,
                 "geo_bypass": True,
                 "http_headers": {
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
                 },
-                # YouTube blocks the `web` player client on datacenter IPs
-                # with a "confirm you're not a bot" wall, which yt-dlp turns
-                # into DownloadError. Different clients are (de)graded at
-                # different times — android_vr currently yields full formats
-                # for logged-in sessions, so try it first.
                 "extractor_args": {
                     "youtube": {
                         "player_client": [
@@ -482,13 +532,10 @@ class InstaDownloader(commands.Cog):
             cookie_file = _get_yt_cookies_path()
             if cookie_file:
                 opts["cookiefile"] = cookie_file
-            loop = asyncio.get_running_loop()
 
             def _download():
                 attempts = [opts]
                 if source == "youtube":
-                    # Some videos/sessions only respond to yt-dlp's default
-                    # client rotation — retry without the override.
                     opts_default = dict(opts)
                     opts_default.pop("extractor_args", None)
                     attempts.append(opts_default)
@@ -502,12 +549,57 @@ class InstaDownloader(commands.Cog):
                                 return path
                     except Exception as e:
                         last_err = e
-                        print(f"[InstaDL] attempt failed for {url}: {e}")
+                        print(f"[InstaDL] yt-dlp attempt failed for {url}: {e}")
                 if last_err:
                     raise last_err
                 return None
 
-            file_path = await loop.run_in_executor(None, _download)
+            try:
+                file_path = await loop.run_in_executor(None, _download)
+            except Exception as e:
+                reason = str(e).strip()[:300]
+                print(f"[InstaDL] download failed for {url}: {e}")
+                # yt-dlp can't do image-only posts — fall back to Instagram's
+                # /media endpoint which serves the post image directly.
+                if source == "instagram":
+                    try:
+                        if await self._send_image_fallback(message, url):
+                            try:
+                                await message.delete()
+                            except Exception:
+                                pass
+                            return
+                    except Exception as fb:
+                        print(f"[InstaDL] image fallback failed for {url}: {fb}")
+                if reason and "not a bot" in reason.lower():
+                    await self._send_status(
+                        message.channel,
+                        "YouTube is blocking our server's IP (\"not a bot\" check). "
+                        "This is fixed by adding the bot's free `COBALT_API_KEY` "
+                        "(register at cobalt.tools, /api -> create key) — the bot "
+                        "already downloads through cobalt when the key is set.",
+                        reference=message,
+                    )
+                elif reason and "requested format is not available" in reason.lower():
+                    await self._send_status(
+                        message.channel,
+                        "YouTube accepted the request but served no playable "
+                        "formats. If `COBALT_API_KEY` is set, try again shortly.",
+                        reference=message,
+                    )
+                elif reason:
+                    await self._send_status(
+                        message.channel,
+                        f"Couldn't download that link: `{reason}`",
+                        reference=message,
+                    )
+                else:
+                    await self._send_status(
+                        message.channel,
+                        f"Couldn't download that link: `{type(e).__name__}`",
+                        reference=message,
+                    )
+                return
 
             if not file_path or not os.path.exists(file_path):
                 await self._send_status(
@@ -517,6 +609,7 @@ class InstaDownloader(commands.Cog):
                 )
                 return
 
+        try:
             size = os.path.getsize(file_path)
             if size > 25 * 1024 * 1024:
                 await self._send_status(
@@ -537,59 +630,6 @@ class InstaDownloader(commands.Cog):
                 await message.delete()
             except Exception:
                 pass
-        except Exception as e:
-            reason = str(e).strip()[:300]
-            print(f"[InstaDL] download failed for {url}: {e}")
-            # yt-dlp can't do image-only posts — fall back to Instagram's
-            # /media endpoint which serves the post image directly.
-            try:
-                if await self._send_image_fallback(message, url):
-                    try:
-                        await message.delete()
-                    except Exception:
-                        pass
-                    return
-            except Exception as fb:
-                print(f"[InstaDL] image fallback failed for {url}: {fb}")
-            if reason and "not a bot" in reason.lower():
-                if _get_yt_cookies_path():
-                    hint = (
-                        "Your `YT_COOKIES` session was flagged or rotated by YouTube. "
-                        "Sign out/in on YouTube, re-export ALL cookies in one go "
-                        "(DevTools \u2192 Application \u2192 Cookies \u2192 youtube.com, copy "
-                        "every row), and update the env var."
-                    )
-                else:
-                    hint = (
-                        "Set the bot's `YT_COOKIES` env var (base64 of a cookies.txt "
-                        "or a cookie header) to fix this."
-                    )
-                await self._send_status(
-                    message.channel,
-                    "YouTube is blocking our server's downloads (\"not a bot\" check). "
-                    + hint,
-                    reference=message,
-                )
-            elif reason and "requested format is not available" in reason.lower():
-                await self._send_status(
-                    message.channel,
-                    "YouTube accepted the login but served no playable formats — the "
-                    "cookies mix values from different sessions. Re-export ALL cookies "
-                    "from one page load (DevTools / Cookie-Editor) and update `YT_COOKIES`.",
-                    reference=message,
-                )
-            elif reason:
-                await self._send_status(
-                    message.channel,
-                    f"Couldn't download that link: `{reason}`",
-                    reference=message,
-                )
-            else:
-                await self._send_status(
-                    message.channel,
-                    f"Couldn't download that link: `{type(e).__name__}`",
-                    reference=message,
-                )
         finally:
             if file_path and os.path.exists(file_path):
                 try:
