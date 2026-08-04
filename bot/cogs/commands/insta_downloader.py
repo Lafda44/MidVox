@@ -61,10 +61,17 @@ def _json_cookies_to_netscape(content):
     for c in cookies:
         if not isinstance(c, dict):
             continue
-        domain = str(c.get("domain", "")).lstrip(".")
+        domain = str(c.get("domain", ""))
         if not domain:
             continue
         include_sub = "TRUE" if not c.get("hostOnly") else "FALSE"
+        # Netscape format: a leading dot on the domain is REQUIRED when the
+        # includeSubdomains flag is TRUE (http.cookiejar asserts this).
+        if include_sub == "TRUE":
+            if not domain.startswith("."):
+                domain = "." + domain.lstrip(".")
+        else:
+            domain = domain.lstrip(".")
         path = str(c.get("path") or "/")
         secure = "TRUE" if c.get("secure") else "FALSE"
         exp = c.get("expirationDate")
@@ -76,13 +83,36 @@ def _json_cookies_to_netscape(content):
     return "\n".join(lines) + "\n"
 
 
+def _header_to_netscape(content):
+    """Convert a raw cookie header (`Name=Value; Name=Value; ...`) to the
+    Netscape format. Returns None if it doesn't look like one."""
+    if "\t" in content or ";" not in content:
+        return None
+    lines = ["# Netscape HTTP Cookie File"]
+    count = 0
+    for part in content.split(";"):
+        if "=" not in part:
+            continue
+        name, _, value = part.partition("=")
+        name, value = name.strip(), value.strip()
+        if not name or not value:
+            continue
+        lines.append(f".youtube.com\tTRUE\t/\tTRUE\t0\t{name}\t{value}")
+        count += 1
+    if not count:
+        return None
+    return "\n".join(lines) + "\n"
+
+
 def _get_yt_cookies_path():
     """Write the YT_COOKIES env var into a temp cookies.txt once.
 
     YouTube blocks downloads from datacenter IPs unless the request carries
-    a logged-in browser session. Set YT_COOKIES in Render to the base64 of
-    either a Netscape cookies.txt ("Get cookies.txt LOCALLY" extension) or
-    a JSON cookie export (Cookie-Editor) taken while signed into YouTube.
+    a logged-in browser session. Set YT_COOKIES in Render to any of these,
+    taken while signed into YouTube:
+      * a raw cookie header (Name=Value; Name=Value; ...),
+      * a JSON cookie export (Cookie-Editor), or
+      * base64 of a Netscape cookies.txt ("Get cookies.txt LOCALLY").
     Returns None if unset.
     """
     global _YT_COOKIES_PATH
@@ -95,6 +125,8 @@ def _get_yt_cookies_path():
         import base64
 
         content = base64.b64decode(raw).decode("utf-8", "replace")
+        if not content.startswith(("[", "{")) and "\t" not in content and ";" not in content:
+            content = raw
     except Exception:
         content = raw
     if content.lstrip().startswith(("[", "{")):
@@ -103,6 +135,10 @@ def _get_yt_cookies_path():
             content = converted
         else:
             print("[InstaDL] YT_COOKIES looks like JSON but couldn't be parsed")
+    else:
+        header_cookies = _header_to_netscape(content)
+        if header_cookies:
+            content = header_cookies
     path = os.path.join(tempfile.gettempdir(), "yt_cookies.txt")
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
@@ -411,7 +447,8 @@ class InstaDownloader(commands.Cog):
         try:
             tmp = os.path.join(tempfile.gettempdir(), "instadl_%(id)s.%(ext)s")
             opts = {
-                "format": "b[ext=mp4]/b",
+                "format": "bv*+ba/b[ext=mp4]/b",
+                "merge_output_format": "mp4",
                 "outtmpl": tmp,
                 "quiet": True,
                 "no_warnings": True,
@@ -426,11 +463,19 @@ class InstaDownloader(commands.Cog):
                 },
                 # YouTube blocks the `web` player client on datacenter IPs
                 # with a "confirm you're not a bot" wall, which yt-dlp turns
-                # into DownloadError. Try the mobile clients first; a logged
-                # in session (YT_COOKIES) is the reliable fix for servers.
+                # into DownloadError. Different clients are (de)graded at
+                # different times — android_vr currently yields full formats
+                # for logged-in sessions, so try it first.
                 "extractor_args": {
                     "youtube": {
-                        "player_client": ["android", "ios", "tv", "web_embedded", "mweb"],
+                        "player_client": [
+                            "android_vr",
+                            "android",
+                            "ios",
+                            "tv",
+                            "web_embedded",
+                            "mweb",
+                        ],
                     },
                 },
             }
@@ -493,8 +538,8 @@ class InstaDownloader(commands.Cog):
                 await self._send_status(
                     message.channel,
                     "YouTube is blocking our server's downloads (\"not a bot\" check). "
-                    "Set the bot's `YT_COOKIES` env var to your browser's cookies.txt "
-                    "(base64) to fix this.",
+                    "Set the bot's `YT_COOKIES` env var (raw cookie header, JSON "
+                    "export, or base64 cookies.txt) to fix this.",
                     reference=message,
                 )
             elif reason:
