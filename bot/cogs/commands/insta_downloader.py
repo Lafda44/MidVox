@@ -13,8 +13,8 @@
 # ╚══════════════════════════════════════════════════════════════════╝
 
 """
-Insta Downloader — when an Instagram link is posted in a configured
-channel, download the media (reel/post) and repost it to Discord so it
+Media Downloader — when an Instagram link or a YouTube Short is posted in
+a configured channel, download the media and repost it to Discord so it
 plays inline. Instagram embeds don't render in Discord, hence the bot.
 
 Storage mirrors the AntiSpamPlus pattern: SQLite is always written (a
@@ -35,6 +35,11 @@ from collections import defaultdict
 INSTA_URL_RE = re.compile(
     r"(?:https?://)?(?:www\.|m\.|dl\.)?(?:instagram\.com|instagr\.am)/"
     r"(?:reel|reels|p|tv|stories|share)/[\w\-]+",
+    re.IGNORECASE,
+)
+
+YT_SHORTS_URL_RE = re.compile(
+    r"(?:https?://)?(?:www\.|m\.)?youtube\.com/shorts/([\w\-]{6,20})",
     re.IGNORECASE,
 )
 
@@ -296,27 +301,34 @@ class InstaDownloader(commands.Cog):
                 return
 
             content = message.content or ""
-            match = INSTA_URL_RE.search(content)
-            if not match:
+            insta_match = INSTA_URL_RE.search(content)
+            yt_match = YT_SHORTS_URL_RE.search(content)
+            if not insta_match and not yt_match:
                 return
 
-            url = match.group(0)
+            if insta_match:
+                url = insta_match.group(0)
+                source = "instagram"
+            else:
+                url = yt_match.group(0)
+                source = "youtube"
+
             if not url.startswith("http"):
                 url = "https://" + url
 
-            # Per-channel cooldown so a spam of links can't hammer Instagram
+            # Per-channel cooldown so a spam of links can't hammer the sites
             now = time.time()
             key = str(message.channel.id)
             if now - self._channel_cooldown.get(key, 0) < 8:
                 return
             self._channel_cooldown[key] = now
 
-            print(f"[InstaDL] downloading {url} for guild {message.guild.id}")
-            await self._download_and_send(message, url, config)
+            print(f"[InstaDL] downloading {source} url {url} for guild {message.guild.id}")
+            await self._download_and_send(message, url, config, source)
         except Exception as e:
             print(f"[InstaDL] on_message error: {e}")
 
-    async def _download_and_send(self, message, url, config):
+    async def _download_and_send(self, message, url, config, source="instagram"):
         """Download the media with yt-dlp and repost it in the channel."""
         try:
             import yt_dlp
@@ -355,7 +367,7 @@ class InstaDownloader(commands.Cog):
             if not file_path or not os.path.exists(file_path):
                 await self._send_status(
                     message.channel,
-                    f"Couldn't download that link — Instagram likely blocked it or it's not a downloadable post.\n{url}",
+                    f"Couldn't download that link — the platform likely blocked it or it's not downloadable.\n{url}",
                     reference=message,
                 )
                 return
@@ -369,8 +381,9 @@ class InstaDownloader(commands.Cog):
                 )
                 return
 
+            ext = os.path.splitext(file_path)[1] or ".mp4"
             await message.channel.send(
-                file=discord.File(file_path, filename=f"instagram_{int(time.time())}.mp4")
+                file=discord.File(file_path, filename=f"{source}_{int(time.time())}{ext}")
             )
 
             if config.get("delete_original"):

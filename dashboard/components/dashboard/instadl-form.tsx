@@ -96,7 +96,7 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
               <div className="p-2.5 rounded-xl bg-primary/10 text-primary"><Download className="h-5 w-5" /></div>
               <div>
                 <h4 className="font-bold text-slate-50 text-sm">Enabled</h4>
-                <p className="text-xs text-slate-400">Watch selected channels for Instagram links</p>
+                <p className="text-xs text-slate-400">Watch selected channels for Instagram links &amp; YouTube Shorts</p>
               </div>
             </div>
             <Switch checked={config.enabled} onCheckedChange={toggleEnabled} />

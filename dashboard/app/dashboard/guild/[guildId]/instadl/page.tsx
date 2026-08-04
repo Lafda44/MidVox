@@ -24,7 +24,7 @@ export default async function InstaDLPage({ params }: { params: { guildId: strin
             Insta Downloader
           </h2>
           <p className="text-slate-400 mt-1">
-            Auto-download Instagram links posted in specific channels and repost the media inline.
+            Auto-download Instagram links & YouTube Shorts posted in specific channels and repost the media inline.
           </p>
         </div>
       </div>
