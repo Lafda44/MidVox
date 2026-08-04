@@ -539,12 +539,14 @@ async def get_guild_verification(guild_id: int):
             row = await cursor.fetchone()
             
     if row:
+        def _to_str(v):
+            return str(v) if v else None
         return VerificationConfig(
             guild_id=guild_id,
-            verification_channel_id=row[0],
-            verified_role_id=row[1],
-            log_channel_id=row[2],
-            verification_method=row[3],
+            verification_channel_id=_to_str(row[0]),
+            verified_role_id=_to_str(row[1]),
+            log_channel_id=_to_str(row[2]),
+            verification_method=row[3] or "both",
             enabled=bool(row[4])
         )
     return VerificationConfig(
