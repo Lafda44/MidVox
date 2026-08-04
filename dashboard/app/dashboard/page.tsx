@@ -22,7 +22,7 @@ export default async function DashboardPage() {
     error = err.message || "Failed to connect to the bot API.";
     // Fallback data for UI structure if API fails
     botInfo = {
-      name: "ZyroX Bot",
+      name: "MidVox Bot",
       guilds: 0,
       users: 0,
       commands: 0,

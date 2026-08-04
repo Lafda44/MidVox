@@ -15,7 +15,7 @@ const spaceGrotesk  = Space_Grotesk({ subsets: ["latin"], variable: "--font-spac
 const plusJakarta   = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-plus-jakarta", display: "swap" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
-const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "Zyrox";
+const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox";
 
 export const metadata: Metadata = {
   title: `${brandName} — Discord Bot`,

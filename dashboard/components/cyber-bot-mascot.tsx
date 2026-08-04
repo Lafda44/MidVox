@@ -18,7 +18,7 @@ export function CyberBotMascot({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("select-none", className)}
-      aria-label="ZyroX CyberBot mascot"
+      aria-label="MidVox CyberBot mascot"
       role="img"
     >
       <defs>

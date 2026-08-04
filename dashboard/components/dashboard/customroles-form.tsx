@@ -1,4 +1,4 @@
-﻿/**
+/**
  * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
  * â•‘                                                                  â•‘
  * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
@@ -156,7 +156,7 @@ export function CustomRolesForm({ initialConfig, roles, guildId }: CustomRolesFo
              <li>â€¢ <code>.staff @user</code> - Assigns/Removes Staff role</li>
              <li>â€¢ <code>.girl @user</code> - Assigns/Removes Girl role</li>
              <li>â€¢ <code>.vip @user</code> - Assigns/Removes VIP role</li>
-             <li>â€¢ Ensure Zyrox is placed higher than these roles in server settings!</li>
+             <li>â€¢ Ensure MidVox is placed higher than these roles in server settings!</li>
           </ul>
         </div>
       </div>

@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "ZyroX";
+const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox";
 
 /* ── Cyber particles canvas — reacts to the cursor ──────────────────────── */
 function Particles() {
@@ -1066,13 +1066,13 @@ export default function LandingPage() {
   ];
 
   const steps = [
-    { icon: Server,              title: "Invite the bot",      desc: "Add ZyroX to your server with one click — all 16 modules come pre-armed and safe by default." },
+    { icon: Server,              title: "Invite the bot",      desc: "Add MidVox to your server with one click — all 16 modules come pre-armed and safe by default." },
     { icon: LogIn,               title: "Authenticate",        desc: "Log in with Discord on this site. We only read what you can already see — nothing more." },
     { icon: SlidersHorizontal,   title: "Configure visually",  desc: "Toggle modules, set roles, preview rank cards — saved instantly. No commands, no config files." },
   ];
 
   const testimonials = [
-    { quote: "We replaced six bots with ZyroX in one afternoon. Anti-nuke blocked a full raid while I slept — the logs looked like a movie.", name: "Kai",   role: "Owner · 210k member server",  grad: "from-[#6366F1] to-[#06B6D4]", init: "K" },
+    { quote: "We replaced six bots with MidVox in one afternoon. Anti-nuke blocked a full raid while I slept — the logs looked like a movie.", name: "Kai",   role: "Owner · 210k member server",  grad: "from-[#6366F1] to-[#06B6D4]", init: "K" },
     { quote: "The dashboard is the only reason I switched. Everything is clickable, and I haven't written a single slash command since.",    name: "Maya",  role: "Mod team lead · 45k server", grad: "from-[#06B6D4] to-[#6366F1]", init: "M" },
     { quote: "Leveling import from MEE6 took 30 seconds, and the rank cards look better than anything our paid bots ever did.",               name: "Arjun", role: "Admin · gaming community",  grad: "from-[#4F46E5] to-[#818CF8]", init: "A" },
   ];

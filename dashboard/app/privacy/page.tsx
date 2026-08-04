@@ -34,7 +34,7 @@ export default function PrivacyPage() {
           <div className="h-9 w-9 rounded-xl bg-red-600 flex items-center justify-center mr-4">
             <Bot className="h-5 w-5 text-slate-50" />
           </div>
-          <span className="text-xl font-bold text-slate-50 font-display uppercase tracking-tighter">ZyroX Engine</span>
+          <span className="text-xl font-bold text-slate-50 font-display uppercase tracking-tighter">MidVox Engine</span>
         </Link>
         <Link href="/">
           <Button variant="ghost" className="text-slate-400 hover:text-slate-50 gap-2">
@@ -64,7 +64,7 @@ export default function PrivacyPage() {
                 <h2 className="text-2xl font-bold font-display uppercase tracking-tight">Data Collection</h2>
               </div>
               <p className="text-slate-400 leading-relaxed font-medium">
-                The ZyroX Engine collects only the minimum necessary data to function within Discord. This includes your Discord User ID, Server (Guild) ID, and configuration settings provided during setup. We do not store message content unless explicitly configured for logging purposes by server administrators.
+                The MidVox Engine collects only the minimum necessary data to function within Discord. This includes your Discord User ID, Server (Guild) ID, and configuration settings provided during setup. We do not store message content unless explicitly configured for logging purposes by server administrators.
               </p>
             </section>
 

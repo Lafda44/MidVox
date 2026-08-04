@@ -1,4 +1,4 @@
-﻿/**
+/**
  * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
  * â•‘                                                                  â•‘
  * â•‘   â–‘â–ˆâ–€â–€â–‘â–ˆâ–€â–ˆâ–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆ   â–‘â–ˆâ–€â–„â–‘â–ˆâ–€â–€â–‘â–ˆâ–‘â–ˆâ–‘â–ˆâ–€â–€                     â•‘
@@ -202,7 +202,7 @@ export function VerificationForm({ initialConfig, channels, roles, guildId }: Ve
           </div>
           <h3 className="text-sm font-bold text-primary mb-2">How It Works</h3>
           <p className="text-xs text-slate-400 leading-relaxed mb-4">
-            Zyrox Verification ensures that no unauthorized bots or malicious users enter your server unverified.
+            MidVox Verification ensures that no unauthorized bots or malicious users enter your server unverified.
           </p>
           <ul className="text-xs text-slate-500 space-y-2">
              <li>â€¢ The bot will create a panel in your Verification Channel.</li>

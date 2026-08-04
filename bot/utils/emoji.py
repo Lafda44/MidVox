@@ -13,7 +13,7 @@
 # ╚══════════════════════════════════════════════════════════════════╝
 
 """
-Centralized emoji module for the Zyrox bot.
+Centralized emoji module for the MidVox bot.
 All emoji definitions are stored here for easy management and consistency.
 """
 
@@ -126,15 +126,15 @@ ZTICK = "<:Ztick:1531958743196110960>"
 ZUNMUTE = "<:zunmute:1531959135078191296>"
 ZWARNING = "<:zwarning:1531958600921255936>"
 ZWRENCH = "<:zwrench:1531958753434271855>"
-ZYROXCONNECTION = "<:zyroxconnection:1531959050873475163>"
-ZYROXHAMMER = "<:zyroxhammer:1531959266838319256>"
-ZYROXLINKS = "<:zyroxlinks:1531959014282235964>"
-ZYROXSYS = "<:zyroxsys:1531959246344818830>"
-ZYROX_CODE = "<:zyrox_code:1531959139738062908>"
-ZYROX_COMMAND = "<:zyrox_command:1531958896552448125>"
-ZYROX_GLOBAL = "<:zyrox_global:1531959019768643726>"
-ZYROX_OWNER = "<:zyrox_owner:1531958901040349315>"
-ZYROX_SEARCH = "<:zyrox_search:1531958790595809470>"
+MIDVOXCONNECTION = "<:zyroxconnection:1531959050873475163>"
+MIDVOXHAMMER = "<:zyroxhammer:1531959266838319256>"
+MIDVOXLINKS = "<:zyroxlinks:1531959014282235964>"
+MIDVOXSYS = "<:zyroxsys:1531959246344818830>"
+MIDVOX_CODE = "<:zyrox_code:1531959139738062908>"
+MIDVOX_COMMAND = "<:zyrox_command:1531958896552448125>"
+MIDVOX_GLOBAL = "<:zyrox_global:1531959019768643726>"
+MIDVOX_OWNER = "<:zyrox_owner:1531958901040349315>"
+MIDVOX_SEARCH = "<:zyrox_search:1531958790595809470>"
 
 # ============================================================================
 # DISCORD CUSTOM EMOJIS (Animated)

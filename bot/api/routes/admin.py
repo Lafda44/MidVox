@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING
 import os, aiosqlite
 
 if TYPE_CHECKING:
-    from core.zyrox import zyrox
+    from core.midvox import midvox
 
 router = APIRouter()
 
@@ -37,7 +37,7 @@ import psutil
 import time
 
 @router.get("/stats", response_model=AdminStats)
-async def get_admin_stats(bot: "zyrox" = Depends(get_bot)):
+async def get_admin_stats(bot: "midvox" = Depends(get_bot)):
     # Calculate DB size and shard info
     total_size: float = 0.0
     db_count = 0

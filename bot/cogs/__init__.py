@@ -13,7 +13,7 @@
 # ╚══════════════════════════════════════════════════════════════════╝
 
 from __future__ import annotations
-from core import zyrox
+from core import midvox
 from colorama import Fore, Style, init
 
 
@@ -101,36 +101,36 @@ from .events.ai import AIResponses
 from .events.stickymessage import StickyMessageListener
 
 ########-------HELP-------########
-from .zyrox.antinuke import _antinuke
-from .zyrox.extra import _extra
-from .zyrox.general import _general
-from .zyrox.automod import _automod 
-from .zyrox.moderation import _moderation
-#from .zyrox.inviteTracker import _inviteTracker
-#from .zyrox.music import _music
-from .zyrox.fun import _fun
-from .zyrox.games import _games
-from .zyrox.ignore import _ignore
-from .zyrox.server import _server
-from .zyrox.voice import _voice 
-from .zyrox.welcome import _welcome 
-from .zyrox.giveaway import _giveaway
-from .zyrox.ticket import _ticket
+from .midvox.antinuke import _antinuke
+from .midvox.extra import _extra
+from .midvox.general import _general
+from .midvox.automod import _automod 
+from .midvox.moderation import _moderation
+#from .midvox.inviteTracker import _inviteTracker
+#from .midvox.music import _music
+from .midvox.fun import _fun
+from .midvox.games import _games
+from .midvox.ignore import _ignore
+from .midvox.server import _server
+from .midvox.voice import _voice 
+from .midvox.welcome import _welcome 
+from .midvox.giveaway import _giveaway
+from .midvox.ticket import _ticket
 #from .axon.vanityroles import Vanityroles69999
-from .zyrox.logging import _logging
-from .zyrox.vanity import _vanity
-from .zyrox.inviteTracker import inviteTracker 
-from .zyrox.counting import _Counting
-from .zyrox.j2c import _J2C
-from .zyrox.ai import _ai
-from .zyrox.booster import __boost 
-from .zyrox.leveling import _leveling
-from .zyrox.sticky import _sticky
-from .zyrox.verify import _verify
-from .zyrox.encryption import _encrypt
-from .zyrox.mc import _mc
-from .zyrox.joindm import _joindm
-from .zyrox.birth import _birth
+from .midvox.logging import _logging
+from .midvox.vanity import _vanity
+from .midvox.inviteTracker import inviteTracker 
+from .midvox.counting import _Counting
+from .midvox.j2c import _J2C
+from .midvox.ai import _ai
+from .midvox.booster import __boost 
+from .midvox.leveling import _leveling
+from .midvox.sticky import _sticky
+from .midvox.verify import _verify
+from .midvox.encryption import _encrypt
+from .midvox.mc import _mc
+from .midvox.joindm import _joindm
+from .midvox.birth import _birth
 
 #########ANTINUKE#########
 
@@ -188,7 +188,7 @@ from .moderation.snipe import Snipe
 
 from utils.config import BotName
 
-async def setup(bot: zyrox):
+async def setup(bot: midvox):
   cogs_to_load = [
         Help, General, Moderation, Automod, Welcomer, Fun, Games, Extra,
         Voice, Owner, Customrole, afk, Embed, Media, Ignore, TicketCog, Logging,

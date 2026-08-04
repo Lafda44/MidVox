@@ -36,7 +36,7 @@ extensions: List[str] = [
     "cogs"
 ]
 
-class zyrox(commands.AutoShardedBot):
+class midvox(commands.AutoShardedBot):
     def __init__(self, *arg, **kwargs):
         intents = discord.Intents.all()
         intents.presences = True
@@ -89,7 +89,7 @@ class zyrox(commands.AutoShardedBot):
             (discord.ActivityType.playing, f"{prefix}help | Security in your Server"),
             (discord.ActivityType.watching, f"{user_count} users"),
             (discord.ActivityType.watching, f"{guild_count} servers"),
-            (discord.ActivityType.listening, "Killing Nukers"),
+            (discord.ActivityType.listening, "MidNight"),
             (discord.ActivityType.playing, f"Protector {BotName}"),
         ]
 
@@ -142,5 +142,5 @@ class zyrox(commands.AutoShardedBot):
 
 def setup_bot():
     intents = discord.Intents.all()
-    bot = zyrox(intents=intents)
+    bot = midvox(intents=intents)
     return bot
