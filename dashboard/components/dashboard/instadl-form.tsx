@@ -26,11 +26,10 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
     setSaving(true);
     const data: any = {
       enabled: config.enabled,
-      delete_original: config.delete_original,
     };
     const promise = api.updateInstaDL(guildId, data);
     toast.promise(promise, {
-      loading: "Saving Insta Downloader configuration...",
+      loading: "Saving Media Downloader configuration...",
       success: "Settings saved successfully!",
       error: "Failed to update config",
     });
@@ -49,21 +48,9 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
     try {
       const result = await api.updateInstaDL(guildId, { enabled: value });
       setConfig((prev: any) => ({ ...prev, ...result }));
-      toast.success(value ? "Insta Downloader enabled" : "Insta Downloader disabled");
+      toast.success(value ? "Media Downloader enabled" : "Media Downloader disabled");
     } catch (err) {
       toast.error("Failed to update status");
-      console.error(err);
-    }
-  };
-
-  const toggleDeleteOriginal = async (value: boolean) => {
-    setConfig((prev: any) => ({ ...prev, delete_original: value }));
-    try {
-      const result = await api.updateInstaDL(guildId, { delete_original: value });
-      setConfig((prev: any) => ({ ...prev, ...result }));
-      toast.success(value ? "Original messages will be deleted" : "Original messages kept");
-    } catch (err) {
-      toast.error("Failed to update delete setting");
       console.error(err);
     }
   };
@@ -105,16 +92,15 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
           {config.enabled && (
             <div className="space-y-8 pl-4 border-l-2 border-slate-800">
 
-              {/* Delete Original Toggle */}
+              {/* Auto-Delete Notice */}
               <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-2xl border border-slate-800">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-red-500/10 text-red-600"><Trash2 className="h-5 w-5" /></div>
                   <div>
-                    <h4 className="font-bold text-slate-50 text-sm">Delete Original</h4>
-                    <p className="text-xs text-slate-400">Remove the original message after the media is posted</p>
+                    <h4 className="font-bold text-slate-50 text-sm">Original Link Removed</h4>
+                    <p className="text-xs text-slate-400">The posted link (and its embed) is deleted automatically after the media is reposted</p>
                   </div>
                 </div>
-                <Switch checked={config.delete_original} onCheckedChange={toggleDeleteOriginal} />
               </div>
 
               {/* Monitored Channels */}
@@ -160,7 +146,7 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
               className="w-full h-14 text-base font-bold gap-3 shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all"
             >
               {saving ? <RefreshCcw className="h-5 w-5 animate-spin" /> : <Save className="h-5 w-5" />}
-              Save Insta Downloader Settings
+              Save Media Downloader Settings
             </Button>
           </div>
 
@@ -178,8 +164,9 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
             <h3 className="text-sm font-bold text-slate-50">How It Works</h3>
           </div>
           <ul className="text-xs text-slate-500 space-y-2">
-            <li>â€¢ Reels and post links are downloaded automatically.</li>
+            <li>â€¢ Instagram reels, posts &amp; YouTube Shorts are downloaded automatically.</li>
             <li>â€¢ Media is reposted inline in the channel.</li>
+            <li>â€¢ The original link message is deleted so no embed is left behind.</li>
             <li>â€¢ Files are capped at 24MB for Discord limits.</li>
             <li>â€¢ Only monitored channels are watched.</li>
           </ul>
@@ -190,7 +177,7 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
             <Plus className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-bold text-slate-50">Supported Links</h3>
           </div>
-          <p className="text-xs text-slate-500 mb-2">instagram.com reels, posts, stories &amp; instagr.am short links.</p>
+          <p className="text-xs text-slate-500 mb-2">instagram.com reels, posts, stories, instagr.am short links &amp; youtube.com/shorts links.</p>
         </div>
       </div>
     </div>

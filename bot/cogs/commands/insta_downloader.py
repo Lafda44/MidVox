@@ -485,10 +485,27 @@ class InstaDownloader(commands.Cog):
             loop = asyncio.get_running_loop()
 
             def _download():
-                with yt_dlp.YoutubeDL(opts) as ydl:
-                    info = ydl.extract_info(url, download=True)
-                    path = ydl.prepare_filename(info)
-                    return path if os.path.exists(path) else None
+                attempts = [opts]
+                if source == "youtube":
+                    # Some videos/sessions only respond to yt-dlp's default
+                    # client rotation — retry without the override.
+                    opts_default = dict(opts)
+                    opts_default.pop("extractor_args", None)
+                    attempts.append(opts_default)
+                last_err = None
+                for o in attempts:
+                    try:
+                        with yt_dlp.YoutubeDL(o) as ydl:
+                            info = ydl.extract_info(url, download=True)
+                            path = ydl.prepare_filename(info)
+                            if path and os.path.exists(path):
+                                return path
+                    except Exception as e:
+                        last_err = e
+                        print(f"[InstaDL] attempt failed for {url}: {e}")
+                if last_err:
+                    raise last_err
+                return None
 
             file_path = await loop.run_in_executor(None, _download)
 
@@ -514,11 +531,12 @@ class InstaDownloader(commands.Cog):
                 file=discord.File(file_path, filename=f"{source}_{int(time.time())}{ext}")
             )
 
-            if config.get("delete_original"):
-                try:
-                    await message.delete()
-                except Exception:
-                    pass
+            # Always remove the original link message so neither the URL nor
+            # Discord's embed lingers in the channel.
+            try:
+                await message.delete()
+            except Exception:
+                pass
         except Exception as e:
             reason = str(e).strip()[:300]
             print(f"[InstaDL] download failed for {url}: {e}")
@@ -526,20 +544,30 @@ class InstaDownloader(commands.Cog):
             # /media endpoint which serves the post image directly.
             try:
                 if await self._send_image_fallback(message, url):
-                    if config.get("delete_original"):
-                        try:
-                            await message.delete()
-                        except Exception:
-                            pass
+                    try:
+                        await message.delete()
+                    except Exception:
+                        pass
                     return
             except Exception as fb:
                 print(f"[InstaDL] image fallback failed for {url}: {fb}")
             if reason and "not a bot" in reason.lower():
+                if _get_yt_cookies_path():
+                    hint = (
+                        "Your `YT_COOKIES` session was flagged or rotated by YouTube. "
+                        "Sign out/in on YouTube, re-export ALL cookies in one go "
+                        "(DevTools \u2192 Application \u2192 Cookies \u2192 youtube.com, copy "
+                        "every row), and update the env var."
+                    )
+                else:
+                    hint = (
+                        "Set the bot's `YT_COOKIES` env var (base64 of a cookies.txt "
+                        "or a cookie header) to fix this."
+                    )
                 await self._send_status(
                     message.channel,
                     "YouTube is blocking our server's downloads (\"not a bot\" check). "
-                    "Set the bot's `YT_COOKIES` env var (raw cookie header, JSON "
-                    "export, or base64 cookies.txt) to fix this.",
+                    + hint,
                     reference=message,
                 )
             elif reason and "requested format is not available" in reason.lower():
