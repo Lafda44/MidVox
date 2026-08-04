@@ -462,7 +462,11 @@ class InstaDownloader(commands.Cog):
                 return None
             dreq = urllib.request.Request(
                 data["url"],
-                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "Range": "bytes=0-25165823"},
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                    "Authorization": f"Bearer {key}",
+                    "Range": "bytes=0-25165823",
+                },
             )
             with urllib.request.urlopen(dreq, timeout=120) as resp:
                 media = resp.read()
