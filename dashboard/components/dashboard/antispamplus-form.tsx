@@ -36,7 +36,6 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
       re_window: config.re_window,
       re_cooldown: config.re_cooldown,
       re_delay: config.re_delay,
-      timeout_duration: config.timeout_duration,
     };
     const promise = api.updateAntiSpamPlus(guildId, data);
     toast.promise(promise, {
@@ -255,10 +254,6 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                 <label className="text-xs font-bold text-slate-400">Cooldown (s)</label>
                 <Input type="number" min={1} max={300} value={config.re_cooldown} onChange={(e) => updateField("re_cooldown", parseInt(e.target.value) || 20)} className="bg-slate-900/50 border-slate-800 h-10" />
               </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400">Timeout (min)</label>
-                <Input type="number" min={1} max={60} value={config.timeout_duration} onChange={(e) => updateField("timeout_duration", parseInt(e.target.value) || 1)} className="bg-slate-900/50 border-slate-800 h-10" />
-              </div>
             </div>
 
             {/* Target Channels for Reaction Spam */}
@@ -321,7 +316,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
             <li>â€¢ Messages from target users are auto-deleted.</li>
             <li>â€¢ Blocked commands are removed instantly.</li>
             <li>â€¢ Excluded channels are never affected.</li>
-            <li>â€¢ Reaction spam triggers a timeout + cleanup.</li>
+            <li>â€¢ Reaction spam triggers cleanup.</li>
           </ul>
         </div>
 

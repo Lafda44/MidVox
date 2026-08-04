@@ -4,7 +4,6 @@ import aiosqlite
 import asyncio
 import os
 import time
-from datetime import timedelta
 from collections import defaultdict, deque
 from utils.Tools import *
 from utils.mongo import MongoManager
@@ -52,8 +51,6 @@ class AntiSpamPlus(commands.Cog):
         self.user_data = defaultdict(deque)
         self.message_reactions = defaultdict(lambda: defaultdict(int))
         self.cooldown = {}
-        self.warnings = defaultdict(lambda: defaultdict(int))
-        self.last_warning = defaultdict(dict)
         bot.loop.create_task(self._seed_blocked_commands())
         bot.loop.create_task(self._mongo_watch())
 
@@ -188,23 +185,30 @@ class AntiSpamPlus(commands.Cog):
         return default
 
     async def _set_fields(self, guild_id, data):
-        update = {"$set": {}, "$setOnInsert": self._default_doc(guild_id)}
+        set_on_insert = self._default_doc(guild_id)
+        update = {"$set": {}, "$setOnInsert": set_on_insert}
         for k in CONFIG_DEFAULTS:
             if k in data:
                 update["$set"][k] = data[k]
         if update["$set"]:
             update["$set"]["guild_id"] = guild_id
+            # Mongo rejects a path used in both $set and $setOnInsert
+            for k in list(update["$set"]):
+                set_on_insert.pop(k, None)
             await self.mongo.antispamplus_config.update_one(
                 {"_id": str(guild_id)}, update, upsert=True
             )
 
     async def _push_array(self, guild_id, field, value):
         print(f"[AntiSpamPlus _push_array] guild={guild_id} field={field} value={value} (type={type(value).__name__})")
+        set_on_insert = self._default_doc(guild_id)
+        # Mongo rejects a path used in both $addToSet and $setOnInsert
+        set_on_insert.pop(field, None)
         await self.mongo.antispamplus_config.update_one(
             {"_id": str(guild_id)},
             {
                 "$addToSet": {field: value},
-                "$setOnInsert": self._default_doc(guild_id),
+                "$setOnInsert": set_on_insert,
             },
             upsert=True,
         )
@@ -602,43 +606,6 @@ class AntiSpamPlus(commands.Cog):
             except (discord.Forbidden, discord.NotFound, discord.HTTPException):
                 pass
 
-            gid = message.guild.id
-            uid = message.author.id
-
-            now = time.time()
-            last = self.last_warning[gid].get(uid, 0)
-            if now - last > 600:
-                self.warnings[gid][uid] = 0
-
-            self.warnings[gid][uid] += 1
-            self.last_warning[gid][uid] = now
-            strike = self.warnings[gid][uid]
-
-            if strike >= 3:
-                member = message.guild.get_member(uid)
-                if member:
-                    try:
-                        await member.timeout(
-                            discord.utils.utcnow() + timedelta(minutes=config["timeout_duration"])
-                        )
-                    except Exception as e:
-                        print(f"[AntiSpamPlus] Timeout failed for {uid}: {e}")
-                    try:
-                        await member.send(
-                            f"You have been timed out for {config['timeout_duration']} minute(s) for repeated spam in **{message.guild.name}**."
-                        )
-                    except Exception:
-                        pass
-                self.warnings[gid][uid] = 0
-            else:
-                try:
-                    await message.author.send(
-                        f"⚠️ **Warning {strike}/2** — Your message in **{message.guild.name}** was deleted. "
-                        f"1 more strike and you will be timed out."
-                    )
-                except Exception:
-                    pass
-
         except Exception as e:
             print(f"AntiSpamPlus on_message error: {e}")
 
@@ -681,22 +648,6 @@ class AntiSpamPlus(commands.Cog):
                 return
 
             member = guild.get_member(payload.user_id)
-            try:
-                user = member or await self.bot.fetch_user(payload.user_id)
-                await user.send(
-                    "⚠️ Stop spamming reactions.\nYou are timed out for 1 minute."
-                )
-            except Exception:
-                pass
-
-            try:
-                if member:
-                    await member.timeout(
-                        discord.utils.utcnow()
-                        + timedelta(minutes=config["timeout_duration"])
-                    )
-            except Exception as e:
-                print(f"Timeout failed: {e}")
 
             for ch_id in config["target_channels"]:
                 channel = self.bot.get_channel(int(ch_id))
