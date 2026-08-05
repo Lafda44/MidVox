@@ -440,7 +440,7 @@ class InstaDownloader(commands.Cog):
         if not key:
             return None
         try:
-            body = json.dumps({"url": url}).encode()
+            body = json.dumps({"url": url, "videoQuality": 2160}).encode()
             req = urllib.request.Request(
                 "https://api.cobalt.tools/api/json",
                 data=body,
@@ -507,12 +507,13 @@ class InstaDownloader(commands.Cog):
             tmp = os.path.join(tempfile.gettempdir(), "instadl_%(id)s.%(ext)s")
             opts = {
                 "format": "bv*+ba/b[ext=mp4]/b",
+                "format_sort": ["res", "fps", "vcodec:av01", "vcodec:vp9", "vcodec:h264"],
                 "merge_output_format": "mp4",
                 "outtmpl": tmp,
                 "quiet": True,
                 "no_warnings": True,
                 "noplaylist": True,
-                "max_filesize": 24 * 1024 * 1024,
+                "max_filesize": 25 * 1024 * 1024,
                 "socket_timeout": 25,
                 "retries": 2,
                 "fragment_retries": 2,
