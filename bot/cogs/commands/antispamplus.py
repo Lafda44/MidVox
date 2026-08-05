@@ -581,21 +581,11 @@ class AntiSpamPlus(commands.Cog):
                 return
 
             content = (message.content or "").lower().strip()
-            should_delete = False
 
-            if str(message.author.id) in config["target_users"]:
-                should_delete = True
-
-            if any(
-                content == cmd or content.startswith(cmd + " ")
-                for cmd in config["blocked_commands"]
-            ):
-                should_delete = True
-
-            if not should_delete:
+            if str(message.author.id) not in config["target_users"]:
                 return
 
-            print(f"[AntiSpamPlus] Deleting msg from {message.author.id} in {message.guild.id} (tu={config['target_users']}, bc={config['blocked_commands']})")
+            print(f"[AntiSpamPlus] Deleting msg from {message.author.id} in {message.guild.id} (tu={config['target_users']})")
             await asyncio.sleep(config["delete_delay"])
             perms = message.channel.permissions_for(message.guild.me)
             if not perms.manage_messages:
