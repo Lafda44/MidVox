@@ -158,6 +158,7 @@ class InstaDownloader(commands.Cog):
         self.bot = bot
         self._channel_cooldown = defaultdict(float)
         self._download_lock = asyncio.Lock()
+        self._active_status_id = None
 
     @property
     def mongo(self):
@@ -435,6 +436,37 @@ class InstaDownloader(commands.Cog):
         except Exception as e:
             print(f"[InstaDL] on_message error: {e}")
 
+    @commands.Cog.listener(name="on_message")
+    async def _cleanup_bot_messages(self, message):
+        """Auto-delete the bot's own status/error messages in configured
+        channels. Media posts (videos/images) are never deleted."""
+        try:
+            if message.author.id != self.bot.user.id:
+                return
+            if not message.guild or not isinstance(message.channel, discord.TextChannel):
+                return
+            config = await self.get_config(message.guild.id)
+            if not config.get("enabled"):
+                return
+            if str(message.channel.id) not in config.get("channels", []):
+                return
+            if message.attachments or (message.embeds and not message.content):
+                return
+            if self._active_status_id == message.id:
+                return
+
+            await asyncio.sleep(20)
+
+            async def _delete_later():
+                try:
+                    await message.delete()
+                except Exception:
+                    pass
+
+            asyncio.get_running_loop().create_task(_delete_later())
+        except Exception as e:
+            print(f"[InstaDL] cleanup error: {e}")
+
     def _cobalt_download(self, url):
         """Download media through the cobalt API — it extracts on its own
         (clean) infrastructure, so Render's flagged datacenter IP never
@@ -498,6 +530,7 @@ class InstaDownloader(commands.Cog):
         status = await self._send_status(
             message.channel, "Downloading ⏳", reference=None, auto_delete=0
         )
+        self._active_status_id = status.id if status else None
         if status:
             # Animate "Downloading . / .. / ..." until the download finishes.
             asyncio.get_running_loop().create_task(
@@ -507,6 +540,7 @@ class InstaDownloader(commands.Cog):
         try:
             await self._download_and_send_inner(message, url, config, source)
         finally:
+            self._active_status_id = None
             if status:
                 try:
                     await status.delete()

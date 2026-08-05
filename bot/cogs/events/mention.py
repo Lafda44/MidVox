@@ -143,12 +143,8 @@ class Mention(commands.Cog):
             self.bot.user in message.mentions
             and len(message.content.strip().split()) == 1
         ):
-            guild_id = message.guild.id
-            data = await getConfig(guild_id)
-            prefix = data["prefix"]
-
-            view = MentionSelectView(message, self.bot, prefix)
-            await message.channel.send(view=view)
+            # Pinging/mentioning the bot should never auto-trigger a reply.
+            return
 
 
 def setup(bot):
