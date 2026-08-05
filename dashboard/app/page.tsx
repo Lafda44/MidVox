@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
+import { AnimatePresence, animate, motion, useInView, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import {
@@ -53,6 +53,27 @@ function Reveal({
       {children}
     </motion.div>
   );
+}
+
+function CountUp({ value, duration = 1.8, delay = 0 }: { value: number; duration?: number; delay?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!inView || !el) return;
+    const controls = animate(0, value, {
+      duration,
+      delay,
+      ease: EASE,
+      onUpdate: (v) => {
+        el.textContent = Math.round(v).toLocaleString("en-US");
+      },
+    });
+    return () => controls.stop();
+  }, [inView, value, duration, delay]);
+
+  return <span ref={ref}>0</span>;
 }
 
 /* ── Header ─────────────────────────────────────────────────────────────── */
@@ -254,6 +275,32 @@ function DashboardMockup({ view, setView }: { view: View; setView: (v: View) => 
   const incomingLog = LOGS[tick % LOGS.length];
   const logTail = Array.from({ length: LOGS.length - 1 }, (_, i) => LOGS[(tick + i + 1) % LOGS.length]);
 
+  const panelRef = useRef<HTMLDivElement>(null);
+  const rotX = useSpring(useMotionValue(0), { stiffness: 160, damping: 20 });
+  const rotY = useSpring(useMotionValue(0), { stiffness: 160, damping: 20 });
+  const spotX = useMotionValue(50);
+  const spotY = useMotionValue(50);
+  const spot = useMotionTemplate`radial-gradient(480px circle at ${spotX}% ${spotY}%, rgba(192,193,255,0.14), transparent 70%)`;
+
+  const handlePanelMove = (e: ReactMouseEvent<HTMLDivElement>) => {
+    const el = panelRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    rotY.set(px * 10);
+    rotX.set(py * -8);
+    spotX.set(px * 100 + 50);
+    spotY.set(py * 100 + 50);
+  };
+
+  const handlePanelLeave = () => {
+    rotX.set(0);
+    rotY.set(0);
+    spotX.set(50);
+    spotY.set(50);
+  };
+
   const bars = [
     { h: 25, cls: "bg-[#34343c]/40 border-white/5" },
     { h: 50, cls: "bg-[#34343c]/40 border-white/5" },
@@ -281,8 +328,27 @@ function DashboardMockup({ view, setView }: { view: View; setView: (v: View) => 
   return (
     <section className="relative w-full py-16 mb-20 z-20 -mt-10">
       <div className="relative z-10 max-w-[1280px] mx-auto px-4 md:px-16">
-        <div className="glass-panel dashboard-glow rounded-2xl overflow-hidden border border-[#c0c1ff]/20 relative z-10">
-          {/* browser chrome */}
+        <div className="relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 60, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.9, ease: EASE }}
+          >
+            <motion.div
+              animate={{ y: [-5, -11, -5] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+              style={{ rotateX: rotX, rotateY: rotY, transformPerspective: 1400 }}
+            >
+              <div
+                ref={panelRef}
+                onMouseMove={handlePanelMove}
+                onMouseLeave={handlePanelLeave}
+                className="glass-panel dashboard-glow rounded-2xl overflow-hidden border border-[#c0c1ff]/20 relative z-10"
+              >
+                <motion.div className="pointer-events-none absolute inset-0 z-20" style={{ background: spot }} />
+                <div className="panel-sheen" />
+                {/* browser chrome */}
           <div className="bg-[#34343c]/80 flex items-center px-6 py-4 border-b border-white/10 gap-4 backdrop-blur-md">
             <div className="flex gap-2.5">
               <div className="w-3.5 h-3.5 rounded-full bg-[#ffb4ab] border border-[#ffb4ab]/50 shadow-[0_0_10px_rgba(255,180,171,0.5)]" />
@@ -345,10 +411,10 @@ function DashboardMockup({ view, setView }: { view: View; setView: (v: View) => 
             <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={view}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3, ease: EASE }}
+              initial={{ opacity: 0, y: 16, scale: 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -12, scale: 0.99 }}
+              transition={{ duration: 0.4, ease: EASE }}
               className="flex-1 p-6 md:p-8 flex flex-col gap-6 relative z-10"
             >
               {view === "overview" && (
@@ -356,10 +422,10 @@ function DashboardMockup({ view, setView }: { view: View; setView: (v: View) => 
                   {/* stats row */}
                   <div className="grid grid-cols-3 gap-6">
                     {[
-                      { label: "Guilds", value: "128", acc: ACCENTS.primary },
-                      { label: "Members", value: "48,213", acc: ACCENTS.secondary },
-                      { label: "Latency", value: "34", suffix: "ms", acc: ACCENTS.tertiary },
-                    ].map((s) => (
+                      { label: "Guilds", value: 128, acc: ACCENTS.primary },
+                      { label: "Members", value: 48213, acc: ACCENTS.secondary },
+                      { label: "Latency", value: 34, suffix: "ms", acc: ACCENTS.tertiary },
+                    ].map((s, i) => (
                       <motion.div
                         key={s.label}
                         whileHover={{ y: -4 }}
@@ -368,7 +434,7 @@ function DashboardMockup({ view, setView }: { view: View; setView: (v: View) => 
                         <div className={cn("absolute top-0 left-0 w-1 h-full group-hover:bg-current transition-colors", s.acc.bar, s.acc.glow)} />
                         <span className={cn("font-mono text-[12px] tracking-widest uppercase font-bold", s.acc.text)}>{s.label}</span>
                         <div className="font-display text-[40px] mt-2 text-white font-bold tracking-tight">
-                          {s.value}
+                          <CountUp value={s.value} delay={0.3 + i * 0.15} />
                           {s.suffix && <span className="text-[24px] text-[#c7c4d7] font-medium">{s.suffix}</span>}
                         </div>
                       </motion.div>
@@ -476,6 +542,9 @@ function DashboardMockup({ view, setView }: { view: View; setView: (v: View) => 
             </motion.div>
             </AnimatePresence>
           </div>
+        </div>
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* module status pill */}
