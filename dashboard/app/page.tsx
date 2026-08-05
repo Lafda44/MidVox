@@ -114,7 +114,7 @@ function Header({ navOpen, setNavOpen }: { navOpen: boolean; setNavOpen: (v: boo
               <span
                 className={cn(
                   "absolute -bottom-1.5 left-0 w-full h-[2px] bg-gradient-to-r from-[#c0c1ff] to-transparent transition-opacity duration-300",
-                  i === 0 ? "opacity-100" : "opacity-40 group-hover:opacity-100"
+                  i === 0 ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 )}
               />
             </Link>
