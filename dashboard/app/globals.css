@@ -551,3 +551,155 @@ p, li { line-height: 1.7; }
   0% { background-position: 0% 50%; }
   100% { background-position: 300% 50%; }
 }
+
+/* ─── Motion redesign (page.tsx) ────────────────────────────────────────── */
+@keyframes aurora-beam {
+  0%   { transform: translateX(-120%) skewX(-14deg); opacity: 0; }
+  18%  { opacity: 0.9; }
+  50%  { opacity: 0.55; }
+  82%  { opacity: 0.9; }
+  100% { transform: translateX(120%) skewX(-14deg); opacity: 0; }
+}
+
+.aurora-beam {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  width: 45%;
+  filter: blur(50px);
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: aurora-beam 9s ease-in-out infinite;
+}
+
+.aurora-beam.indigo {
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5) 50%, transparent);
+}
+
+.aurora-beam.violet {
+  background: linear-gradient(90deg, transparent, rgba(183, 109, 255, 0.45) 50%, transparent);
+}
+
+.aurora-beam.cyan {
+  background: linear-gradient(90deg, transparent, rgba(76, 215, 246, 0.4) 50%, transparent);
+}
+
+@keyframes text-sheen {
+  from { background-position: 0% center; }
+  to   { background-position: -250% center; }
+}
+
+.animate-text-shimmer {
+  background: linear-gradient(120deg, #c0c1ff 0%, #ffffff 22%, #b76dff 42%, #4cd7f6 60%, #c0c1ff 82%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: text-sheen 7s linear infinite;
+}
+
+@keyframes sheen-sweep {
+  0%   { transform: translateX(-130%) skewX(-12deg); }
+  55%  { transform: translateX(130%) skewX(-12deg); }
+  100% { transform: translateX(130%) skewX(-12deg); }
+}
+
+.btn-sheen-auto {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-sheen-auto::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.22) 50%, transparent 70%);
+  animation: sheen-sweep 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes cta-ring {
+  0%   { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.btn-pulse-ring {
+  position: relative;
+}
+.btn-pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid rgba(99, 102, 241, 0.55);
+  animation: cta-ring 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes radar-spin {
+  to { transform: rotate(360deg); }
+}
+
+.radar-ring {
+  position: absolute;
+  inset: -22px;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, rgba(192, 193, 255, 0.55), transparent 70deg, transparent 360deg);
+  -webkit-mask-image: radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 1px));
+  mask-image: radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 1px));
+  animation: radar-spin 4s linear infinite;
+  pointer-events: none;
+}
+
+.typing-caret {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background: #4cd7f6;
+  box-shadow: 0 0 8px rgba(76, 215, 246, 0.8);
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+@keyframes bar-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(192, 193, 255, 0.3); }
+  50%      { box-shadow: 0 0 26px rgba(192, 193, 255, 0.65); }
+}
+
+.bar-live {
+  animation: bar-pulse 2.6s ease-in-out infinite;
+}
+
+.status-live {
+  position: relative;
+}
+.status-live::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1px solid rgba(76, 215, 246, 0.5);
+  animation: cta-ring 1.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-beam,
+  .animate-text-shimmer,
+  .btn-sheen-auto::after,
+  .btn-pulse-ring::before,
+  .radar-ring,
+  .bar-live,
+  .status-live::after,
+  .marquee-track {
+    animation: none;
+  }
+}
