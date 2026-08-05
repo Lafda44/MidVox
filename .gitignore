@@ -47,6 +47,9 @@ build/
 .env.local
 .env.*.local
 
+# Ignore runtime-generated Cloudflare WARP files (start.sh)
+.warp/
+
 # Ignore node_modules
 node_modules/
 package-lock.json

@@ -555,6 +555,13 @@ class InstaDownloader(commands.Cog):
                     opts_default = dict(opts)
                     opts_default.pop("extractor_args", None)
                     attempts.append(opts_default)
+                # Route YT traffic through the WARP SOCKS5 tunnel when one is
+                # up (setup in start.sh). Cookies are unnecessary there but
+                # harmless, so both paths are kept.
+                proxy = os.getenv("YT_DL_PROXY", "").strip()
+                if proxy:
+                    for o in attempts:
+                        o["proxy"] = proxy
                 last_err = None
                 for o in attempts:
                     try:
@@ -588,13 +595,23 @@ class InstaDownloader(commands.Cog):
                     except Exception as fb:
                         print(f"[InstaDL] image fallback failed for {url}: {fb}")
                 if reason and "not a bot" in reason.lower():
+                    if os.getenv("YT_DL_PROXY", "").strip():
+                        text = (
+                            "YouTube blocked the download even through our Cloudflare "
+                            "WARP tunnel — the server's IP may still be flagged. Check "
+                            "the server logs (the `WARP` line) and retry in a few minutes."
+                        )
+                    else:
+                        text = (
+                            "YouTube blocked our server's data-center IP (\"not a bot\" "
+                            "check) — cookies won't fix this. The bot automatically retries "
+                            "YouTube anonymously (Android client) first and routes via a "
+                            "Cloudflare WARP tunnel. If it keeps failing, empty the "
+                            "`YT_COOKIES` env var and redeploy, then retry."
+                        )
                     await self._send_status(
                         message.channel,
-                        "YouTube blocked our server's data-center IP (\"not a bot\" "
-                        "check) — cookies won't fix this. The bot automatically retries "
-                        "YouTube anonymously (Android client) first, which usually "
-                        "works. If it keeps failing, empty the `YT_COOKIES` env var and "
-                        "redeploy, then retry.",
+                        text,
                         reference=message,
                     )
                 elif reason and "requested format is not available" in reason.lower():
