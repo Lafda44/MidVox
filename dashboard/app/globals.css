@@ -463,3 +463,91 @@ p, li { line-height: 1.7; }
 .marquee-track.reverse {
   animation-direction: reverse;
 }
+
+/* ─── Tech-Noir landing (app/page.tsx) ──────────────────────────────────── */
+.glass-nav {
+  background: linear-gradient(180deg, rgba(10, 10, 15, 0.9) 0%, rgba(10, 10, 15, 0.6) 100%);
+  border-bottom: 1px solid rgba(192, 193, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), inset 0 -1px 0 rgba(192, 193, 255, 0.05);
+}
+
+.glass-card {
+  background-color: rgba(10, 10, 15, 0.5);
+  border: 1px solid rgba(192, 193, 255, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel {
+  background-color: rgba(10, 10, 15, 0.6);
+  border: 1px solid rgba(192, 193, 255, 0.2);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(192, 193, 255, 0.1);
+}
+
+.text-gradient-noir {
+  background: linear-gradient(135deg, #c0c1ff 0%, #b76dff 50%, #4cd7f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.border-glow-noir {
+  box-shadow: 0 0 15px rgba(192, 193, 255, 0.3), inset 0 0 15px rgba(192, 193, 255, 0.1);
+}
+
+.dashboard-glow {
+  box-shadow: 0 0 50px rgba(99, 102, 241, 0.2), inset 0 0 20px rgba(183, 109, 255, 0.1);
+}
+
+.bg-glow-indigo {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(10, 10, 15, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(40px);
+}
+
+.bg-glow-violet {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(183, 109, 255, 0.15) 0%, rgba(10, 10, 15, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(40px);
+}
+
+.btn-glow {
+  position: relative;
+  z-index: 0;
+}
+.btn-glow::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(90deg, #6366F1, #b76dff, #4cd7f6, #6366F1);
+  background-size: 300%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: noir-glow 8s linear infinite;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+.btn-glow:hover::after {
+  opacity: 1;
+}
+
+@keyframes noir-glow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
