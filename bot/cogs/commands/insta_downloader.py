@@ -385,7 +385,10 @@ class InstaDownloader(commands.Cog):
         try:
             msg = await channel.send(text, reference=reference)
         except Exception:
-            return None
+            try:
+                msg = await channel.send(text)
+            except Exception:
+                return None
         if auto_delete:
             await self._auto_delete(msg, auto_delete)
         return msg
@@ -485,8 +488,49 @@ class InstaDownloader(commands.Cog):
             return None
 
     async def _download_and_send(self, message, url, config, source="instagram"):
+        """Delete the user's link message immediately, show an animated
+        "Downloading …" status, then download and repost the media."""
+        try:
+            await message.delete()
+        except Exception:
+            pass
+
+        status = await self._send_status(
+            message.channel, "Downloading ⏳", reference=None, auto_delete=0
+        )
+        if status:
+            # Animate "Downloading . / .. / ..." until the download finishes.
+            asyncio.get_running_loop().create_task(
+                self._animate_loading(status)
+            )
+
+        try:
+            await self._download_and_send_inner(message, url, config, source)
+        finally:
+            if status:
+                try:
+                    await status.delete()
+                except Exception:
+                    pass
+
+    async def _animate_loading(self, status, interval=0.6):
+        """Spin 'Downloading' through . → .. → ... while a download runs."""
+        dots = ["", ".", "..", "..."]
+        i = 0
+        try:
+            while True:
+                await status.edit(content=f"Downloading {dots[i]} ⏳")
+                i = (i + 1) % len(dots)
+                await asyncio.sleep(interval)
+        except (discord.NotFound, discord.HTTPException):
+            return
+        except Exception:
+            return
+
+    async def _download_and_send_inner(self, message, url, config, source="instagram"):
         """Download the media (YouTube via cobalt/youtube-dl, Instagram via
-        youtube-dl) and repost it inline, removing the original link."""
+        youtube-dl) and repost it inline. `_download_and_send` wraps this with
+        an immediate link deletion + animated loading indicator."""
         loop = asyncio.get_running_loop()
         file_path = None
 
