@@ -72,12 +72,12 @@ function Header({ navOpen, setNavOpen }: { navOpen: boolean; setNavOpen: (v: boo
       className="fixed top-0 w-full z-50 glass-nav"
     >
       <div className="flex justify-between items-center px-4 md:px-16 py-4 max-w-[1280px] mx-auto">
-        <div className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3 cursor-pointer">
           <div className="relative flex items-center justify-center w-8 h-8 rounded bg-[#c0c1ff]/10 border border-[#c0c1ff]/30 border-glow-noir">
             <Bot className="h-[20px] w-[20px] text-[#c0c1ff]" />
           </div>
           <span className="font-display text-[24px] font-bold text-white tracking-widest">{BRAND}</span>
-        </div>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-12">
           {navLinks.map(([label, href], i) => (
@@ -85,29 +85,22 @@ function Header({ navOpen, setNavOpen }: { navOpen: boolean; setNavOpen: (v: boo
               key={label}
               href={href}
               className={cn(
-                "font-mono text-[14px] tracking-widest uppercase transition-colors font-bold relative group",
+                "font-mono text-[14px] tracking-widest uppercase transition-colors font-bold relative group cursor-pointer",
                 i === 0 ? "text-[#c0c1ff]" : "text-[#E2E8F0] hover:text-white"
               )}
             >
               {label}
-              {i === 0 && (
-                <span className="absolute -bottom-1.5 left-0 w-full h-[2px] bg-gradient-to-r from-[#c0c1ff] to-transparent" />
-              )}
+              <span
+                className={cn(
+                  "absolute -bottom-1.5 left-0 w-full h-[2px] bg-gradient-to-r from-[#c0c1ff] to-transparent transition-opacity duration-300",
+                  i === 0 ? "opacity-100" : "opacity-40 group-hover:opacity-100"
+                )}
+              />
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-6">
-          <div className="hidden lg:flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#4cd7f6] animate-pulse shadow-[0_0_8px_#4cd7f6]" />
-            <span className="font-mono text-[10px] uppercase tracking-wider text-[#4cd7f6]">All systems operational</span>
-          </div>
-          <button
-            onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
-            className="hidden md:block font-mono text-[14px] text-[#c7c4d7] hover:text-white transition-colors uppercase tracking-widest"
-          >
-            Sign In
-          </button>
           <Link
             href="/dashboard"
             className="bg-[#6366F1] text-white font-mono text-[14px] px-6 py-2.5 rounded-lg transition-all scale-95 hover:scale-100 active:scale-95 btn-glow btn-sheen-auto btn-pulse-ring shadow-[0_0_20px_rgba(99,102,241,0.4)] tracking-widest uppercase"
@@ -180,11 +173,6 @@ function Hero() {
         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.13, delayChildren: 0.15 } } }}
         className="relative z-10 max-w-[1280px] mx-auto px-4 md:px-16 flex flex-col items-center w-full"
       >
-        <motion.div variants={RISE} className="glass-card rounded-full px-5 py-2 mb-8 flex items-center gap-3 border-[#c0c1ff]/40 border-glow-noir">
-          <span className="w-2 h-2 rounded-full bg-[#c0c1ff] animate-pulse shadow-[0_0_10px_#c0c1ff]" />
-          <span className="font-mono text-[12px] tracking-widest uppercase text-[#c0c1ff]">Trusted by 120+ Discord servers</span>
-        </motion.div>
-
         <motion.h1 variants={RISE} className="font-display text-[48px] md:text-[80px] leading-[1.0] text-white max-w-5xl mb-8 font-bold tracking-tighter">
           Your server needs one bot. <br />
           <span className="text-gradient-noir animate-text-shimmer">Not fifteen.</span>
