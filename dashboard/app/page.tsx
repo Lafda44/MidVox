@@ -77,7 +77,7 @@ function CountUp({ value, duration = 1.8, delay = 0 }: { value: number; duration
 }
 
 /* ── Header ─────────────────────────────────────────────────────────────── */
-function Header({ navOpen, setNavOpen }: { navOpen: boolean; setNavOpen: (v: boolean) => void }) {
+function Header({ navOpen, setNavOpen, active }: { navOpen: boolean; setNavOpen: (v: boolean) => void; active: string }) {
   const navLinks: [string, string][] = [
     ["Modules", "#modules"],
     ["How it works", "#how"],
@@ -101,24 +101,27 @@ function Header({ navOpen, setNavOpen }: { navOpen: boolean; setNavOpen: (v: boo
         </Link>
 
         <nav className="hidden md:flex items-center gap-12">
-          {navLinks.map(([label, href], i) => (
-            <Link
-              key={label}
-              href={href}
-              className={cn(
-                "font-mono text-[14px] tracking-widest uppercase transition-colors font-bold relative group cursor-pointer",
-                i === 0 ? "text-[#c0c1ff]" : "text-[#E2E8F0] hover:text-white"
-              )}
-            >
-              {label}
-              <span
+          {navLinks.map(([label, href]) => {
+            const isActive = active === href.slice(1);
+            return (
+              <Link
+                key={label}
+                href={href}
                 className={cn(
-                  "absolute -bottom-1.5 left-0 w-full h-[2px] bg-gradient-to-r from-[#c0c1ff] to-transparent transition-opacity duration-300",
-                  i === 0 ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                  "font-mono text-[14px] tracking-widest uppercase transition-colors font-bold relative cursor-pointer",
+                  isActive ? "text-[#c0c1ff]" : "text-[#E2E8F0] hover:text-white"
                 )}
-              />
-            </Link>
-          ))}
+              >
+                {label}
+                <span
+                  className={cn(
+                    "absolute -bottom-1.5 left-0 w-full h-[2px] bg-gradient-to-r from-[#c0c1ff] to-transparent transition-opacity duration-300",
+                    isActive ? "opacity-100" : "opacity-0"
+                  )}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-6">
@@ -1046,10 +1049,27 @@ export default function LandingPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [view, setView] = useState<View>("overview");
   const [active, setActive] = useState<ShowcaseKey>("antinuke");
+  const [activeSection, setActiveSection] = useState("modules");
+
+  useEffect(() => {
+    const ids = ["modules", "how", "features", "faq"];
+    const onScroll = () => {
+      const probe = window.innerHeight * 0.4;
+      let current = ids[0];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= probe) current = id;
+      }
+      setActiveSection(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#0a0a0f] font-sans text-[#c7c4d7]">
-      <Header navOpen={navOpen} setNavOpen={setNavOpen} />
+      <Header navOpen={navOpen} setNavOpen={setNavOpen} active={activeSection} />
       <main className="pb-0">
         <Hero />
         <DashboardMockup view={view} setView={setView} />
