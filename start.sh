@@ -22,39 +22,44 @@ ROOT="$(pwd)"
 # the tunnel. On by default; disable by setting WARP=0.
 setup_warp() {
   WARP_DIR="$ROOT/.warp"
-  mkdir -p "$WARP_DIR" || return 1
-  cd "$WARP_DIR" || return 1
+  # Run inside a subshell so the `cd`s below never change the script's
+  # working directory — the rest of start.sh expects to run from the repo root.
+  (
+    mkdir -p "$WARP_DIR" || exit 1
+    cd "$WARP_DIR" || exit 1
 
-  WGCF_BIN="wgcf_2.2.30_linux_amd64"
-  if [ ! -x "./$WGCF_BIN" ]; then
-    curl -fsSL --retry 3 --connect-timeout 20 \
-      -o "./$WGCF_BIN" \
-      "https://github.com/ViRb3/wgcf/releases/download/v2.2.30/$WGCF_BIN" || return 1
-    chmod +x "./$WGCF_BIN"
-  fi
+    WGCF_BIN="wgcf_2.2.30_linux_amd64"
+    if [ ! -x "./$WGCF_BIN" ]; then
+      curl -fsSL --retry 3 --connect-timeout 20 \
+        -o "./$WGCF_BIN" \
+        "https://github.com/ViRb3/wgcf/releases/download/v2.2.30/$WGCF_BIN" || exit 1
+      chmod +x "./$WGCF_BIN"
+    fi
 
-  if [ ! -f "./wgcf-profile.conf" ]; then
-    "./$WGCF_BIN" register --accept-tos || return 1
-    "./$WGCF_BIN" generate || return 1
-  fi
+    if [ ! -f "./wgcf-profile.conf" ]; then
+      "./$WGCF_BIN" register --accept-tos || exit 1
+      "./$WGCF_BIN" generate || exit 1
+    fi
 
-  if [ ! -x "./wireproxy" ]; then
-    curl -fsSL --retry 3 --connect-timeout 20 \
-      -o "./wireproxy.tar.gz" \
-      "https://github.com/windtf/wireproxy/releases/download/v1.1.3/wireproxy_linux_amd64.tar.gz" || return 1
-    tar -xzf "./wireproxy.tar.gz" || return 1
-    chmod +x "./wireproxy"
-    rm -f "./wireproxy.tar.gz"
-  fi
+    if [ ! -x "./wireproxy" ]; then
+      curl -fsSL --retry 3 --connect-timeout 20 \
+        -o "./wireproxy.tar.gz" \
+        "https://github.com/windtf/wireproxy/releases/download/v1.1.3/wireproxy_linux_amd64.tar.gz" || exit 1
+      tar -xzf "./wireproxy.tar.gz" || exit 1
+      chmod +x "./wireproxy"
+      rm -f "./wireproxy.tar.gz"
+    fi
 
-  cat > "./wireproxy.toml" <<EOF
+    cat > "./wireproxy.toml" <<EOF
 WGConfig = $WARP_DIR/wgcf-profile.conf
 
 [Socks5]
 BindAddress = 127.0.0.1:33210
 EOF
 
-  nohup "./wireproxy" -c "./wireproxy.toml" > "$WARP_DIR/wireproxy.log" 2>&1 &
+    nohup "./wireproxy" -c "./wireproxy.toml" > "$WARP_DIR/wireproxy.log" 2>&1 &
+  ) || return 1
+
   for i in $(seq 1 25); do
     if python -c "import socket; s=socket.create_connection(('127.0.0.1',33210),1); s.close()" >/dev/null 2>&1; then
       export YT_DL_PROXY="socks5://127.0.0.1:33210"
