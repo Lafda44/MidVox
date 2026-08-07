@@ -1,14 +1,16 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Users, ShieldCheck, ChevronRight, Hash, RefreshCcw } from "lucide-react";
+import { Users, ShieldCheck, ChevronRight, RefreshCcw, Server, Plus, Search } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export default function GuildsPage() {
   const { data: session, status } = useSession();
@@ -17,48 +19,38 @@ export default function GuildsPage() {
   const [userDiscordError, setUserDiscordError] = useState<string | null>(null);
   const [botError, setBotError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      redirect("/");
-    }
+    if (status === "unauthenticated") redirect("/");
     if (status !== "authenticated") return;
 
     const fetchData = async () => {
       setLoading(true);
       setBotError(null);
       setUserDiscordError(null);
-
       try {
         const guilds = await api.listGuilds();
         setBotGuilds(guilds);
-
-        // Try to fetch user's Discord guilds for admin filter
         if (session?.accessToken) {
           try {
             const res = await fetch("https://discord.com/api/users/@me/guilds", {
               headers: { Authorization: `Bearer ${session.accessToken}` },
             });
             if (res.ok) {
-              const discordGuilds = await res.json();
-              setUserGuilds(discordGuilds);
+              setUserGuilds(await res.json());
             } else {
               setUserDiscordError("Discord API returned " + res.status);
-              console.warn("Discord API returned", res.status, "- falling back to show all bot guilds");
             }
-          } catch (e) {
+          } catch {
             setUserDiscordError("Discord API fetch failed");
-            console.warn("Discord API fetch failed - falling back to show all bot guilds", e);
           }
         } else {
           setUserDiscordError("No access token in session");
-          console.warn("No accessToken in session - showing all bot guilds without Discord filter");
         }
       } catch (err: any) {
-        console.error("Failed to fetch bot guilds:", err);
         setBotError(err.message || "Failed to load bot servers.");
       }
-
       setLoading(false);
     };
 
@@ -67,8 +59,16 @@ export default function GuildsPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <RefreshCcw className="w-8 h-8 animate-spin text-primary" />
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative h-12 w-12">
+            <div className="absolute inset-0 rounded-full border-2 border-indigo-500/20" />
+            <div className="absolute inset-0 rounded-full border-t-2 border-indigo-500 animate-spin" />
+          </div>
+          <p className="text-xs font-mono uppercase tracking-widest text-slate-600 animate-pulse">
+            Loading servers…
+          </p>
+        </div>
       </div>
     );
   }
@@ -79,110 +79,161 @@ export default function GuildsPage() {
     try {
       const perms = BigInt(g.permissions);
       return (perms & ADMINISTRATOR) === ADMINISTRATOR || (perms & MANAGE_GUILD) === MANAGE_GUILD || g.owner === true;
-    } catch {
-      return g.owner === true;
-    }
+    } catch { return g.owner === true; }
   });
 
   const adminGuildIds = new Set(adminUserGuilds.map((g: any) => String(g.id)));
   const managedGuilds = botGuilds.filter((g: any) => adminGuildIds.has(String(g.id)));
-  // Fallback: if Discord filter yielded nothing but we have bot guilds, show them anyway
-  const guilds = managedGuilds.length > 0 ? managedGuilds : botGuilds;
-  const error = botError;
+  const allGuilds = managedGuilds.length > 0 ? managedGuilds : botGuilds;
+  const guilds = query
+    ? allGuilds.filter((g: any) => g.name.toLowerCase().includes(query.toLowerCase()))
+    : allGuilds;
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-end">
+    <div className="space-y-8 max-w-[1200px] mx-auto">
+      {/* Page header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-50">Your Servers</h1>
-          <p className="text-slate-400 mt-2">
-            Select a server to manage its unique configuration and modules.
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-5 w-0.5 rounded-full bg-gradient-to-b from-indigo-500 to-cyan-500" />
+            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-indigo-400">
+              Your Workspace
+            </span>
+          </div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Servers</h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Select a server to configure its modules and settings.
           </p>
         </div>
-        <div className="text-sm font-medium px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-slate-300">
-          Showing <span className="text-slate-50">{guilds.length}</span> active guilds
+
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-600" />
+            <input
+              type="text"
+              placeholder="Filter servers…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-48 bg-white/[0.04] border border-white/[0.07] rounded-lg py-2 pl-8 pr-3 text-xs text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+            />
+          </div>
+          <div className="px-3 py-2 bg-white/[0.04] border border-white/[0.07] rounded-lg text-xs font-medium text-slate-500">
+            <span className="text-white">{guilds.length}</span> guild{guilds.length !== 1 && "s"}
+          </div>
         </div>
       </div>
 
-      {error ? (
-        <div className="bg-red-500/10 border border-red-500/20 p-8 rounded-2xl text-center">
-          <ShieldCheck className="h-12 w-12 text-red-500 mx-auto mb-4 opacity-50" />
-          <h3 className="text-slate-50 font-bold text-lg">Connection Error</h3>
-          <p className="text-slate-400 mt-2">{error}</p>
-          <Button variant="outline" className="mt-6" onClick={() => window.location.reload()}>Retry Connection</Button>
+      {/* Error state */}
+      {botError ? (
+        <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-10 text-center">
+          <ShieldCheck className="h-10 w-10 text-red-400 mx-auto mb-3 opacity-60" />
+          <h3 className="text-base font-semibold text-white mb-1">Connection Error</h3>
+          <p className="text-sm text-slate-400 mb-6">{botError}</p>
+          <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+            Retry
+          </Button>
         </div>
       ) : guilds.length === 0 ? (
-        <div className="bg-slate-800/30 border border-slate-800 border-dashed p-16 rounded-3xl text-center">
-          <div className="h-16 w-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Users className="h-8 w-8 text-slate-600" />
+        <div className="rounded-2xl border border-dashed border-white/[0.07] bg-white/[0.015] p-16 text-center">
+          <div className="h-14 w-14 rounded-2xl bg-white/[0.04] border border-white/[0.07] flex items-center justify-center mx-auto mb-5">
+            <Server className="h-6 w-6 text-slate-600" />
           </div>
-          <h3 className="text-slate-50 font-bold text-xl">No Servers Found</h3>
-          <p className="text-slate-400 mt-2 max-w-sm mx-auto">
-            The bot hasn&apos;t joined any servers yet.
+          <h3 className="text-base font-semibold text-white mb-1">
+            {query ? "No matching servers" : "No Servers Found"}
+          </h3>
+          <p className="text-sm text-slate-500 max-w-xs mx-auto">
+            {query ? "Try a different search term." : "The bot hasn't joined any servers yet."}
           </p>
         </div>
       ) : (
         <>
           {userDiscordError && (
-            <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-2xl mb-6 flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-yellow-500 shrink-0" />
-              <p className="text-sm text-slate-300">
-                Could not verify your Discord permissions â€” showing all guilds the bot is in.
+            <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.05] px-4 py-3 flex items-center gap-3">
+              <div className="h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0" />
+              <p className="text-xs text-slate-400">
+                Could not verify Discord permissions — showing all guilds the bot is in.
               </p>
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
             {guilds.map((guild: any, i: number) => (
-            <motion.div
-              key={guild.id}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05, duration: 0.35, ease: "easeOut" }}
-              className="bg-slate-900 border border-slate-800 rounded-xl group hover:border-primary/40 transition-all duration-300 overflow-hidden hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5"
-            >
-              <div className="p-5">
-                <div className="flex items-start justify-between mb-5">
-                  <div className="relative">
-                    {guild.icon_url ? (
-                      <Image src={guild.icon_url} alt={guild.name} width={56} height={56} className="rounded-xl border-2 border-slate-700 transition-transform group-hover:scale-105" />
-                    ) : (
-                      <div className="h-14 w-14 bg-primary/15 rounded-xl flex items-center justify-center border-2 border-slate-700 text-primary font-bold text-xl transition-transform group-hover:scale-105">
-                        {guild.name.charAt(0)}
-                      </div>
-                    )}
-                    <div className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 border-2 border-slate-900" title="Bot Online" />
+              <motion.div
+                key={guild.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04, duration: 0.4, ease: EASE }}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0d0d1a] hover:border-indigo-500/35 hover:-translate-y-1 hover:shadow-[0_8px_40px_-12px_rgba(99,102,241,0.35)] transition-all duration-300"
+              >
+                {/* top glow line */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div className="p-5 flex-1">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="relative shrink-0">
+                      {guild.icon_url ? (
+                        <Image
+                          src={guild.icon_url}
+                          alt={guild.name}
+                          width={52}
+                          height={52}
+                          className="rounded-xl border border-white/10 group-hover:border-indigo-400/30 transition-colors"
+                        />
+                      ) : (
+                        <div className="h-[52px] w-[52px] rounded-xl border border-white/10 group-hover:border-indigo-400/30 transition-colors bg-gradient-to-br from-indigo-600/20 to-violet-600/20 flex items-center justify-center font-bold text-xl text-indigo-300">
+                          {guild.name.charAt(0)}
+                        </div>
+                      )}
+                      <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 border-2 border-[#0d0d1a] shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+                    </div>
+
+                    <span className="text-[9px] font-mono font-semibold tracking-widest uppercase text-indigo-400/50 bg-indigo-500/[0.08] border border-indigo-500/15 px-2 py-1 rounded-md truncate max-w-[110px]">
+                      {guild.id}
+                    </span>
                   </div>
-                  <div className="flex flex-col items-end text-right">
-                    <span className="text-[9px] uppercase font-semibold text-slate-600 tracking-widest mb-1">Guild ID</span>
-                    <span className="text-[10px] font-mono text-slate-500 bg-slate-950 px-2 py-1 rounded-md border border-slate-800 truncate max-w-[110px]">{guild.id}</span>
+
+                  <h3 className="text-[15px] font-semibold text-white/85 group-hover:text-white truncate tracking-tight transition-colors">
+                    {guild.name}
+                  </h3>
+                  <div className="mt-2 flex items-center gap-1.5">
+                    <Users className="h-3.5 w-3.5 text-indigo-400/50" />
+                    <span className="text-xs text-slate-500 tabular-nums">
+                      {guild.member_count.toLocaleString()} members
+                    </span>
                   </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-50 truncate group-hover:text-primary-light transition-colors">{guild.name}</h3>
-                  <div className="flex items-center gap-3 mt-3 text-slate-400">
-                    <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-800">
-                      <Users className="h-3.5 w-3.5 text-slate-500" />
-                      <span className="text-xs font-semibold text-slate-300">{guild.member_count.toLocaleString()}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-800">
-                      <Hash className="h-3.5 w-3.5 text-slate-500" />
-                      <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-400">Active</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="px-5 py-3 border-t border-slate-800 group-hover:bg-slate-800/40 transition-colors">
-                <Button className="w-full justify-between group/btn" variant="secondary" asChild>
-                  <Link href={`/dashboard/guild/${guild.id}`}>
+
+                <div className="flex items-center justify-between px-5 py-3 border-t border-white/[0.05] bg-white/[0.015] group-hover:bg-indigo-500/[0.06] transition-colors duration-300">
+                  <Link
+                    href={`/dashboard/guild/${guild.id}`}
+                    className="flex items-center justify-between w-full text-[11px] font-semibold uppercase tracking-widest text-slate-500 group-hover:text-indigo-300 transition-colors"
+                  >
                     <span>Manage Server</span>
-                    <ChevronRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                    <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
-                </Button>
+                </div>
+              </motion.div>
+            ))}
+
+            {/* Invite card */}
+            <motion.a
+              href="https://discord.com/oauth2/authorize"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: guilds.length * 0.04, duration: 0.4, ease: EASE }}
+              className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-white/[0.07] bg-white/[0.015] hover:border-indigo-500/30 hover:bg-indigo-500/[0.04] transition-all duration-300 min-h-[140px] p-6 cursor-pointer"
+            >
+              <div className="h-10 w-10 rounded-xl border border-white/[0.07] group-hover:border-indigo-500/30 bg-white/[0.03] flex items-center justify-center transition-colors">
+                <Plus className="h-4 w-4 text-slate-600 group-hover:text-indigo-400 transition-colors" />
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </>
+              <p className="text-xs font-semibold text-slate-600 group-hover:text-slate-400 transition-colors tracking-wide">
+                Add to another server
+              </p>
+            </motion.a>
+          </div>
+        </>
       )}
     </div>
   );

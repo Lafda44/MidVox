@@ -40,7 +40,7 @@ export default function RootLayout({
           <div
             className="absolute inset-0 bg-kenburns"
             style={{
-              backgroundImage: "url('/bg-aurora.jpg')",
+              backgroundImage: "url('/bg-aurora.svg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
             filter: "brightness(0.6) saturate(1.2) hue-rotate(220deg)",

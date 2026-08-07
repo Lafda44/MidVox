@@ -1,7 +1,7 @@
-﻿import React from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Users, Hash, ChevronRight, ArrowUpRight } from "lucide-react";
+import { Users, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ServerCardProps {
@@ -21,69 +21,67 @@ export const ServerCard = ({
   isActive = true,
   className
 }: ServerCardProps) => {
+  const initial = name.charAt(0).toUpperCase();
+
   return (
     <div className={cn(
-      "group bg-slate-900 border border-slate-800 rounded-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 h-full flex flex-col overflow-hidden",
+      "group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0d0d1a] transition-all duration-300",
+      "hover:border-indigo-500/40 hover:shadow-[0_0_30px_-8px_rgba(99,102,241,0.4)] hover:-translate-y-1",
       className
     )}>
-      <div className="p-6 flex-grow">
-        <div className="flex items-start justify-between mb-5">
-          <div className="relative">
+      {/* top gradient line */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+      <div className="p-5 flex-1 flex flex-col gap-4">
+        {/* header row */}
+        <div className="flex items-start justify-between">
+          <div className="relative shrink-0">
             {iconUrl ? (
               <Image
                 src={iconUrl}
                 alt={name}
-                width={64}
-                height={64}
-                className="rounded-xl border-2 border-slate-700 group-hover:border-primary/40 transition-colors"
+                width={56}
+                height={56}
+                className="rounded-xl border border-white/10 group-hover:border-indigo-400/30 transition-colors duration-300"
               />
             ) : (
-              <div className="h-16 w-16 bg-primary/15 rounded-xl flex items-center justify-center border-2 border-slate-700 text-primary font-bold text-2xl group-hover:border-primary/40 transition-colors">
-                {name.charAt(0)}
+              <div className="h-14 w-14 rounded-xl border border-white/10 group-hover:border-indigo-400/30 transition-colors duration-300 bg-gradient-to-br from-indigo-600/20 to-violet-600/20 flex items-center justify-center font-bold text-xl text-indigo-300">
+                {initial}
               </div>
             )}
             {isActive && (
-              <div className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 border-2 border-slate-900" title="Online" />
+              <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 border-2 border-[#0d0d1a] shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
             )}
           </div>
 
-          <div className="flex flex-col items-end text-right">
-            <span className="text-[9px] uppercase font-semibold text-slate-600 tracking-[0.2em] mb-1">
-              ID
-            </span>
-            <span className="text-[10px] font-mono text-slate-500 bg-slate-950 px-2 py-1 rounded-md border border-slate-800 truncate max-w-[120px]">
-              {id}
-            </span>
-          </div>
+          <span className="text-[9px] font-mono font-semibold tracking-[0.18em] uppercase text-indigo-400/60 bg-indigo-500/10 border border-indigo-500/20 px-2 py-1 rounded-md">
+            {String(id).slice(0, 12)}…
+          </span>
         </div>
 
+        {/* name */}
         <div>
-          <h3 className="text-lg font-bold text-slate-50 truncate group-hover:text-primary-light transition-colors tracking-tight">
+          <h3 className="text-[15px] font-semibold text-white/90 group-hover:text-white truncate tracking-tight transition-colors">
             {name}
           </h3>
-          <div className="flex items-center gap-3 mt-3">
-            <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-800">
-              <Users className="h-3.5 w-3.5 text-primary" />
-              <span className="text-xs font-semibold text-slate-200 tabular-nums">
-                {memberCount.toLocaleString()}
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-800">
-              <Hash className="h-3.5 w-3.5 text-slate-500" />
-              <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-400">
-                Managed
-              </span>
-            </div>
+          <div className="mt-2 flex items-center gap-1.5 text-slate-500">
+            <Users className="h-3.5 w-3.5 text-indigo-400/60" />
+            <span className="text-xs font-medium text-slate-400 tabular-nums">
+              {memberCount.toLocaleString()} members
+            </span>
           </div>
         </div>
       </div>
 
+      {/* footer CTA */}
       <Link
         href={`/dashboard/guild/${id}`}
-        className="group/link flex items-center justify-between px-6 py-3.5 border-t border-slate-800 text-[11px] font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-50 hover:bg-slate-800/50 transition-colors"
+        className="flex items-center justify-between px-5 py-3.5 border-t border-white/[0.05] bg-white/[0.02] group-hover:bg-indigo-500/[0.07] transition-colors duration-300"
       >
-        <span>Manage Server</span>
-        <ArrowUpRight className="h-4 w-4 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
+        <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 group-hover:text-indigo-300 transition-colors">
+          Manage Server
+        </span>
+        <ArrowUpRight className="h-4 w-4 text-slate-600 group-hover:text-indigo-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
       </Link>
     </div>
   );

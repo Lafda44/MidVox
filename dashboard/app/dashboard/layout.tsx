@@ -2,91 +2,83 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Server, ShieldCheck, Ticket, BarChart4, FileText, Settings,
   Menu, X, Bell, User, Search, ChevronRight, Sparkles, LogOut,
-  LifeBuoy, ChevronDown, Bot, Shield, Download
+  LifeBuoy, ChevronDown, Bot, Shield, Download, Zap
 } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { cn, isAdmin } from "@/lib/utils";
 import { api } from "@/lib/api";
 import { AdminConfig } from "@/types/api";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const pathname = usePathname();
-  const { data: session, status } = useSession();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [globalNotification, setGlobalNotification] = useState<string | null>(null);
-
+  const pathname = usePathname();
+  const { data: session, status } = useSession();
   const bellRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdowns on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (bellRef.current && !bellRef.current.contains(target)) {
-        setIsNotificationsOpen(false);
-      }
-      if (profileRef.current && !profileRef.current.contains(target)) {
-        setIsProfileOpen(false);
-      }
+      if (bellRef.current && !bellRef.current.contains(target)) setIsNotificationsOpen(false);
+      if (profileRef.current && !profileRef.current.contains(target)) setIsProfileOpen(false);
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Auto-close sidebar on mobile when navigating
-  React.useEffect(() => {
+  useEffect(() => {
     setIsSidebarOpen(false);
     setIsProfileOpen(false);
   }, [pathname]);
 
-  React.useEffect(() => {
-    if (status === "unauthenticated") {
-      signIn("discord");
-    }
-
-    // Fetch global notification
+  useEffect(() => {
+    if (status === "unauthenticated") signIn("discord");
     const fetchNotification = async () => {
       try {
         const config = await api.getAdminConfig();
         setGlobalNotification(config.global_notification);
-      } catch (err) {
-        console.error("Failed to fetch notifications:", err);
-      }
+      } catch {}
     };
     fetchNotification();
   }, [status]);
 
   if (status === "loading" || status === "unauthenticated") {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
-            <span className="font-black text-white italic text-xl">{process.env.NEXT_PUBLIC_BRAND_NAME_WORD || "ZX"}</span>
+      <div className="min-h-screen bg-[#070710] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-5">
+          <div className="relative h-14 w-14">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 opacity-20 blur-xl" />
+            <div className="relative h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-[0_0_24px_rgba(99,102,241,0.5)]">
+              <Bot className="h-7 w-7 text-white" />
+            </div>
           </div>
-          <p className="text-slate-500 font-bold tracking-widest uppercase text-xs">
-            Authenticating...
-          </p>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-sm font-semibold text-white/80">
+              {process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox"}
+            </p>
+            <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-slate-600 animate-pulse">
+              Authenticating…
+            </p>
+          </div>
         </div>
       </div>
     );
   }
 
-  const match = pathname.match(/\/dashboard\/guild\/([^\/]+)/);
+  const match = pathname.match(/\/dashboard\/guild\/([^/]+)/);
   const currentGuildId = match ? match[1] : null;
 
-  // Base sidebar items â€“ will be filtered if we are inside a guild
   const allSidebarItems = currentGuildId
     ? [
         { name: "Overview", href: `/dashboard/guild/${currentGuildId}`, icon: LayoutDashboard },
@@ -104,11 +96,11 @@ export default function DashboardLayout({
             { name: "Welcome", href: `/dashboard/guild/${currentGuildId}/welcome`, icon: Bell },
             { name: "Leveling", href: `/dashboard/guild/${currentGuildId}/leveling`, icon: BarChart4 },
             { name: "Vanity Roles", href: `/dashboard/guild/${currentGuildId}/vanityroles`, icon: Sparkles },
-            { name: "Auto Role", href: `/dashboard/guild/${currentGuildId}/autorole`, icon: Search },
-            { name: "Auto React", href: `/dashboard/guild/${currentGuildId}/autoreact`, icon: Settings },
-            { name: "Reaction Roles", href: `/dashboard/guild/${currentGuildId}/reactionroles`, icon: Search },
+            { name: "Auto Role", href: `/dashboard/guild/${currentGuildId}/autorole`, icon: User },
+            { name: "Auto React", href: `/dashboard/guild/${currentGuildId}/autoreact`, icon: Zap },
+            { name: "Reaction Roles", href: `/dashboard/guild/${currentGuildId}/reactionroles`, icon: Zap },
             { name: "Join DM", href: `/dashboard/guild/${currentGuildId}/joindm`, icon: User },
-            { name: "Invites", href: `/dashboard/guild/${currentGuildId}/invites`, icon: Search },
+            { name: "Invites", href: `/dashboard/guild/${currentGuildId}/invites`, icon: Server },
             { name: "Tracking", href: `/dashboard/guild/${currentGuildId}/tracking`, icon: BarChart4 },
           ],
         },
@@ -122,7 +114,7 @@ export default function DashboardLayout({
           name: "Utility",
           items: [
             { name: "Tickets", href: `/dashboard/guild/${currentGuildId}/tickets`, icon: Ticket },
-            { name: "Join to Create", href: `/dashboard/guild/${currentGuildId}/j2c`, icon: Menu },
+            { name: "Join to Create", href: `/dashboard/guild/${currentGuildId}/j2c`, icon: Settings },
             { name: "Custom Roles", href: `/dashboard/guild/${currentGuildId}/customroles`, icon: ShieldCheck },
             { name: "Voice Role", href: `/dashboard/guild/${currentGuildId}/invcrole`, icon: Settings },
           ],
@@ -134,371 +126,304 @@ export default function DashboardLayout({
         { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
         { name: "Servers", href: "/dashboard/guilds", icon: Server },
         ...(isAdmin(session?.user?.id)
-            ? [{ name: "Admin Panel", href: "/dashboard/admin", icon: Shield },
-               ]
-            : []),
+          ? [{ name: "Admin Panel", href: "/dashboard/admin", icon: Shield }]
+          : []),
       ];
 
-  // Separate the "Back to Servers" item when inside a guild
   let mainSidebarItems = allSidebarItems;
   let backLinkItem: any = null;
-
   if (currentGuildId) {
-    mainSidebarItems = allSidebarItems.filter(
-      (item) => !(item.name === "Back to Servers")
-    );
+    mainSidebarItems = allSidebarItems.filter((item) => item.name !== "Back to Servers");
     backLinkItem = allSidebarItems.find((item) => item.name === "Back to Servers");
   }
-
   const BackLinkIcon = backLinkItem?.icon || Server;
 
   const sidebarVariants = {
-    hidden: { opacity: 0, x: -24 },
+    hidden: { opacity: 0, x: -16 },
     visible: (i: number) => ({
-      opacity: 1,
-      x: 0,
-      transition: { delay: i * 0.03, duration: 0.3, ease: "easeOut" as const },
+      opacity: 1, x: 0,
+      transition: { delay: i * 0.025, duration: 0.35, ease: EASE },
     }),
   };
 
-  return (
-    <div className="min-h-screen bg-[#080810] text-slate-200">
-      {/* Subtle neon background glows + tech grid over dark mesh image */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute inset-0 bg-kenburns"
-          style={{
-            backgroundImage: "url('/bg-mesh.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            filter: "brightness(0.6) saturate(1.1)",
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 120% 100% at 50% 10%, rgba(5,5,11,0.68) 0%, rgba(5,5,11,0.96) 80%)",
-          }}
-        />
-        <div className="absolute top-[-20%] left-1/2 h-[40%] w-[60%] -translate-x-1/2 bg-primary/[0.05] blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] h-[36%] w-[40%] bg-accent/[0.04] blur-[110px]" />
-        <div className="absolute inset-0 cyber-grid-bg opacity-40" />
+  const SidebarContent = () => (
+    <>
+      {/* Logo header */}
+      <div className="flex h-16 items-center px-4 border-b border-white/[0.06] shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="relative h-8 w-8 shrink-0">
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 opacity-30 blur-md" />
+            <div className="relative h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-[0_0_14px_rgba(99,102,241,0.5)]">
+              <Bot className="h-4 w-4 text-white" />
+            </div>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-white leading-none tracking-tight">
+              {process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox"}
+            </p>
+            <p className="text-[9px] font-mono uppercase tracking-[0.22em] text-indigo-400/60 mt-0.5">
+              Dashboard
+            </p>
+          </div>
+        </div>
+        <button
+          className="ml-auto p-1.5 lg:hidden text-slate-600 hover:text-white rounded-lg hover:bg-white/[0.05] transition-colors"
+          onClick={() => setIsSidebarOpen(false)}
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Nav */}
+      <nav className="flex-1 overflow-y-auto no-scrollbar p-3 space-y-4">
+        {mainSidebarItems.map((item: any, index: number) => {
+          if (item.items) {
+            return (
+              <motion.div key={item.name} custom={index} initial="hidden" animate="visible" variants={sidebarVariants}>
+                <p className="px-2.5 mb-1.5 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-700">
+                  {item.name}
+                </p>
+                <div className="space-y-0.5">
+                  {item.items.map((sub: any) => {
+                    const isActive = pathname === sub.href;
+                    return (
+                      <Link
+                        key={sub.name}
+                        href={sub.href}
+                        className={cn(
+                          "group relative flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12.5px] font-medium transition-all duration-200",
+                          isActive
+                            ? "bg-indigo-500/10 text-indigo-300"
+                            : "text-slate-500 hover:bg-white/[0.04] hover:text-slate-200"
+                        )}
+                      >
+                        {isActive && (
+                          <motion.span
+                            layoutId="sidebar-pill"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 rounded-full bg-gradient-to-b from-indigo-400 to-violet-500 shadow-[0_0_8px_rgba(99,102,241,0.7)]"
+                          />
+                        )}
+                        <sub.icon className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-indigo-400" : "text-slate-700 group-hover:text-slate-500")} />
+                        {sub.name}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            );
+          }
+
+          const isActive = pathname === item.href;
+          return (
+            <motion.div key={item.name} custom={index} initial="hidden" animate="visible" variants={sidebarVariants}>
+              <Link
+                href={item.href}
+                className={cn(
+                  "group relative flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12.5px] font-semibold transition-all duration-200",
+                  isActive
+                    ? "bg-indigo-500/10 text-indigo-300"
+                    : "text-slate-500 hover:bg-white/[0.04] hover:text-slate-200"
+                )}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="sidebar-pill"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 rounded-full bg-gradient-to-b from-indigo-400 to-violet-500 shadow-[0_0_8px_rgba(99,102,241,0.7)]"
+                  />
+                )}
+                <item.icon className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-indigo-400" : "text-slate-700 group-hover:text-slate-500")} />
+                {item.name}
+                {isActive && <ChevronRight className="ml-auto h-3.5 w-3.5 text-indigo-500/60" />}
+              </Link>
+            </motion.div>
+          );
+        })}
+
+        {backLinkItem && (
+          <div className="pt-3 border-t border-white/[0.05]">
+            <Link
+              href={backLinkItem.href}
+              className="group flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12.5px] font-semibold text-slate-600 hover:bg-white/[0.04] hover:text-slate-300 transition-all"
+            >
+              <BackLinkIcon className="h-3.5 w-3.5 shrink-0 text-slate-700 group-hover:text-slate-500" />
+              {backLinkItem.name}
+            </Link>
+          </div>
+        )}
+      </nav>
+
+      {/* User profile */}
+      <div className="shrink-0 p-3 border-t border-white/[0.06]">
+        <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+          <div className="h-8 w-8 rounded-full overflow-hidden border border-white/10 shrink-0">
+            {session?.user?.image ? (
+              <Image src={session.user.image!} alt="Avatar" fill className="object-cover" />
+            ) : (
+              <div className="h-full w-full bg-indigo-600/20 flex items-center justify-center">
+                <User className="h-4 w-4 text-indigo-400/60" />
+              </div>
+            )}
+          </div>
+          <div className="overflow-hidden">
+            <p className="text-xs font-semibold text-white/80 truncate leading-none">
+              {session?.user?.name || "Admin"}
+            </p>
+            <p className="text-[9px] font-mono uppercase tracking-[0.15em] text-slate-600 mt-0.5">
+              Active
+            </p>
+          </div>
+          <button
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="ml-auto p-1.5 rounded-lg text-slate-700 hover:text-red-400 hover:bg-red-500/10 transition-all"
+            title="Sign out"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      </div>
+    </>
+  );
+
+  return (
+    <div className="min-h-screen bg-[#070710] text-slate-200">
+      {/* Fixed background */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0" style={{ backgroundImage: "url('/bg-mesh.svg')", backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.45) saturate(0.9)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 120% 100% at 50% 0%, rgba(5,5,16,0.6) 0%, rgba(5,5,16,0.97) 75%)" }} />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-full bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
+        <div className="absolute top-[-15%] left-[20%] h-[500px] w-[500px] rounded-full bg-indigo-600/[0.05] blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[10%] h-[400px] w-[400px] rounded-full bg-violet-600/[0.04] blur-[110px]" />
+        <div className="absolute inset-0 cyber-grid-bg opacity-[0.18]" />
+      </div>
+
+      {/* Mobile overlay */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
       </AnimatePresence>
 
       {/* Sidebar */}
-      <aside
-        className={cn(
-          "fixed top-0 bottom-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-out lg:translate-x-0 bg-[#07070f] border-r border-white/[0.07] flex flex-col",
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
-        {/* Neon top hairline */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary to-accent" />
-        {/* Header */}
-        <div className="flex h-16 items-center px-5 border-b border-white/[0.07] flex-shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-[0_0_18px_rgba(99,102,241,0.45)]">
-              <Bot className="h-5 w-5 text-white" />
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-base font-bold tracking-tight text-slate-50 leading-none">
-                {process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox"}
-              </h1>
-              <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-500 mt-1">
-                Dashboard
-              </span>
-            </div>
-          </div>
-          <button
-            className="ml-auto p-2 lg:hidden text-slate-500 hover:text-slate-50 rounded-lg hover:bg-slate-800/60 transition-colors"
-            onClick={() => setIsSidebarOpen(false)}
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* Scrollable Navigation */}
-        <nav className="flex-1 overflow-y-auto no-scrollbar px-3 py-4 space-y-5">
-          {mainSidebarItems.map((item: any, index: number) => {
-            if (item.items) {
-              return (
-                <motion.div
-                  key={item.name}
-                  custom={index}
-                  initial="hidden"
-                  animate="visible"
-                  variants={sidebarVariants}
-                  className="space-y-1"
-                >
-                  <p className="px-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-600 mb-2">
-                    {item.name}
-                  </p>
-                  <div className="space-y-0.5">
-                    {item.items.map((subItem: any) => {
-                      const isActive = pathname === subItem.href;
-                      return (
-                        <Link
-                          key={subItem.name}
-                          href={subItem.href}
-                          className={cn(
-                            "group relative flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors duration-200",
-                            isActive
-                              ? "bg-primary/10 text-primary-light"
-                              : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
-                          )}
-                        >
-                          {isActive && (
-                            <motion.span
-                              layoutId="sidebar-active"
-                              className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-gradient-to-b from-primary to-accent shadow-[0_0_10px_rgba(99,102,241,0.6)]"
-                            />
-                          )}
-                          <subItem.icon
-                            className={cn(
-                              "h-4 w-4 shrink-0 transition-colors",
-                              isActive ? "text-primary" : "text-slate-600 group-hover:text-slate-400"
-                            )}
-                          />
-                          {subItem.name}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              );
-            }
-
-            const isActive = pathname === item.href;
-            return (
-              <motion.div
-                key={item.name}
-                custom={index}
-                initial="hidden"
-                animate="visible"
-                variants={sidebarVariants}
-              >
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-semibold transition-colors duration-200",
-                    isActive
-                      ? "bg-primary/10 text-primary-light"
-                      : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
-                  )}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="sidebar-active"
-                      className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-gradient-to-b from-primary to-accent shadow-[0_0_10px_rgba(99,102,241,0.6)]"
-                    />
-                  )}
-                  <item.icon
-                    className={cn(
-                      "h-4 w-4 shrink-0 transition-colors",
-                      isActive ? "text-primary" : "text-slate-600 group-hover:text-slate-400"
-                    )}
-                  />
-                  {item.name}
-                  {isActive && (
-                    <ChevronRight className="ml-auto h-4 w-4 text-primary" />
-                  )}
-                </Link>
-              </motion.div>
-            );
-          })}
-
-          {backLinkItem && (
-            <div className="pt-4 mt-4 border-t border-slate-800">
-              <Link
-                href={backLinkItem.href || "/dashboard/guilds"}
-                className="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition-colors"
-              >
-                <BackLinkIcon className="h-4 w-4 text-slate-600 group-hover:text-slate-400" />
-                {backLinkItem.name}
-              </Link>
-            </div>
-          )}
-        </nav>
-
-        {/* User Profile */}
-        <div className="flex-shrink-0 p-3 border-t border-slate-800">
-          <div className="flex items-center gap-3 px-2 py-2 rounded-lg bg-slate-900 border border-slate-800">
-            <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center ring-1 ring-slate-700 overflow-hidden">
-              {session?.user?.image ? (
-                <img
-                  src={session.user.image}
-                  alt="User Avatar"
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <User className="h-5 w-5 text-primary/60" />
-              )}
-            </div>
-            <div className="overflow-hidden">
-              <p className="text-sm font-semibold text-slate-50 truncate">
-                {session?.user?.name || "Administrator"}
-              </p>
-              <p className="text-[10px] font-medium uppercase text-slate-500 truncate tracking-wider">
-                Administrator
-              </p>
-            </div>
-          </div>
-        </div>
+      <aside className={cn(
+        "fixed top-0 bottom-0 left-0 z-50 w-60 flex flex-col border-r border-white/[0.06] bg-[#07070f]/95 backdrop-blur-xl transition-transform duration-300 lg:translate-x-0",
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-indigo-500/20 to-transparent pointer-events-none" />
+        <SidebarContent />
       </aside>
 
-      {/* Main Content Area */}
-      <div className="lg:pl-64 flex flex-col min-h-screen relative z-10 bg-[#080810]">
-        {/* Top Navbar */}
-        <header className="relative h-16 sticky top-0 z-30 flex items-center justify-between border-b border-white/[0.07] bg-[#080810]/80 backdrop-blur-xl px-4 lg:px-8">
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      {/* Main */}
+      <div className="lg:pl-60 flex flex-col min-h-screen relative z-10">
+        {/* Topbar */}
+        <header className="sticky top-0 z-30 h-14 flex items-center px-4 lg:px-6 border-b border-white/[0.06] bg-[#07070f]/80 backdrop-blur-xl">
+          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
+
           <button
-            className="p-2 lg:hidden text-slate-400 hover:bg-slate-800/60 rounded-lg transition-colors"
+            className="p-2 lg:hidden text-slate-600 hover:text-white rounded-lg hover:bg-white/[0.05] transition-colors mr-3"
             onClick={() => setIsSidebarOpen(true)}
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-4 w-4" />
           </button>
 
-          <div className="hidden md:flex items-center w-96 max-w-full relative">
-            <Search className="absolute left-3 h-4 w-4 text-slate-600" />
+          {/* Breadcrumb / search */}
+          <div className="hidden md:flex items-center gap-2 relative">
+            <Search className="absolute left-3 h-3.5 w-3.5 text-slate-700" />
             <input
               type="text"
-              placeholder="Search..."
-              className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 pl-10 pr-4 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/40 transition-all"
+              placeholder="Quick search…"
+              className="w-64 bg-white/[0.03] border border-white/[0.06] rounded-lg py-1.5 pl-9 pr-3 text-xs text-slate-400 placeholder:text-slate-700 focus:outline-none focus:border-indigo-500/40 focus:ring-1 focus:ring-indigo-500/15 transition-all"
             />
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 ml-auto">
+            {/* Bell */}
             <div className="relative" ref={bellRef}>
               <button
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                className="relative p-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-50 rounded-lg transition-all"
+                className="relative p-2 text-slate-600 hover:text-white rounded-lg hover:bg-white/[0.05] transition-all"
               >
-                <Bell className="h-5 w-5" />
+                <Bell className="h-4 w-4" />
                 {globalNotification && (
-                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary border-2 border-slate-950" />
+                  <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500 shadow-[0_0_6px_rgba(99,102,241,0.8)]" />
                 )}
               </button>
-
               <AnimatePresence>
                 {isNotificationsOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl shadow-slate-900/10 p-3 z-20"
+                    initial={{ opacity: 0, y: 6, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.97 }} transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-72 bg-[#0d0d1c] border border-white/[0.08] rounded-xl shadow-2xl p-3 z-20"
                   >
-                    <div className="flex items-center justify-between mb-2 border-b border-slate-800 pb-2 px-1">
-                      <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-[0.2em]">
-                        Broadcasts
-                      </p>
-                      <button
-                        onClick={() => setGlobalNotification(null)}
-                        className="text-[10px] font-medium text-primary/70 hover:text-primary transition-colors uppercase"
-                      >
-                        Clear
-                      </button>
+                    <div className="flex items-center justify-between mb-2 pb-2 border-b border-white/[0.05]">
+                      <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-slate-600">Broadcasts</p>
+                      <button onClick={() => setGlobalNotification(null)} className="text-[9px] font-mono uppercase text-indigo-500/60 hover:text-indigo-400 transition-colors">Clear</button>
                     </div>
-
                     {globalNotification ? (
-                      <div className="bg-primary/5 border border-primary/15 rounded-lg p-3">
+                      <div className="bg-indigo-500/[0.07] border border-indigo-500/20 rounded-lg p-3">
                         <div className="flex items-center gap-2 mb-1.5">
-                          <Sparkles className="h-3 w-3 text-primary" />
-                          <span className="text-[10px] font-semibold uppercase text-primary tracking-widest">
-                            System Broadcast
-                          </span>
+                          <Sparkles className="h-3 w-3 text-indigo-400" />
+                          <span className="text-[9px] font-mono uppercase tracking-widest text-indigo-400">System Broadcast</span>
                         </div>
-                        <p className="text-xs text-slate-300 leading-relaxed">
-                          {globalNotification}
-                        </p>
+                        <p className="text-xs text-slate-300 leading-relaxed">{globalNotification}</p>
                       </div>
                     ) : (
-                      <div className="py-6 flex flex-col items-center justify-center text-center">
-                        <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center mb-2">
-                          <Bell className="h-4 w-4 text-slate-600" />
-                        </div>
-                        <p className="text-xs font-medium text-slate-500">
-                          No active broadcasts
-                        </p>
+                      <div className="py-6 flex flex-col items-center gap-2">
+                        <Bell className="h-5 w-5 text-slate-700" />
+                        <p className="text-xs text-slate-600">No active broadcasts</p>
                       </div>
                     )}
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
-            <div className="h-6 w-px bg-slate-800 hidden sm:block" />
 
-            {/* Profile Dropdown */}
+            <div className="h-5 w-px bg-white/[0.06] hidden sm:block" />
+
+            {/* Profile */}
             <div className="relative" ref={profileRef}>
               <button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-slate-800/60 transition-all border border-transparent hover:border-slate-700"
+                className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/[0.05] border border-transparent hover:border-white/[0.07] transition-all"
               >
-                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border border-slate-700">
+                <div className="h-7 w-7 rounded-full overflow-hidden border border-white/10">
                   {session?.user?.image ? (
-                    <img src={session.user.image} alt="User Avatar" className="h-full w-full object-cover" />
+                    <Image src={session.user.image!} alt="Avatar" fill className="object-cover" />
                   ) : (
-                    <User className="h-4 w-4 text-primary/60" />
+                    <div className="h-full w-full bg-indigo-600/20 flex items-center justify-center">
+                      <User className="h-3.5 w-3.5 text-indigo-400/50" />
+                    </div>
                   )}
                 </div>
-                <div className="hidden sm:flex flex-col items-start leading-none gap-0.5">
-                  <span className="text-xs font-semibold text-slate-200">
-                    {session?.user?.name?.split(' ')[0] || "Admin"}
-                  </span>
-                  <span className="text-[9px] font-medium uppercase text-slate-600 tracking-widest">
-                    Active
-                  </span>
-                </div>
-                <ChevronDown
-                  className={cn(
-                    "h-3.5 w-3.5 text-slate-600 transition-transform hidden sm:block",
-                    isProfileOpen && "rotate-180"
-                  )}
-                />
+                <span className="hidden sm:block text-xs font-semibold text-slate-300">
+                  {session?.user?.name?.split(" ")[0] || "Admin"}
+                </span>
+                <ChevronDown className={cn("h-3 w-3 text-slate-600 hidden sm:block transition-transform", isProfileOpen && "rotate-180")} />
               </button>
 
               <AnimatePresence>
                 {isProfileOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl shadow-slate-900/10 p-1.5 z-20"
+                    initial={{ opacity: 0, y: 6, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.97 }} transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-48 bg-[#0d0d1c] border border-white/[0.08] rounded-xl shadow-2xl p-1.5 z-20"
                   >
-                    <div className="px-3 py-2.5 border-b border-slate-800 mb-1">
-                      <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-[0.2em] mb-0.5">
-                        Authenticated As
-                      </p>
-                      <p className="text-sm font-semibold text-slate-50 truncate">
-                        {session?.user?.name || "Administrator"}
-                      </p>
+                    <div className="px-3 py-2 border-b border-white/[0.05] mb-1">
+                      <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-slate-600 mb-0.5">Signed in as</p>
+                      <p className="text-xs font-semibold text-white/80 truncate">{session?.user?.name || "Administrator"}</p>
                     </div>
-
-                    <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:bg-slate-800/70 hover:text-slate-50 transition-all">
-                      <LifeBuoy className="h-4 w-4 text-slate-600" />
+                    <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-500 hover:bg-white/[0.04] hover:text-slate-200 transition-all">
+                      <LifeBuoy className="h-3.5 w-3.5" />
                       Support
                     </button>
-
                     <button
-                      onClick={() => signOut({ callbackUrl: '/' })}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-red-600 hover:bg-red-500/10 hover:text-red-500 transition-all"
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-red-500/70 hover:bg-red-500/[0.08] hover:text-red-400 transition-all"
                     >
-                      <LogOut className="h-4 w-4" />
+                      <LogOut className="h-3.5 w-3.5" />
                       Sign Out
                     </button>
                   </motion.div>
@@ -508,15 +433,15 @@ export default function DashboardLayout({
           </div>
         </header>
 
-        {/* Content Area */}
-        <main className="flex-1 p-4 lg:p-8 relative z-10">
+        {/* Page content */}
+        <main className="flex-1 p-4 lg:p-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: EASE }}
             >
               <div className="max-w-[1400px] mx-auto">{children}</div>
             </motion.div>
