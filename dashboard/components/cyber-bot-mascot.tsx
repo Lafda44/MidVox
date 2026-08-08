@@ -33,16 +33,16 @@ export function CyberBotMascot({
         </linearGradient>
         <linearGradient id="mascot-visor" x1="70" y1="110" x2="250" y2="190" gradientUnits="userSpaceOnUse">
           <stop stopColor="#a5b4fc" />
-          <stop offset="0.5" stopColor="#6366f1" />
+          <stop offset="0.5" stopColor="#F59E0B" />
           <stop offset="1" stopColor="#22d3ee" />
         </linearGradient>
         <radialGradient id="mascot-glow" cx="0.5" cy="0.5" r="0.5">
-          <stop stopColor="#6366f1" stopOpacity="0.45" />
-          <stop offset="1" stopColor="#6366f1" stopOpacity="0" />
+          <stop stopColor="#F59E0B" stopOpacity="0.45" />
+          <stop offset="1" stopColor="#F59E0B" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="mascot-cheek" x1="100" y1="180" x2="150" y2="205" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#06b6d4" stopOpacity="0.85" />
-          <stop offset="1" stopColor="#06b6d4" stopOpacity="0" />
+          <stop stopColor="#FBB024" stopOpacity="0.85" />
+          <stop offset="1" stopColor="#FBB024" stopOpacity="0" />
         </linearGradient>
         <filter id="mascot-soft" x="-40%" y="-40%" width="180%" height="180%">
           <feGaussianBlur stdDeviation="10" />
@@ -56,7 +56,7 @@ export function CyberBotMascot({
 
       {/* Antenna */}
       <rect x="152" y="18" width="16" height="34" rx="7" fill="url(#mascot-metal-dark)" />
-      <circle cx="160" cy="14" r="12" fill="#a5b4fc" stroke="#6366f1" strokeWidth="3" />
+      <circle cx="160" cy="14" r="12" fill="#a5b4fc" stroke="#F59E0B" strokeWidth="3" />
 
       {/* Ears */}
       <rect x="34" y="112" width="26" height="46" rx="10" fill="url(#mascot-metal-dark)" />
@@ -87,7 +87,7 @@ export function CyberBotMascot({
         width="144"
         height="58"
         rx="26"
-        fill="#6366f1"
+        fill="#F59E0B"
         opacity="0.55"
         filter="url(#mascot-soft)"
       />
@@ -115,7 +115,7 @@ export function CyberBotMascot({
       {/* Mouth grille */}
       <rect x="136" y="172" width="48" height="8" rx="4" fill="#22273d" />
       <rect x="146" y="186" width="28" height="6" rx="3" fill="#22273d" />
-      <rect x="152" y="196" width="16" height="5" rx="2.5" fill="#06b6d4" opacity="0.9" />
+      <rect x="152" y="196" width="16" height="5" rx="2.5" fill="#FBB024" opacity="0.9" />
 
       {/* Collar */}
       <path
@@ -129,7 +129,7 @@ export function CyberBotMascot({
 
       {/* Chest core */}
       <circle cx="160" cy="276" r="18" fill="#0b0c16" stroke="#8b90ab" strokeWidth="4" />
-      <circle cx="160" cy="276" r="9" fill="#6366f1" />
+      <circle cx="160" cy="276" r="9" fill="#F59E0B" />
       <circle cx="160" cy="276" r="4" fill="#c7d2fe" />
 
       {/* Floating sparks */}

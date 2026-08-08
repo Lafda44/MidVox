@@ -73,10 +73,10 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
   return (
     <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20">
       <div className="lg:col-span-2 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl shadow-slate-900/5">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] overflow-hidden shadow-xl shadow-black/30">
           <div className="p-8 space-y-8">
-            <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-4">
-               <span className="text-sm font-bold text-slate-300">Social Economy Status</span>
+            <div className="flex items-center justify-between mb-4 border-b border-[#1A1A1A] pb-4">
+               <span className="text-sm font-bold text-neutral-300">Social Economy Status</span>
                <Switch 
                   checked={config.enabled} 
                   onCheckedChange={() => setConfig({...config, enabled: !config.enabled})}
@@ -85,7 +85,7 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase text-slate-500 tracking-widest flex items-center gap-2">
+                <label className="text-xs font-black uppercase text-neutral-500 tracking-widest flex items-center gap-2">
                   <Zap className="h-3 w-3" />
                   XP Weight
                 </label>
@@ -100,7 +100,7 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase text-slate-500 tracking-widest flex items-center gap-2">
+                <label className="text-xs font-black uppercase text-neutral-500 tracking-widest flex items-center gap-2">
                   <Clock className="h-3 w-3" />
                   Cooldown
                 </label>
@@ -113,13 +113,13 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
                     disabled={!config.enabled}
                     className="py-6 text-lg font-bold pr-12"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">SEC</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-neutral-500">SEC</span>
                 </div>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-black uppercase text-slate-500 tracking-widest flex items-center gap-2">
+              <label className="text-xs font-black uppercase text-neutral-500 tracking-widest flex items-center gap-2">
                 <Hash className="h-3 w-3" />
                 Level Up Channel
               </label>
@@ -143,17 +143,17 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
           </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 relative overflow-hidden group">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] p-8 relative overflow-hidden group">
           <div className="absolute right-0 top-0 h-full w-1 bg-primary/20" />
-           <h3 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-6 flex items-center gap-2">
+           <h3 className="text-sm font-black uppercase text-neutral-500 tracking-widest mb-6 flex items-center gap-2">
             <Palette className="h-4 w-4" />
             Cosmetic Defaults
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
              <div className="space-y-2">
-                <p className="text-xs text-slate-500 font-bold px-1">Rank Card Color</p>
+                <p className="text-xs text-neutral-500 font-bold px-1">Rank Card Color</p>
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl border border-slate-700 shadow-inner" style={{ backgroundColor: config.embed_style.color }} />
+                  <div className="h-10 w-10 rounded-xl border border-neutral-700 shadow-inner" style={{ backgroundColor: config.embed_style.color }} />
                   <Input 
                     value={config.embed_style.color}
                     onChange={(e) => setConfig({...config, embed_style: {...config.embed_style, color: e.target.value}})}
@@ -162,10 +162,10 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
                   />
                 </div>
              </div>
-             <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-2xl border border-slate-800">
+             <div className="flex items-center justify-between p-4 bg-[#131313] rounded-[6px] border border-[#1A1A1A]">
                 <div className="flex items-center gap-3">
-                  <Layout className="h-4 w-4 text-slate-500" />
-                  <span className="text-sm font-bold text-slate-300">Thumbnail</span>
+                  <Layout className="h-4 w-4 text-neutral-500" />
+                  <span className="text-sm font-bold text-neutral-300">Thumbnail</span>
                 </div>
                 <Switch 
                   checked={config.embed_style.thumbnail}
@@ -178,14 +178,14 @@ export function LevelingForm({ initialConfig, guildId }: LevelingFormProps) {
       </div>
 
       <div className="space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 relative overflow-hidden group shadow-lg">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] p-6 relative overflow-hidden group shadow-lg">
            <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
               <Info className="h-32 w-32 text-slate-50" />
            </div>
-           <h3 className="text-xs font-black uppercase text-slate-500 tracking-widest mb-4">Leveling Logic</h3>
-           <div className="space-y-4 text-sm leading-relaxed text-slate-400">
+           <h3 className="text-xs font-black uppercase text-neutral-500 tracking-widest mb-4">Leveling Logic</h3>
+           <div className="space-y-4 text-sm leading-relaxed text-neutral-400">
               <p>Members earn <span className="text-slate-50 font-bold italic">XP</span> by chatting.</p>
-              <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10 text-[10px] font-mono">
+              <div className="p-4 bg-primary/5 rounded-[6px] border border-primary/10 text-[10px] font-mono">
                  5 * (level ^ 2) + (50 * level) + 100
               </div>
            </div>

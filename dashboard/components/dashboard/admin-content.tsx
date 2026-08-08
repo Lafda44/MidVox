@@ -98,27 +98,27 @@ export function AdminContent() {
     { name: "Total Users", value: stats?.total_users || "0", icon: Users, color: "text-blue-500" },
     { name: "Active Servers", value: stats?.active_servers || "0", icon: Server, color: "text-emerald-500" },
     { name: "API Latency", value: stats?.api_latency || "0ms", icon: Activity, color: "text-amber-500" },
-    { name: "Database Size", value: stats?.db_size || "0 MB", icon: Database, color: "text-purple-500" },
+    { name: "Database Size", value: stats?.db_size || "0 MB", icon: Database, color: "text-amber-500" },
   ];
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500">
       {/* Header */}
       <div className="relative group">
-        <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-primary-dark rounded-3xl blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
-        <div className="relative bg-slate-950 border border-slate-200 rounded-3xl p-8 lg:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+        <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-primary-dark rounded-[6px] blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
+        <div className="relative bg-[#0F0F0F] border border-[#1F1F1F] rounded-[6px] p-8 lg:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           <div className="flex items-center gap-6">
-            <div className="h-16 w-16 rounded-2xl bg-red-500/20 flex items-center justify-center border border-red-500/30 shadow-2xl shadow-red-500/20">
+            <div className="h-16 w-16 rounded-[6px] bg-red-500/20 flex items-center justify-center border border-red-500/30 shadow-2xl shadow-red-500/20">
               <Shield className="h-8 w-8 text-red-500" />
             </div>
             <div>
               <h1 className="text-4xl font-black text-slate-50 tracking-tight font-display">Admin Control Panel</h1>
-              <p className="text-slate-400 mt-2 font-medium">Restricted access for MidVox administrators only.</p>
+              <p className="text-neutral-400 mt-2 font-medium">Restricted access for MidVox administrators only.</p>
             </div>
           </div>
           <button 
             onClick={() => fetchData(true)}
-            className="flex items-center gap-3 bg-red-500/5 px-6 py-3 rounded-2xl border border-red-500/10 hover:bg-red-500/10 transition-all active:scale-95 group/refresh"
+            className="flex items-center gap-3 bg-red-500/5 px-6 py-3 rounded-[6px] border border-red-500/10 hover:bg-red-500/10 transition-all active:scale-95 group/refresh"
           >
             <RefreshCw className={cn("h-4 w-4 text-red-500 transition-all", refreshing && "animate-spin")} />
             <span className="text-xs font-black uppercase tracking-widest text-red-500">
@@ -131,16 +131,16 @@ export function AdminContent() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statItems.map((stat) => (
-          <div key={stat.name} className="glass border border-slate-200 rounded-3xl p-6 hover:border-slate-200 transition-all group">
+          <div key={stat.name} className="bg-[#131313] border border-[#1F1F1F]">
             <div className="flex items-center justify-between mb-4">
-              <div className={cn("p-3 rounded-xl bg-slate-100/70 group-hover:scale-110 transition-transform", stat.color)}>
+              <div className={cn("p-3 rounded-xl bg-[#1A1A1A]/70 group-hover:scale-110 transition-transform", stat.color)}>
                 <stat.icon className="h-6 w-6" />
               </div>
               <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">
                 Live
               </span>
             </div>
-            <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">{stat.name}</p>
+            <p className="text-neutral-500 text-xs font-bold uppercase tracking-widest">{stat.name}</p>
             <h3 className="text-2xl font-black text-slate-50 mt-1 font-display">{stat.value}</h3>
           </div>
         ))}
@@ -149,27 +149,27 @@ export function AdminContent() {
       {/* System Status Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* API Health */}
-        <div className="lg:col-span-2 glass border border-slate-200 rounded-[2.5rem] overflow-hidden">
-          <div className="p-8 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
+        <div className="lg:col-span-2 bg-[#131313] border border-[#1F1F1F] rounded-[6px] overflow-hidden">
+          <div className="p-8 border-b border-[#1F1F1F] flex items-center justify-between bg-[#0F0F0F]">
             <div className="flex items-center gap-4">
               <Activity className="h-5 w-5 text-red-500" />
               <h3 className="text-lg font-bold text-slate-50">System Nodes Status</h3>
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Auto-Polling Active</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Auto-Polling Active</span>
           </div>
           <div className="p-8 space-y-6">
             {stats?.nodes.map((node) => {
               const Icon = node.icon === "Globe" ? Globe : node.icon === "Database" ? Database : node.icon === "Cpu" ? Cpu : Lock;
               const isHealthy = node.status === "Healthy";
               return (
-                <div key={node.name} className="flex items-center justify-between p-4 bg-slate-100/50 rounded-2xl border border-slate-200 group hover:bg-slate-100 transition-all">
+                <div key={node.name} className="flex items-center justify-between p-4 bg-[#1A1A1A]/50 rounded-[6px] border border-[#1F1F1F] group hover:bg-[#1A1A1A] transition-all">
                   <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-xl bg-slate-800 flex items-center justify-center group-hover:bg-slate-700 transition-colors">
-                      <Icon className="h-5 w-5 text-slate-400" />
+                    <div className="h-10 w-10 rounded-xl bg-[#1A1A1A] flex items-center justify-center group-hover:bg-neutral-700 transition-colors">
+                      <Icon className="h-5 w-5 text-neutral-400" />
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-slate-50">{node.name}</h4>
-                      <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Load: {node.load}</p>
+                      <p className="text-[10px] font-black uppercase text-neutral-500 tracking-widest">Load: {node.load}</p>
                     </div>
                   </div>
                   <div className={cn(
@@ -188,22 +188,22 @@ export function AdminContent() {
         </div>
 
         {/* Global Config */}
-        <div className="glass border border-slate-200 rounded-[2.5rem] overflow-hidden flex flex-col">
-          <div className="p-8 border-b border-slate-200 flex items-center gap-4 bg-slate-50/80">
+        <div className="bg-[#131313] border border-[#1F1F1F]">
+          <div className="p-8 border-b border-[#1F1F1F] flex items-center gap-4 bg-[#0F0F0F]">
             <Settings className="h-5 w-5 text-primary" />
             <h3 className="text-lg font-bold text-slate-50">Global Settings</h3>
           </div>
           <div className="p-8 flex-1 space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 pl-1">Maintenance Mode</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 pl-1">Maintenance Mode</label>
               <button 
                 onClick={handleToggleMaintenance}
                 disabled={saving}
                 className={cn(
-                  "w-full flex items-center justify-between p-4 rounded-2xl border transition-all",
+                  "w-full flex items-center justify-between p-4 rounded-[6px] border transition-all",
                   config?.maintenance_mode 
                     ? "bg-red-500/10 border-red-500/30 text-red-500" 
-                    : "bg-slate-100/70 border-slate-200 text-slate-600 hover:bg-slate-100"
+                    : "bg-[#1A1A1A]/70 border-[#1F1F1F] text-neutral-600 hover:bg-[#1A1A1A]"
                 )}
               >
                 <span className="text-sm font-medium">
@@ -211,7 +211,7 @@ export function AdminContent() {
                 </span>
                 <div className={cn(
                   "h-6 w-11 rounded-full relative transition-colors duration-300",
-                  config?.maintenance_mode ? "bg-red-500" : "bg-slate-700"
+                  config?.maintenance_mode ? "bg-red-500" : "bg-neutral-700"
                 )}>
                   <div className={cn(
                     "absolute top-1 h-4 w-4 bg-white rounded-full transition-all duration-300 shadow-sm",
@@ -222,11 +222,11 @@ export function AdminContent() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 pl-1">Global Notification</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 pl-1">Global Notification</label>
               <textarea 
                 value={notification}
                 onChange={(e) => setNotification(e.target.value)}
-                className="w-full h-32 bg-slate-100/70 border border-slate-200 rounded-2xl p-4 text-xs font-medium text-slate-300 focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all placeholder:text-slate-600"
+                className="w-full h-32 bg-[#1A1A1A]/70 border border-[#1F1F1F] rounded-[6px] p-4 text-xs font-medium text-neutral-300 focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all placeholder:text-neutral-600"
                 placeholder="Message to display across all dashboards..."
               />
             </div>
@@ -234,7 +234,7 @@ export function AdminContent() {
             <button 
               onClick={handleBroadcast}
               disabled={saving}
-              className="w-full py-4 bg-primary rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50"
+              className="w-full py-4 bg-primary rounded-[6px] font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50"
             >
               {saving ? "Processing..." : "Broadcast Message"}
             </button>

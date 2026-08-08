@@ -115,10 +115,10 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] overflow-hidden shadow-xl">
           <div className="p-8 space-y-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-black uppercase text-slate-500 tracking-widest">Master Control</h3>
+              <h3 className="text-sm font-black uppercase text-neutral-500 tracking-widest">Master Control</h3>
               <Switch 
                 checked={config.status} 
                 onCheckedChange={(val) => setConfig({ ...config, status: val })}
@@ -130,21 +130,21 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
                 <div 
                   key={feature.id}
                   className={cn(
-                    "p-6 rounded-2xl border transition-all duration-300",
-                    config.status ? "bg-slate-900/40 border-slate-800" : "bg-slate-900/10 border-slate-900 opacity-40 grayscale"
+                    "p-6 rounded-[6px] border transition-all duration-300",
+                    config.status ? "bg-[#131313] border-[#1A1A1A]" : "bg-[#0F0F0F]/20 border-[#111111] opacity-40 grayscale"
                   )}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div className="flex items-center gap-4">
                       <div className={cn(
                         "h-12 w-12 rounded-xl flex items-center justify-center transition-colors",
-                        config.status ? "bg-primary/20 text-primary" : "bg-slate-800 text-slate-500"
+                        config.status ? "bg-primary/20 text-primary" : "bg-[#1A1A1A] text-neutral-500"
                       )}>
                         <feature.icon className="h-6 w-6" />
                       </div>
                       <div>
                         <h3 className="font-bold text-slate-50">{feature.name}</h3>
-                        <p className="text-xs text-slate-500 max-w-xs">{feature.desc}</p>
+                        <p className="text-xs text-neutral-500 max-w-xs">{feature.desc}</p>
                       </div>
                     </div>
 
@@ -161,7 +161,7 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
               ))}
             </div>
 
-            <div className="pt-6 border-t border-slate-800">
+            <div className="pt-6 border-t border-[#1A1A1A]">
               <h4 className="text-sm font-bold text-slate-50 mb-4 flex items-center gap-2">
                 <ShieldCheck className="h-5 w-5 text-emerald-500" />
                 Whitelisted Users
@@ -172,7 +172,7 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
                   placeholder="User ID..." 
                   value={wlInput}
                   onChange={(e) => setWlInput(e.target.value)}
-                  className="bg-slate-900/50"
+                  className="bg-[#0F0F0F]"
                 />
                 <Button onClick={handleAddWhitelist} disabled={saving} variant="secondary">
                   <Plus className="h-5 w-5" />
@@ -181,22 +181,22 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
 
               <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
                 {whitelistedUsers.length === 0 ? (
-                  <p className="text-xs text-slate-500 italic text-center py-4">No users whitelisted.</p>
+                  <p className="text-xs text-neutral-500 italic text-center py-4">No users whitelisted.</p>
                 ) : (
                   whitelistedUsers.map(userId => (
-                    <div key={userId} className="flex items-center justify-between p-3 rounded-xl bg-slate-900/30 border border-slate-800/50">
+                    <div key={userId} className="flex items-center justify-between p-3 rounded-xl bg-[#111111]/30 border border-[#1A1A1A]/50">
                       <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center">
-                          <User className="h-4 w-4 text-slate-400" />
+                        <div className="h-8 w-8 rounded-full bg-[#1A1A1A] flex items-center justify-center">
+                          <User className="h-4 w-4 text-neutral-400" />
                         </div>
-                        <span className="text-sm font-mono text-slate-300">{userId}</span>
+                        <span className="text-sm font-mono text-neutral-300">{userId}</span>
                       </div>
                       <Button 
                         variant="ghost" 
                         size="sm" 
                         onClick={() => handleRemoveWhitelist(userId)}
                         disabled={saving}
-                        className="text-red-600 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0"
+                        className="text-red-400 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -219,12 +219,12 @@ export function AntiNukeForm({ initialConfig, guildId }: AntiNukeFormProps) {
       </div>
 
       <div className="space-y-6">
-         <div className="bg-gradient-to-br from-red-500/10 to-transparent border border-red-500/20 rounded-3xl p-6 relative overflow-hidden group">
+         <div className="bg-gradient-to-br from-red-500/10 to-transparent border border-red-500/20 rounded-[6px] p-6 relative overflow-hidden group">
             <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
               <ShieldAlert className="h-32 w-32 text-red-500" />
             </div>
-            <h3 className="text-sm font-bold text-red-600 mb-2">Maximum Protection</h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-4">Anti-Nuke is fixed to instantly Ban malicious actors. Ensure that MidVox&apos;s role is at the TOP of the role hierarchy for it to be able to ban admins.</p>
+            <h3 className="text-sm font-bold text-red-400 mb-2">Maximum Protection</h3>
+            <p className="text-xs text-neutral-400 leading-relaxed mb-4">Anti-Nuke is fixed to instantly Ban malicious actors. Ensure that MidVox&apos;s role is at the TOP of the role hierarchy for it to be able to ban admins.</p>
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
               <span className="text-[10px] font-black uppercase text-red-500">Fixed Punishments</span>

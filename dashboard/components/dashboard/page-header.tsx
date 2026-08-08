@@ -29,7 +29,7 @@ export const PageHeader = ({
             {title}
           </h1>
           {description && (
-            <p className="text-sm text-slate-500 mt-1 font-normal">
+            <p className="text-sm text-neutral-500 mt-1 font-normal">
               {description}
             </p>
           )}

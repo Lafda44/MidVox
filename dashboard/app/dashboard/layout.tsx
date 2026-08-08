@@ -6,16 +6,15 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  LayoutDashboard, Server, ShieldCheck, Ticket, BarChart4, FileText, Settings,
+  LayoutDashboard, Server, ShieldCheck, Ticket, BarChart4, Settings,
   Menu, X, Bell, User, Search, ChevronRight, Sparkles, LogOut,
-  LifeBuoy, ChevronDown, Bot, Shield, Download, Zap
+  LifeBuoy, ChevronDown, Terminal, Shield, Download, Zap
 } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { cn, isAdmin } from "@/lib/utils";
 import { api } from "@/lib/api";
-import { AdminConfig } from "@/types/api";
 
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -55,22 +54,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (status === "loading" || status === "unauthenticated") {
     return (
-      <div className="min-h-screen bg-[#070710] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-5">
-          <div className="relative h-14 w-14">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 opacity-20 blur-xl" />
-            <div className="relative h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-[0_0_24px_rgba(99,102,241,0.5)]">
-              <Bot className="h-7 w-7 text-white" />
-            </div>
+      <div className="min-h-screen bg-[#0C0C0C] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-11 w-11 rounded-[6px] bg-[#F59E0B] flex items-center justify-center shadow-[0_0_28px_rgba(245,158,11,0.35)]">
+            <Terminal className="h-5 w-5 text-black" />
           </div>
-          <div className="flex flex-col items-center gap-1">
-            <p className="text-sm font-semibold text-white/80">
-              {process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox"}
-            </p>
-            <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-slate-600 animate-pulse">
-              Authenticating…
-            </p>
-          </div>
+          <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#555] animate-pulse">
+            Authenticating
+          </p>
         </div>
       </div>
     );
@@ -138,36 +129,44 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
   const BackLinkIcon = backLinkItem?.icon || Server;
 
-  const sidebarVariants = {
-    hidden: { opacity: 0, x: -16 },
-    visible: (i: number) => ({
-      opacity: 1, x: 0,
-      transition: { delay: i * 0.025, duration: 0.35, ease: EASE },
-    }),
+  const NavLink = ({ item }: { item: any }) => {
+    const isActive = pathname === item.href;
+    return (
+      <Link
+        href={item.href}
+        className={cn(
+          "group relative flex items-center gap-2.5 px-3 py-2 rounded-[4px] text-[12.5px] font-medium font-mono transition-all duration-150",
+          isActive
+            ? "bg-[rgba(245,158,11,0.08)] text-[#F59E0B] border-l-2 border-[#F59E0B] pl-[10px]"
+            : "text-[#777] hover:bg-[#161616] hover:text-[#CCC] border-l-2 border-transparent pl-[10px]"
+        )}
+      >
+        <item.icon className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-[#F59E0B]" : "text-[#555] group-hover:text-[#999]")} />
+        {item.name}
+        {isActive && <ChevronRight className="ml-auto h-3 w-3 text-[#F59E0B]/50" />}
+      </Link>
+    );
   };
 
   const SidebarContent = () => (
     <>
       {/* Logo header */}
-      <div className="flex h-16 items-center px-4 border-b border-white/[0.06] shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="relative h-8 w-8 shrink-0">
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 opacity-30 blur-md" />
-            <div className="relative h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-[0_0_14px_rgba(99,102,241,0.5)]">
-              <Bot className="h-4 w-4 text-white" />
-            </div>
+      <div className="flex h-14 items-center px-4 border-b border-[#1A1A1A] shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="h-7 w-7 rounded-[5px] bg-[#F59E0B] flex items-center justify-center shrink-0">
+            <Terminal className="h-3.5 w-3.5 text-black" />
           </div>
           <div>
-            <p className="text-sm font-bold text-white leading-none tracking-tight">
-              {process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox"}
+            <p className="text-[13px] font-bold text-[#F5F5F5] leading-none tracking-tight font-mono">
+              {BRAND}
             </p>
-            <p className="text-[9px] font-mono uppercase tracking-[0.22em] text-indigo-400/60 mt-0.5">
-              Dashboard
+            <p className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#F59E0B]/60 mt-1">
+              Control Panel
             </p>
           </div>
         </div>
         <button
-          className="ml-auto p-1.5 lg:hidden text-slate-600 hover:text-white rounded-lg hover:bg-white/[0.05] transition-colors"
+          className="ml-auto p-1.5 lg:hidden text-[#555] hover:text-white rounded-[4px] hover:bg-[#1A1A1A] transition-colors"
           onClick={() => setIsSidebarOpen(false)}
         >
           <X className="h-4 w-4" />
@@ -176,76 +175,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto no-scrollbar p-3 space-y-4">
-        {mainSidebarItems.map((item: any, index: number) => {
+        {mainSidebarItems.map((item: any) => {
           if (item.items) {
             return (
-              <motion.div key={item.name} custom={index} initial="hidden" animate="visible" variants={sidebarVariants}>
-                <p className="px-2.5 mb-1.5 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-700">
+              <div key={item.name}>
+                <p className="px-3 mb-1.5 text-[9px] font-mono font-semibold uppercase tracking-[0.25em] text-[#444]">
                   {item.name}
                 </p>
                 <div className="space-y-0.5">
-                  {item.items.map((sub: any) => {
-                    const isActive = pathname === sub.href;
-                    return (
-                      <Link
-                        key={sub.name}
-                        href={sub.href}
-                        className={cn(
-                          "group relative flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12.5px] font-medium transition-all duration-200",
-                          isActive
-                            ? "bg-indigo-500/10 text-indigo-300"
-                            : "text-slate-500 hover:bg-white/[0.04] hover:text-slate-200"
-                        )}
-                      >
-                        {isActive && (
-                          <motion.span
-                            layoutId="sidebar-pill"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 rounded-full bg-gradient-to-b from-indigo-400 to-violet-500 shadow-[0_0_8px_rgba(99,102,241,0.7)]"
-                          />
-                        )}
-                        <sub.icon className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-indigo-400" : "text-slate-700 group-hover:text-slate-500")} />
-                        {sub.name}
-                      </Link>
-                    );
-                  })}
+                  {item.items.map((sub: any) => <NavLink key={sub.name} item={sub} />)}
                 </div>
-              </motion.div>
+              </div>
             );
           }
-
-          const isActive = pathname === item.href;
-          return (
-            <motion.div key={item.name} custom={index} initial="hidden" animate="visible" variants={sidebarVariants}>
-              <Link
-                href={item.href}
-                className={cn(
-                  "group relative flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12.5px] font-semibold transition-all duration-200",
-                  isActive
-                    ? "bg-indigo-500/10 text-indigo-300"
-                    : "text-slate-500 hover:bg-white/[0.04] hover:text-slate-200"
-                )}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="sidebar-pill"
-                    className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 rounded-full bg-gradient-to-b from-indigo-400 to-violet-500 shadow-[0_0_8px_rgba(99,102,241,0.7)]"
-                  />
-                )}
-                <item.icon className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-indigo-400" : "text-slate-700 group-hover:text-slate-500")} />
-                {item.name}
-                {isActive && <ChevronRight className="ml-auto h-3.5 w-3.5 text-indigo-500/60" />}
-              </Link>
-            </motion.div>
-          );
+          return <NavLink key={item.name} item={item} />;
         })}
 
         {backLinkItem && (
-          <div className="pt-3 border-t border-white/[0.05]">
+          <div className="pt-3 border-t border-[#1A1A1A]">
             <Link
               href={backLinkItem.href}
-              className="group flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12.5px] font-semibold text-slate-600 hover:bg-white/[0.04] hover:text-slate-300 transition-all"
+              className="group flex items-center gap-2.5 px-3 py-2 rounded-[4px] text-[12.5px] font-mono font-medium text-[#666] hover:bg-[#161616] hover:text-[#CCC] transition-all"
             >
-              <BackLinkIcon className="h-3.5 w-3.5 shrink-0 text-slate-700 group-hover:text-slate-500" />
+              <BackLinkIcon className="h-3.5 w-3.5 shrink-0 text-[#555] group-hover:text-[#999]" />
               {backLinkItem.name}
             </Link>
           </div>
@@ -253,28 +205,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </nav>
 
       {/* User profile */}
-      <div className="shrink-0 p-3 border-t border-white/[0.06]">
-        <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-          <div className="h-8 w-8 rounded-full overflow-hidden border border-white/10 shrink-0">
+      <div className="shrink-0 p-3 border-t border-[#1A1A1A]">
+        <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-[5px] bg-[#131313] border border-[#1F1F1F]">
+          <div className="relative h-8 w-8 rounded-[4px] overflow-hidden border border-[#2A2A2A] shrink-0">
             {session?.user?.image ? (
               <Image src={session.user.image!} alt="Avatar" fill className="object-cover" />
             ) : (
-              <div className="h-full w-full bg-indigo-600/20 flex items-center justify-center">
-                <User className="h-4 w-4 text-indigo-400/60" />
+              <div className="h-full w-full bg-[#1A1A1A] flex items-center justify-center">
+                <User className="h-4 w-4 text-[#555]" />
               </div>
             )}
           </div>
           <div className="overflow-hidden">
-            <p className="text-xs font-semibold text-white/80 truncate leading-none">
+            <p className="text-xs font-semibold text-[#DDD] truncate leading-none">
               {session?.user?.name || "Admin"}
             </p>
-            <p className="text-[9px] font-mono uppercase tracking-[0.15em] text-slate-600 mt-0.5">
-              Active
+            <p className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#22C55E] mt-1 flex items-center gap-1">
+              <span className="w-1 h-1 rounded-full bg-[#22C55E] inline-block" />
+              Online
             </p>
           </div>
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="ml-auto p-1.5 rounded-lg text-slate-700 hover:text-red-400 hover:bg-red-500/10 transition-all"
+            className="ml-auto p-1.5 rounded-[4px] text-[#555] hover:text-[#EF4444] hover:bg-[rgba(239,68,68,0.08)] transition-all"
             title="Sign out"
           >
             <LogOut className="h-3.5 w-3.5" />
@@ -285,23 +238,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   );
 
   return (
-    <div className="min-h-screen bg-[#070710] text-slate-200">
-      {/* Fixed background */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0" style={{ backgroundImage: "url('/bg-mesh.svg')", backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.45) saturate(0.9)" }} />
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 120% 100% at 50% 0%, rgba(5,5,16,0.6) 0%, rgba(5,5,16,0.97) 75%)" }} />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-full bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
-        <div className="absolute top-[-15%] left-[20%] h-[500px] w-[500px] rounded-full bg-indigo-600/[0.05] blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[10%] h-[400px] w-[400px] rounded-full bg-violet-600/[0.04] blur-[110px]" />
-        <div className="absolute inset-0 cyber-grid-bg opacity-[0.18]" />
-      </div>
-
+    <div className="min-h-screen bg-[#0C0C0C] text-[#DDD]">
       {/* Mobile overlay */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-40 bg-black/70 lg:hidden"
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
@@ -309,33 +252,30 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Sidebar */}
       <aside className={cn(
-        "fixed top-0 bottom-0 left-0 z-50 w-60 flex flex-col border-r border-white/[0.06] bg-[#07070f]/95 backdrop-blur-xl transition-transform duration-300 lg:translate-x-0",
+        "fixed top-0 bottom-0 left-0 z-50 w-60 flex flex-col border-r border-[#1A1A1A] bg-[#0F0F0F] transition-transform duration-200 lg:translate-x-0",
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-indigo-500/20 to-transparent pointer-events-none" />
         <SidebarContent />
       </aside>
 
       {/* Main */}
-      <div className="lg:pl-60 flex flex-col min-h-screen relative z-10">
+      <div className="lg:pl-60 flex flex-col min-h-screen">
         {/* Topbar */}
-        <header className="sticky top-0 z-30 h-14 flex items-center px-4 lg:px-6 border-b border-white/[0.06] bg-[#07070f]/80 backdrop-blur-xl">
-          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
-
+        <header className="sticky top-0 z-30 h-14 flex items-center px-4 lg:px-6 border-b border-[#1A1A1A] bg-[rgba(12,12,12,0.95)] backdrop-blur-sm">
           <button
-            className="p-2 lg:hidden text-slate-600 hover:text-white rounded-lg hover:bg-white/[0.05] transition-colors mr-3"
+            className="p-2 lg:hidden text-[#555] hover:text-white rounded-[4px] hover:bg-[#1A1A1A] transition-colors mr-3"
             onClick={() => setIsSidebarOpen(true)}
           >
             <Menu className="h-4 w-4" />
           </button>
 
-          {/* Breadcrumb / search */}
-          <div className="hidden md:flex items-center gap-2 relative">
-            <Search className="absolute left-3 h-3.5 w-3.5 text-slate-700" />
+          {/* Search */}
+          <div className="hidden md:flex items-center relative">
+            <Search className="absolute left-3 h-3.5 w-3.5 text-[#444]" />
             <input
               type="text"
-              placeholder="Quick search…"
-              className="w-64 bg-white/[0.03] border border-white/[0.06] rounded-lg py-1.5 pl-9 pr-3 text-xs text-slate-400 placeholder:text-slate-700 focus:outline-none focus:border-indigo-500/40 focus:ring-1 focus:ring-indigo-500/15 transition-all"
+              placeholder="search..."
+              className="w-64 bg-[#131313] border border-[#1F1F1F] rounded-[4px] py-1.5 pl-9 pr-3 text-xs font-mono text-[#AAA] placeholder:text-[#444] focus:outline-none focus:border-[#F59E0B]/40 transition-all"
             />
           </div>
 
@@ -344,36 +284,36 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="relative" ref={bellRef}>
               <button
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                className="relative p-2 text-slate-600 hover:text-white rounded-lg hover:bg-white/[0.05] transition-all"
+                className="relative p-2 text-[#555] hover:text-white rounded-[4px] hover:bg-[#1A1A1A] transition-all"
               >
                 <Bell className="h-4 w-4" />
                 {globalNotification && (
-                  <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500 shadow-[0_0_6px_rgba(99,102,241,0.8)]" />
+                  <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-[#F59E0B] shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
                 )}
               </button>
               <AnimatePresence>
                 {isNotificationsOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.97 }} transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-72 bg-[#0d0d1c] border border-white/[0.08] rounded-xl shadow-2xl p-3 z-20"
+                    initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }} transition={{ duration: 0.12 }}
+                    className="absolute right-0 mt-2 w-72 bg-[#131313] border border-[#252525] rounded-[6px] shadow-2xl p-3 z-20"
                   >
-                    <div className="flex items-center justify-between mb-2 pb-2 border-b border-white/[0.05]">
-                      <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-slate-600">Broadcasts</p>
-                      <button onClick={() => setGlobalNotification(null)} className="text-[9px] font-mono uppercase text-indigo-500/60 hover:text-indigo-400 transition-colors">Clear</button>
+                    <div className="flex items-center justify-between mb-2 pb-2 border-b border-[#1F1F1F]">
+                      <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#555]">Broadcasts</p>
+                      <button onClick={() => setGlobalNotification(null)} className="text-[9px] font-mono uppercase text-[#F59E0B]/60 hover:text-[#F59E0B] transition-colors">Clear</button>
                     </div>
                     {globalNotification ? (
-                      <div className="bg-indigo-500/[0.07] border border-indigo-500/20 rounded-lg p-3">
+                      <div className="bg-[rgba(245,158,11,0.05)] border border-[#F59E0B]/20 rounded-[4px] p-3">
                         <div className="flex items-center gap-2 mb-1.5">
-                          <Sparkles className="h-3 w-3 text-indigo-400" />
-                          <span className="text-[9px] font-mono uppercase tracking-widest text-indigo-400">System Broadcast</span>
+                          <Sparkles className="h-3 w-3 text-[#F59E0B]" />
+                          <span className="text-[9px] font-mono uppercase tracking-widest text-[#F59E0B]">System</span>
                         </div>
-                        <p className="text-xs text-slate-300 leading-relaxed">{globalNotification}</p>
+                        <p className="text-xs text-[#BBB] leading-relaxed">{globalNotification}</p>
                       </div>
                     ) : (
                       <div className="py-6 flex flex-col items-center gap-2">
-                        <Bell className="h-5 w-5 text-slate-700" />
-                        <p className="text-xs text-slate-600">No active broadcasts</p>
+                        <Bell className="h-5 w-5 text-[#333]" />
+                        <p className="text-xs font-mono text-[#555]">No active broadcasts</p>
                       </div>
                     )}
                   </motion.div>
@@ -381,47 +321,47 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </AnimatePresence>
             </div>
 
-            <div className="h-5 w-px bg-white/[0.06] hidden sm:block" />
+            <div className="h-5 w-px bg-[#1F1F1F] hidden sm:block" />
 
             {/* Profile */}
             <div className="relative" ref={profileRef}>
               <button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/[0.05] border border-transparent hover:border-white/[0.07] transition-all"
+                className="flex items-center gap-2 p-1.5 rounded-[4px] hover:bg-[#1A1A1A] transition-all"
               >
-                <div className="h-7 w-7 rounded-full overflow-hidden border border-white/10">
+                <div className="relative h-7 w-7 rounded-[4px] overflow-hidden border border-[#2A2A2A]">
                   {session?.user?.image ? (
                     <Image src={session.user.image!} alt="Avatar" fill className="object-cover" />
                   ) : (
-                    <div className="h-full w-full bg-indigo-600/20 flex items-center justify-center">
-                      <User className="h-3.5 w-3.5 text-indigo-400/50" />
+                    <div className="h-full w-full bg-[#1A1A1A] flex items-center justify-center">
+                      <User className="h-3.5 w-3.5 text-[#555]" />
                     </div>
                   )}
                 </div>
-                <span className="hidden sm:block text-xs font-semibold text-slate-300">
+                <span className="hidden sm:block text-xs font-mono font-semibold text-[#BBB]">
                   {session?.user?.name?.split(" ")[0] || "Admin"}
                 </span>
-                <ChevronDown className={cn("h-3 w-3 text-slate-600 hidden sm:block transition-transform", isProfileOpen && "rotate-180")} />
+                <ChevronDown className={cn("h-3 w-3 text-[#555] hidden sm:block transition-transform", isProfileOpen && "rotate-180")} />
               </button>
 
               <AnimatePresence>
                 {isProfileOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.97 }} transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-48 bg-[#0d0d1c] border border-white/[0.08] rounded-xl shadow-2xl p-1.5 z-20"
+                    initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }} transition={{ duration: 0.12 }}
+                    className="absolute right-0 mt-2 w-48 bg-[#131313] border border-[#252525] rounded-[6px] shadow-2xl p-1.5 z-20"
                   >
-                    <div className="px-3 py-2 border-b border-white/[0.05] mb-1">
-                      <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-slate-600 mb-0.5">Signed in as</p>
-                      <p className="text-xs font-semibold text-white/80 truncate">{session?.user?.name || "Administrator"}</p>
+                    <div className="px-3 py-2 border-b border-[#1F1F1F] mb-1">
+                      <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#555] mb-0.5">Signed in as</p>
+                      <p className="text-xs font-semibold text-[#DDD] truncate">{session?.user?.name || "Administrator"}</p>
                     </div>
-                    <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-500 hover:bg-white/[0.04] hover:text-slate-200 transition-all">
+                    <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[4px] text-xs font-mono font-medium text-[#777] hover:bg-[#1A1A1A] hover:text-[#CCC] transition-all">
                       <LifeBuoy className="h-3.5 w-3.5" />
                       Support
                     </button>
                     <button
                       onClick={() => signOut({ callbackUrl: "/" })}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-red-500/70 hover:bg-red-500/[0.08] hover:text-red-400 transition-all"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[4px] text-xs font-mono font-medium text-[#EF4444]/70 hover:bg-[rgba(239,68,68,0.08)] hover:text-[#EF4444] transition-all"
                     >
                       <LogOut className="h-3.5 w-3.5" />
                       Sign Out
@@ -438,10 +378,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.22, ease: EASE }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
             >
               <div className="max-w-[1400px] mx-auto">{children}</div>
             </motion.div>

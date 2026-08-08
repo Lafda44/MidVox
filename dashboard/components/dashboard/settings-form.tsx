@@ -65,11 +65,11 @@ export function SettingsForm({ initialPrefix, guildId }: SettingsFormProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div className="lg:col-span-2 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl shadow-slate-900/5">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] overflow-hidden shadow-xl shadow-black/30">
           <div className="p-8 space-y-6">
             <form onSubmit={handleSave} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-sm font-black uppercase text-slate-500 tracking-widest flex items-center gap-2">
+                <label className="text-sm font-black uppercase text-neutral-500 tracking-widest flex items-center gap-2">
                   <Command className="h-4 w-4" />
                   Command Prefix
                 </label>
@@ -81,11 +81,11 @@ export function SettingsForm({ initialPrefix, guildId }: SettingsFormProps) {
                     maxLength={10}
                     className="text-lg font-bold pr-20 py-7"
                   />
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-slate-600 group-focus-within:text-primary transition-colors">
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-neutral-600 group-focus-within:text-primary transition-colors">
                     {prefix.length}/10
                   </div>
                 </div>
-                <p className="text-xs text-slate-500 italic">This character triggers bot commands (e.g. {prefix || ">"}help)</p>
+                <p className="text-xs text-neutral-500 italic">This character triggers bot commands (e.g. {prefix || ">"}help)</p>
               </div>
 
               <Button 
@@ -99,23 +99,23 @@ export function SettingsForm({ initialPrefix, guildId }: SettingsFormProps) {
             </form>
           </div>
           
-          <div className="bg-slate-800/30 px-8 py-4 border-t border-slate-800 flex items-center justify-between">
-             <span className="text-xs text-slate-500 font-medium">Last synced: Just now</span>
+          <div className="bg-[#1A1A1A]/30 px-8 py-4 border-t border-[#1A1A1A] flex items-center justify-between">
+             <span className="text-xs text-neutral-500 font-medium">Last synced: Just now</span>
              <button className="text-xs text-primary hover:underline font-bold">Refresh Cache</button>
           </div>
         </div>
       </div>
 
       <div className="space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 relative overflow-hidden group">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] p-6 relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
             <Info className="h-32 w-32 text-slate-50" />
           </div>
-          <h3 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-4 flex items-center gap-2">
+          <h3 className="text-sm font-black uppercase text-neutral-500 tracking-widest mb-4 flex items-center gap-2">
             <Info className="h-4 w-4" />
             Information
           </h3>
-          <div className="space-y-4 text-sm leading-relaxed text-slate-400">
+          <div className="space-y-4 text-sm leading-relaxed text-neutral-400">
             <p>The <span className="text-slate-50 font-bold italic">Prefix</span> is a unique identifier that tells the bot to process text as a command.</p>
           </div>
         </div>

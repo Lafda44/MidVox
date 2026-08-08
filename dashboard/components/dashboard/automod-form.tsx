@@ -100,10 +100,10 @@ export function AutomodForm({ initialConfig, guildId }: AutomodFormProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] overflow-hidden shadow-xl">
           <div className="p-8 space-y-6">
             <div className="flex items-center justify-between mb-4">
-               <h3 className="text-sm font-black uppercase text-slate-500 tracking-widest">Master Control</h3>
+               <h3 className="text-sm font-black uppercase text-neutral-500 tracking-widest">Master Control</h3>
                <Switch 
                   checked={config.enabled} 
                   onCheckedChange={() => handleToggle('master')}
@@ -117,21 +117,21 @@ export function AutomodForm({ initialConfig, guildId }: AutomodFormProps) {
                   <div 
                     key={rule.id}
                     className={cn(
-                      "p-6 rounded-2xl border transition-all duration-300",
-                      config.enabled ? "bg-slate-900/40 border-slate-800" : "bg-slate-900/10 border-slate-900 opacity-40 grayscale"
+                      "p-6 rounded-[6px] border transition-all duration-300",
+                      config.enabled ? "bg-[#131313] border-[#1A1A1A]" : "bg-[#0F0F0F]/20 border-[#111111] opacity-40 grayscale"
                     )}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                       <div className="flex items-center gap-4">
                         <div className={cn(
                           "h-12 w-12 rounded-xl flex items-center justify-center transition-colors",
-                          isEnabled ? "bg-primary/20 text-primary" : "bg-slate-800 text-slate-500"
+                          isEnabled ? "bg-primary/20 text-primary" : "bg-[#1A1A1A] text-neutral-500"
                         )}>
                           <rule.icon className="h-6 w-6" />
                         </div>
                         <div>
                           <h3 className="font-bold text-slate-50">{rule.name}</h3>
-                          <p className="text-xs text-slate-500 max-w-xs">{rule.desc}</p>
+                          <p className="text-xs text-neutral-500 max-w-xs">{rule.desc}</p>
                         </div>
                       </div>
 
@@ -147,7 +147,7 @@ export function AutomodForm({ initialConfig, guildId }: AutomodFormProps) {
                              />
                            </div>
                          )}
-                         <div className="h-8 w-[1px] bg-slate-800 hidden sm:block" />
+                         <div className="h-8 w-[1px] bg-[#1A1A1A] hidden sm:block" />
                          <Switch 
                           disabled={!config.enabled}
                           checked={config.punishments?.[rule.id] !== undefined}
@@ -181,23 +181,23 @@ export function AutomodForm({ initialConfig, guildId }: AutomodFormProps) {
       </div>
 
       <div className="space-y-6">
-         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-            <h3 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-4">Logging Level</h3>
+         <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] p-6">
+            <h3 className="text-sm font-black uppercase text-neutral-500 tracking-widest mb-4">Logging Level</h3>
             <div className="space-y-3">
-               <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-200/70 flex items-center justify-between">
-                  <span className="text-sm text-slate-400">Log Channel</span>
+               <div className="p-3 bg-[#0F0F0F] rounded-xl border border-neutral-200/70 flex items-center justify-between">
+                  <span className="text-sm text-neutral-400">Log Channel</span>
                   <span className="text-xs font-mono text-primary">#{config.logging_channel || 'None'}</span>
                </div>
-               <p className="text-[10px] text-slate-500 italic text-center">Mod logs are automatically sent to the configured channel.</p>
+               <p className="text-[10px] text-neutral-500 italic text-center">Mod logs are automatically sent to the configured channel.</p>
             </div>
          </div>
 
-         <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
+         <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-[6px] p-6 relative overflow-hidden group">
             <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
               <ShieldAlert className="h-32 w-32 text-slate-50" />
             </div>
             <h3 className="text-sm font-bold text-slate-50 mb-2">Automod AI</h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-4">Our neural network analyzes message context to prevent false positives.</p>
+            <p className="text-xs text-neutral-400 leading-relaxed mb-4">Our neural network analyzes message context to prevent false positives.</p>
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary" />
               <span className="text-[10px] font-black uppercase text-primary">V2 Active</span>

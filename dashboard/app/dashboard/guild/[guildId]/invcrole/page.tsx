@@ -87,29 +87,29 @@ export default function InvcRolePage({ params }: { params: { guildId: string } }
             <Volume2 className="h-6 w-6 text-primary" />
             Voice Role
           </h2>
-          <p className="text-slate-400 mt-1">Automatically assign a role when members join a voice channel.</p>
+          <p className="text-neutral-400 mt-1">Automatically assign a role when members join a voice channel.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3 space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl p-8 space-y-8">
+          <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] overflow-hidden shadow-xl p-8 space-y-8">
             
             {/* Status & Toggle */}
-            <div className="flex items-center justify-between p-6 bg-slate-900/40 rounded-2xl border border-slate-800">
+            <div className="flex items-center justify-between p-6 bg-[#131313] rounded-[6px] border border-[#1A1A1A]">
               <div className="flex items-center gap-4">
                 <div className={cn("p-3 rounded-xl transition-colors", config.enabled ? "bg-emerald-500/20 text-emerald-500" : "bg-red-500/20 text-red-500")}>
                   <Power className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-lg font-black text-white">Voice Role System</h3>
-                  <p className="text-sm text-slate-400 mt-1">{config.enabled ? "The system is active and monitoring channels." : "The system is currently disabled."}</p>
+                  <p className="text-sm text-neutral-400 mt-1">{config.enabled ? "The system is active and monitoring channels." : "The system is currently disabled."}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 flex items-center gap-2">
+                <div className="px-3 py-1 rounded-full bg-[#111111] border border-[#1A1A1A] flex items-center gap-2">
                   <div className={cn("w-2 h-2 rounded-full", config.enabled ? 'bg-emerald-500 animate-pulse' : 'bg-red-500')} />
-                  <span className="text-[10px] font-bold uppercase text-slate-400">
+                  <span className="text-[10px] font-bold uppercase text-neutral-400">
                     {config.enabled ? 'Live' : 'Off'}
                   </span>
                 </div>
@@ -122,15 +122,15 @@ export default function InvcRolePage({ params }: { params: { guildId: string } }
             </div>
 
             {/* Role Selector */}
-            <div className={cn("p-6 border rounded-2xl space-y-4 transition-all duration-300", 
-              config.enabled ? "bg-slate-900/40 border-slate-800 opacity-100" : "bg-slate-900/10 border-slate-900 opacity-50 pointer-events-none grayscale")}>
+            <div className={cn("p-6 border rounded-[6px] space-y-4 transition-all duration-300", 
+              config.enabled ? "bg-[#131313] border-[#1A1A1A] opacity-100" : "bg-[#0F0F0F]/20 border-[#111111] opacity-40 pointer-events-none grayscale")}>
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-primary/20 text-primary rounded-xl">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="font-bold text-white">Voice State Role</h4>
-                  <p className="text-xs text-slate-400 mt-1">Choose the role to be assigned automatically to voice participants.</p>
+                  <p className="text-xs text-neutral-400 mt-1">Choose the role to be assigned automatically to voice participants.</p>
                 </div>
               </div>
               <Select
@@ -138,13 +138,13 @@ export default function InvcRolePage({ params }: { params: { guildId: string } }
                 onValueChange={(val) => setConfig({ ...config, role_id: val === "none" ? null : val })}
                 disabled={!config.enabled}
               >
-                <SelectTrigger className="w-full h-12 bg-slate-900 border-slate-800 font-medium">
+                <SelectTrigger className="w-full h-12 bg-[#111111] border-[#1A1A1A] font-medium">
                   <SelectValue placeholder="Select a role..." />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
-                  <SelectItem value="none" className="text-slate-400 focus:bg-slate-800">No Role Selected</SelectItem>
+                <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[300px]">
+                  <SelectItem value="none" className="text-neutral-400 focus:bg-[#1A1A1A]">No Role Selected</SelectItem>
                   {filteredRoles.map((r) => (
-                    <SelectItem key={r.id} value={r.id} className="focus:bg-slate-800">
+                    <SelectItem key={r.id} value={r.id} className="focus:bg-[#1A1A1A]">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: formatColor(r.color) }} />
                         {r.name}
@@ -164,7 +164,7 @@ export default function InvcRolePage({ params }: { params: { guildId: string } }
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
+          <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-[6px] p-6 relative overflow-hidden group">
             <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
               <Volume2 className="h-32 w-32 text-primary" />
             </div>
@@ -172,7 +172,7 @@ export default function InvcRolePage({ params }: { params: { guildId: string } }
               <Info className="h-4 w-4 text-primary" />
               <h3 className="text-sm font-bold text-white">How It Works</h3>
             </div>
-            <ul className="text-xs text-slate-500 space-y-3 leading-relaxed">
+            <ul className="text-xs text-neutral-500 space-y-3 leading-relaxed">
               <li className="flex gap-2">
                 <span className="text-primary font-bold">01</span>
                 <span>Role is added when a user joins any voice channel.</span>

@@ -67,14 +67,14 @@ export default function DocsPage() {
   const [activeTab, setActiveTab] = useState("Introduction");
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans">
+    <div className="min-h-screen bg-[#0C0C0C] text-[#F5F5F5] font-sans">
       {/* Background Decor */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-red-500/[0.02] blur-[150px] rounded-full" />
       </div>
 
       {/* Nav */}
-      <nav className="fixed top-0 w-full z-50 border-b border-slate-200/70 bg-slate-950/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
+      <nav className="fixed top-0 w-full z-50 border-b border-[#1F1F1F] bg-[rgba(12,12,12,0.95)] backdrop-blur-sm px-6 h-20 flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-4 group">
             <div className="h-8 w-8 rounded-lg bg-red-600 flex items-center justify-center mr-3">
@@ -84,24 +84,24 @@ export default function DocsPage() {
           </Link>
           
           <div className="hidden lg:flex items-center w-80 relative group">
-            <SearchIcon className="absolute left-4 h-4 w-4 text-slate-500 group-focus-within:text-red-500 transition-colors" />
+            <SearchIcon className="absolute left-4 h-4 w-4 text-neutral-500 group-focus-within:text-red-500 transition-colors" />
             <input 
               type="text" 
               placeholder="Search documentation..."
-              className="w-full bg-slate-100/70 border border-slate-200/70 rounded-2xl py-2.5 pl-12 pr-4 text-xs font-bold text-slate-300 focus:outline-none focus:ring-1 focus:ring-red-500/30 focus:bg-slate-100 transition-all"
+              className="w-full bg-[#1A1A1A]/70 border border-[#1F1F1F] rounded-[6px] py-2.5 pl-12 pr-4 text-xs font-bold text-neutral-300 focus:outline-none focus:ring-1 focus:ring-red-500/30 focus:bg-[#1A1A1A] transition-all"
             />
           </div>
         </div>
 
         <div className="flex items-center gap-4">
            <button 
-             className="lg:hidden p-2 text-slate-400"
+             className="lg:hidden p-2 text-neutral-400"
              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
            >
              {isSidebarOpen ? <X /> : <Menu />}
            </button>
            <Link href="/">
-            <Button variant="ghost" className="text-slate-400 hover:text-slate-50 gap-2 text-xs font-black uppercase tracking-widest">
+            <Button variant="ghost" className="text-neutral-400 hover:text-slate-50 gap-2 text-xs font-black uppercase tracking-widest">
               Exit Docs
             </Button>
           </Link>
@@ -111,13 +111,13 @@ export default function DocsPage() {
       <div className="max-w-7xl mx-auto flex pt-20">
         {/* Sidebar */}
         <aside className={cn(
-          "fixed inset-y-0 left-0 z-40 w-80 bg-slate-950 border-r border-slate-200/70 pt-20 transition-transform lg:translate-x-0 lg:static lg:bg-transparent",
+          "fixed inset-y-0 left-0 z-40 w-80 bg-[#0C0C0C] border-r border-[#1F1F1F] pt-20 transition-transform lg:translate-x-0 lg:static lg:bg-[#0F0F0F]",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
           <div className="h-full p-8 overflow-y-auto no-scrollbar">
             {DOCS_NAV.map((section) => (
               <div key={section.title} className="mb-10">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-600 mb-6">{section.title}</h4>
+                <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-600 mb-6">{section.title}</h4>
                 <div className="space-y-1">
                   {section.items.map((item) => (
                     <button
@@ -127,14 +127,14 @@ export default function DocsPage() {
                         setIsSidebarOpen(false);
                       }}
                       className={cn(
-                        "w-full flex flex-col items-start gap-1 p-4 rounded-2xl transition-all text-left",
+                        "w-full flex flex-col items-start gap-1 p-4 rounded-[6px] transition-all text-left",
                         activeTab === item.name 
                           ? "bg-red-500/10 border border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.05)]" 
-                          : "hover:bg-slate-100/50 border border-transparent"
+                          : "hover:bg-[#1A1A1A]/50 border border-transparent"
                       )}
                     >
-                      <span className={cn("text-sm font-bold", activeTab === item.name ? "text-red-500" : "text-slate-300")}>{item.name}</span>
-                      <span className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">{item.description}</span>
+                      <span className={cn("text-sm font-bold", activeTab === item.name ? "text-red-500" : "text-neutral-300")}>{item.name}</span>
+                      <span className="text-[10px] text-neutral-600 font-bold uppercase tracking-tight">{item.description}</span>
                     </button>
                   ))}
                 </div>
@@ -155,20 +155,20 @@ export default function DocsPage() {
           </h1>
 
              <div className="prose max-w-none">
-             <p className="text-lg text-slate-400 mb-12 leading-relaxed">
+             <p className="text-lg text-neutral-400 mb-12 leading-relaxed">
                Welcome to the {activeTab} section of the MidVox Engine documentation. Our engine is designed for communities that demand absolute performance and cinematic management tools.
              </p>
 
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-8 rounded-[32px] glass border-slate-200/70 space-y-4">
+                <div className="p-8 rounded-[32px] bg-[#131313] border-[#1F1F1F] space-y-4">
                    <Zap className="h-6 w-6 text-red-500" />
                    <h3 className="text-xl font-bold text-slate-50 font-display uppercase">Fast Dispatch</h3>
-                   <p className="text-sm text-slate-500 font-bold uppercase tracking-tight">Commands are dispatched via our global edge network in under 12ms.</p>
+                   <p className="text-sm text-neutral-500 font-bold uppercase tracking-tight">Commands are dispatched via our global edge network in under 12ms.</p>
                 </div>
-                <div className="p-8 rounded-[32px] glass border-slate-200/70 space-y-4">
+                <div className="p-8 rounded-[32px] bg-[#131313] border-[#1F1F1F] space-y-4">
                    <ShieldCheck className="h-6 w-6 text-emerald-500" />
                    <h3 className="text-xl font-bold text-slate-50 font-display uppercase">Secure Node</h3>
-                   <p className="text-sm text-slate-500 font-bold uppercase tracking-tight">Every module runs in a dedicated neural sandbox with AES-256 encryption.</p>
+                   <p className="text-sm text-neutral-500 font-bold uppercase tracking-tight">Every module runs in a dedicated neural sandbox with AES-256 encryption.</p>
                 </div>
              </div>
 
@@ -178,19 +178,19 @@ export default function DocsPage() {
                 </div>
                 <h2 className="text-2xl font-bold text-slate-50 font-display uppercase tracking-tight mb-4">Neural Architecture</h2>
                   <h3 className="text-slate-50 font-bold">Protocol Overview</h3>
-                <p className="text-slate-500 font-bold leading-relaxed mb-8">
+                <p className="text-neutral-500 font-bold leading-relaxed mb-8">
                   The MidVox Engine utilizes a decentralized event stream processing model. When a Discord event is received, it is instantly routed to the nearest edge cluster.
                 </p>
-                <div className="bg-black/40 p-6 rounded-2xl border border-slate-200/70 font-mono text-sm text-red-500 mb-8">
+                <div className="bg-black/40 p-6 rounded-[6px] border border-[#1F1F1F] font-mono text-sm text-red-500 mb-8">
                   $ midvox initialize --cluster-shard [neural_07] --mode enterprise
                 </div>
              </div>
           </div>
 
-          <div className="mt-20 pt-12 border-t border-slate-200/70 flex items-center justify-between">
+          <div className="mt-20 pt-12 border-t border-[#1F1F1F] flex items-center justify-between">
              <div>
-                <p className="text-[10px] font-black uppercase text-slate-600 tracking-[0.4em] mb-2">Internal Ref</p>
-                <p className="text-sm font-bold text-slate-400">DOC-ID: CX_7749_B</p>
+                <p className="text-[10px] font-black uppercase text-neutral-600 tracking-[0.4em] mb-2">Internal Ref</p>
+                <p className="text-sm font-bold text-neutral-400">DOC-ID: CX_7749_B</p>
              </div>
              <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />

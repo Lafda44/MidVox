@@ -84,12 +84,12 @@ export function VanityRoleForm({ initialSetups, channels, roles, guildId }: Vani
     <div className="space-y-8">
       
       {/* List Existing Ones */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl p-8">
+      <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] shadow-xl p-8">
         <h3 className="text-xl font-bold text-slate-50 mb-6">Active Vanity Roles</h3>
         
         {setups.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 text-slate-500">
-            <Link2 className="h-12 w-12 mb-4 opacity-50 bg-slate-800 p-2 rounded-xl" />
+          <div className="flex flex-col items-center justify-center py-10 text-neutral-500">
+            <Link2 className="h-12 w-12 mb-4 opacity-50 bg-[#1A1A1A] p-2 rounded-xl" />
             <p>No vanity roles configured yet.</p>
           </div>
         ) : (
@@ -98,7 +98,7 @@ export function VanityRoleForm({ initialSetups, channels, roles, guildId }: Vani
               const r = roles.find(ro => ro.id.toString() === setup.role_id?.toString());
               const c = channels.find(ch => ch.id.toString() === setup.log_channel_id?.toString());
               return (
-                <div key={idx} className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 relative group">
+                <div key={idx} className="bg-[#0F0F0F] p-6 rounded-[6px] border border-[#1A1A1A] relative group">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-bold text-lg text-primary">{setup.vanity}</h4>
                     <Button 
@@ -113,13 +113,13 @@ export function VanityRoleForm({ initialSetups, channels, roles, guildId }: Vani
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
-                      <span className="text-slate-400">Role:</span>
+                      <span className="text-neutral-400">Role:</span>
                       <span className="text-slate-50 font-medium">
                         {r ? r.name : setup.role_id}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-slate-400">Log Channel:</span>
+                      <span className="text-neutral-400">Log Channel:</span>
                       <span className="text-slate-50 font-medium">
                         {c ? `#${c.name}` : setup.log_channel_id}
                       </span>
@@ -133,31 +133,31 @@ export function VanityRoleForm({ initialSetups, channels, roles, guildId }: Vani
       </div>
 
       {/* Add New Setup */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl p-8">
+      <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] shadow-xl p-8">
         <h3 className="text-xl font-bold text-slate-50 mb-6">Add New Vanity Role</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-3">
-            <label className="text-sm font-bold text-slate-300">Vanity Code</label>
+            <label className="text-sm font-bold text-neutral-300">Vanity Code</label>
             <Input 
               value={newVanity}
               onChange={(e) => setNewVanity(e.target.value)}
               placeholder="e.g. zyx"
-              className="h-12 bg-slate-900 border-slate-800"
+              className="h-12 bg-[#111111] border-[#1A1A1A]"
             />
           </div>
           
           <div className="space-y-3">
-            <label className="text-sm font-bold text-slate-300">Reward Role</label>
+            <label className="text-sm font-bold text-neutral-300">Reward Role</label>
             <Select
               value={newRole || ""}
               onValueChange={(val) => setNewRole(val)}
             >
-              <SelectTrigger className="w-full h-12 bg-slate-900 border-slate-800 text-left">
+              <SelectTrigger className="w-full h-12 bg-[#111111] border-[#1A1A1A] text-left">
                 <SelectValue placeholder="Select a role..." />
               </SelectTrigger>
-              <SelectContent className="bg-slate-900 border-slate-800">
+              <SelectContent className="bg-[#111111] border-[#1A1A1A]">
                 {roles.map((r) => (
-                  <SelectItem key={r.id} value={r.id.toString()} className="focus:bg-slate-800">
+                  <SelectItem key={r.id} value={r.id.toString()} className="focus:bg-[#1A1A1A]">
                     {r.name}
                   </SelectItem>
                 ))}
@@ -166,17 +166,17 @@ export function VanityRoleForm({ initialSetups, channels, roles, guildId }: Vani
           </div>
 
           <div className="space-y-3">
-            <label className="text-sm font-bold text-slate-300">Log Channel</label>
+            <label className="text-sm font-bold text-neutral-300">Log Channel</label>
             <Select
               value={newChannel || ""}
               onValueChange={(val) => setNewChannel(val)}
             >
-              <SelectTrigger className="w-full h-12 bg-slate-900 border-slate-800 text-left">
+              <SelectTrigger className="w-full h-12 bg-[#111111] border-[#1A1A1A] text-left">
                 <SelectValue placeholder="Select log channel..." />
               </SelectTrigger>
-              <SelectContent className="bg-slate-900 border-slate-800">
+              <SelectContent className="bg-[#111111] border-[#1A1A1A]">
                 {textChannels.map((c) => (
-                  <SelectItem key={c.id} value={c.id.toString()} className="focus:bg-slate-800">
+                  <SelectItem key={c.id} value={c.id.toString()} className="focus:bg-[#1A1A1A]">
                     # {c.name}
                   </SelectItem>
                 ))}

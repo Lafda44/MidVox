@@ -68,18 +68,18 @@ const Select = ({ children, value, onValueChange, options, placeholder, classNam
           disabled={disabled}
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "flex h-10 w-full items-center justify-between rounded-lg border border-slate-700/70 bg-slate-900 px-4 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50",
-            isOpen && "ring-2 ring-primary/50 border-slate-700"
+            "flex h-10 w-full items-center justify-between rounded-lg border border-neutral-700/70 bg-[#111111] px-4 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-500/30 disabled:cursor-not-allowed disabled:opacity-50",
+            isOpen && "ring-2 ring-amber-500/30 border-neutral-700"
           )}
         >
-          <span className={cn("truncate", !selectedOption && "text-slate-500")}>
+          <span className={cn("truncate", !selectedOption && "text-neutral-500")}>
             {selectedOption ? selectedOption.label : placeholder}
           </span>
-          <ChevronDown className={cn("h-4 w-4 text-slate-500 transition-transform duration-200", isOpen && "rotate-180")} />
+          <ChevronDown className={cn("h-4 w-4 text-neutral-500 transition-transform duration-200", isOpen && "rotate-180")} />
         </button>
 
         {isOpen && (
-          <div className="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-lg border border-slate-800 bg-slate-900 p-1 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-lg border border-[#1A1A1A] bg-[#111111] p-1 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             <div className="max-h-60 overflow-y-auto overflow-x-hidden no-scrollbar">
               {options.map((option) => (
                 <button
@@ -90,8 +90,8 @@ const Select = ({ children, value, onValueChange, options, placeholder, classNam
                     setIsOpen(false)
                   }}
                   className={cn(
-                    "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors hover:bg-slate-800/80",
-                    value === option.value ? "bg-primary text-white" : "text-slate-300"
+                    "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors hover:bg-[#1A1A1A]/80",
+                    value === option.value ? "bg-primary text-white" : "text-neutral-300"
                   )}
                 >
                   <span className="truncate">{option.label}</span>
@@ -128,14 +128,14 @@ const SelectTrigger = React.forwardRef<
       type="button"
       onClick={() => context.setIsOpen(!context.isOpen)}
       className={cn(
-        "flex h-10 w-full items-center justify-between rounded-lg border border-slate-700/70 bg-slate-900 px-4 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50",
-        context.isOpen && "ring-2 ring-primary/50 border-slate-700",
+        "flex h-10 w-full items-center justify-between rounded-lg border border-neutral-700/70 bg-[#111111] px-4 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-500/30 disabled:cursor-not-allowed disabled:opacity-50",
+        context.isOpen && "ring-2 ring-amber-500/30 border-neutral-700",
         className
       )}
       {...props}
     >
       {children}
-      <ChevronDown className={cn("h-4 w-4 text-slate-500 transition-transform duration-200", context.isOpen && "rotate-180")} />
+      <ChevronDown className={cn("h-4 w-4 text-neutral-500 transition-transform duration-200", context.isOpen && "rotate-180")} />
     </button>
   )
 })
@@ -144,7 +144,7 @@ SelectTrigger.displayName = "SelectTrigger"
 const SelectValue = ({ placeholder, className }: { placeholder?: string, className?: string }) => {
   const context = React.useContext(SelectContext)
   if (!context) return null
-  return <span className={cn("truncate", !context.value && "text-slate-500", className)}>{context.value || placeholder}</span>
+  return <span className={cn("truncate", !context.value && "text-neutral-500", className)}>{context.value || placeholder}</span>
 }
 
 const SelectContent = ({ children, className }: { children: React.ReactNode, className?: string }) => {
@@ -152,7 +152,7 @@ const SelectContent = ({ children, className }: { children: React.ReactNode, cla
   if (!context || !context.isOpen) return null
 
   return (
-    <div className={cn("absolute top-full z-50 mt-2 w-full overflow-hidden rounded-lg border border-slate-800 bg-slate-900 p-1 shadow-2xl animate-in fade-in zoom-in-95 duration-200", className)}>
+    <div className={cn("absolute top-full z-50 mt-2 w-full overflow-hidden rounded-lg border border-[#1A1A1A] bg-[#111111] p-1 shadow-2xl animate-in fade-in zoom-in-95 duration-200", className)}>
       <div className="max-h-60 overflow-y-auto overflow-x-hidden no-scrollbar">
         {children}
       </div>
@@ -178,8 +178,8 @@ const SelectItem = React.forwardRef<
         context.setIsOpen(false)
       }}
       className={cn(
-        "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors hover:bg-slate-800/80",
-        isSelected ? "bg-primary text-white" : "text-slate-300",
+        "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors hover:bg-[#1A1A1A]/80",
+        isSelected ? "bg-primary text-white" : "text-neutral-300",
         className
       )}
       {...props}

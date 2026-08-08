@@ -24,7 +24,7 @@ import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
 const LoggingForm = dynamic(() => import("@/components/dashboard/logging-form").then(mod => mod.LoggingForm), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-slate-800/20 rounded-[40px]" />
+  loading: () => <div className="h-96 w-full animate-pulse bg-[#1A1A1A]/30 rounded-[40px]" />
 });
 
 export default async function LoggingPage({ params }: { params: { guildId: string } }) {
@@ -43,10 +43,10 @@ export default async function LoggingPage({ params }: { params: { guildId: strin
             <BellRing className="h-6 w-6 text-primary" />
             Audit Logging
           </h2>
-          <p className="text-slate-400 mt-1 font-medium italic">Configure events and dispatch routes for your server.</p>
+          <p className="text-neutral-400 mt-1 font-medium italic">Configure events and dispatch routes for your server.</p>
         </div>
         <div className="flex items-center gap-4">
-           <Button variant="outline" className="gap-2 border-slate-800 bg-slate-900/50 rounded-2xl">
+           <Button variant="outline" className="gap-2 border-[#1A1A1A] bg-[#0F0F0F] rounded-[6px]">
              Audit History
              <ChevronRight className="h-4 w-4" />
            </Button>

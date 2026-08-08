@@ -20,7 +20,7 @@ import dynamic from "next/dynamic";
 import { api } from "@/lib/api";
 
 const WelcomeForm = dynamic(() => import("@/components/dashboard/welcome-form").then(mod => mod.WelcomeForm), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-slate-800/20 rounded-3xl" />
+  loading: () => <div className="h-96 w-full animate-pulse bg-[#1A1A1A]/30 rounded-[6px]" />
 });
 
 export default async function WelcomePage({ params }: { params: { guildId: string } }) {
@@ -39,7 +39,7 @@ export default async function WelcomePage({ params }: { params: { guildId: strin
             <SmilePlus className="h-6 w-6 text-primary" />
             Welcomer
           </h2>
-          <p className="text-slate-400 mt-1">Greet new members to your server.</p>
+          <p className="text-neutral-400 mt-1">Greet new members to your server.</p>
         </div>
       </div>
 

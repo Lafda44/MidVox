@@ -110,13 +110,13 @@ export default function VanityRolesPage({ params }: { params: { guildId: string 
             <Link2 className="h-6 w-6 text-primary" />
             Vanity Roles
           </h2>
-          <p className="text-slate-400 mt-1">Give special roles to members with your vanity/invite link in their status.</p>
+          <p className="text-neutral-400 mt-1">Give special roles to members with your vanity/invite link in their status.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3 space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl p-8 space-y-8">
+          <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] overflow-hidden shadow-xl p-8 space-y-8">
             
             {/* Add New Setup */}
             <div className="space-y-4">
@@ -127,23 +127,23 @@ export default function VanityRolesPage({ params }: { params: { guildId: string 
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400">Vanity Text / URL</label>
+                  <label className="text-xs font-bold text-neutral-400">Vanity Text / URL</label>
                   <Input
                     placeholder="e.g. .gg/my-server"
                     value={newSetup.vanity}
                     onChange={(e) => setNewSetup({ ...newSetup, vanity: e.target.value })}
-                    className="bg-slate-900/50 border-slate-800 h-12"
+                    className="bg-[#0F0F0F] border-[#1A1A1A] h-12"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400">Role to Give</label>
+                  <label className="text-xs font-bold text-neutral-400">Role to Give</label>
                   <Select value={newSetup.role_id} onValueChange={(val) => setNewSetup({ ...newSetup, role_id: val })}>
-                    <SelectTrigger className="w-full h-12 bg-slate-900/50 border-slate-800">
+                    <SelectTrigger className="w-full h-12 bg-[#0F0F0F] border-[#1A1A1A]">
                       <SelectValue placeholder="Select a role..." />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
+                    <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[300px]">
                       {filteredRoles.map((r) => (
-                        <SelectItem key={r.id} value={r.id} className="focus:bg-slate-800">
+                        <SelectItem key={r.id} value={r.id} className="focus:bg-[#1A1A1A]">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: formatColor(r.color) }} />
                             {r.name}
@@ -154,14 +154,14 @@ export default function VanityRolesPage({ params }: { params: { guildId: string 
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400">Log Channel</label>
+                  <label className="text-xs font-bold text-neutral-400">Log Channel</label>
                   <Select value={newSetup.log_channel_id} onValueChange={(val) => setNewSetup({ ...newSetup, log_channel_id: val })}>
-                    <SelectTrigger className="w-full h-12 bg-slate-900/50 border-slate-800">
+                    <SelectTrigger className="w-full h-12 bg-[#0F0F0F] border-[#1A1A1A]">
                       <SelectValue placeholder="Select a channel..." />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
+                    <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[300px]">
                       {textChannels.map((c) => (
-                        <SelectItem key={c.id} value={c.id} className="focus:bg-slate-800">#{c.name}</SelectItem>
+                        <SelectItem key={c.id} value={c.id} className="focus:bg-[#1A1A1A]">#{c.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -175,36 +175,36 @@ export default function VanityRolesPage({ params }: { params: { guildId: string 
             </div>
 
             {/* Active Setups */}
-            <div className="pt-6 border-t border-slate-800 space-y-4">
+            <div className="pt-6 border-t border-[#1A1A1A] space-y-4">
               <h4 className="text-sm font-bold text-white flex items-center gap-2">
                 <Link2 className="h-5 w-5 text-primary" /> Active Setups
               </h4>
               {setups.length === 0 ? (
-                <div className="text-center p-8 bg-slate-900/20 rounded-2xl border border-dashed border-slate-700">
-                  <Link2 className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-                  <p className="text-sm text-slate-500">No vanity role setups configured yet.</p>
+                <div className="text-center p-8 bg-[#0F0F0F]/60 rounded-[6px] border border-dashed border-neutral-700">
+                  <Link2 className="w-10 h-10 text-neutral-600 mx-auto mb-3" />
+                  <p className="text-sm text-neutral-500">No vanity role setups configured yet.</p>
                 </div>
               ) : (
                 setups.map((setup, index) => {
                   const role = filteredRoles.find(r => r.id === String(setup.role_id));
                   const channel = channels.find(c => c.id === String(setup.log_channel_id));
                   return (
-                    <div key={index} className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800 animate-in zoom-in-95 duration-200">
+                    <div key={index} className="flex items-center justify-between p-4 bg-[#131313] rounded-xl border border-[#1A1A1A] animate-in zoom-in-95 duration-200">
                       <div className="flex items-center gap-8">
                         <div className="flex flex-col">
-                          <span className="text-[10px] uppercase font-bold text-slate-500">Vanity Text</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-500">Vanity Text</span>
                           <span className="font-medium text-primary">{setup.vanity}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-[10px] uppercase font-bold text-slate-500">Role</span>
-                          <span className="font-medium text-slate-200">{role?.name || "Unknown"}</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-500">Role</span>
+                          <span className="font-medium text-neutral-200">{role?.name || "Unknown"}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-[10px] uppercase font-bold text-slate-500">Log Channel</span>
-                          <span className="font-medium text-slate-200">#{channel?.name || "Unknown"}</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-500">Log Channel</span>
+                          <span className="font-medium text-neutral-200">#{channel?.name || "Unknown"}</span>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(setup.vanity)} className="text-red-600 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0">
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(setup.vanity)} className="text-red-400 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0">
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
@@ -217,7 +217,7 @@ export default function VanityRolesPage({ params }: { params: { guildId: string 
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
+          <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-[6px] p-6 relative overflow-hidden group">
             <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
               <Link2 className="h-32 w-32 text-primary" />
             </div>
@@ -225,7 +225,7 @@ export default function VanityRolesPage({ params }: { params: { guildId: string 
               <Info className="h-4 w-4 text-primary" />
               <h3 className="text-sm font-bold text-white">How It Works</h3>
             </div>
-            <ul className="text-xs text-slate-500 space-y-2">
+            <ul className="text-xs text-neutral-500 space-y-2">
               <li>• The bot monitors member custom statuses.</li>
               <li>• If a member adds the vanity text, the role is auto-assigned.</li>
               <li>• Removing the text will remove the role.</li>

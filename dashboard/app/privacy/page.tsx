@@ -23,13 +23,13 @@ import { Button } from "@/components/ui/button";
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans">
+    <div className="min-h-screen bg-[#0C0C0C] text-[#F5F5F5] font-sans">
       {/* Background Decor */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-red-500/[0.03] blur-[120px] rounded-full" />
       </div>
 
-      <nav className="fixed top-0 w-full z-50 border-b border-slate-200/70 bg-slate-950/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
+      <nav className="fixed top-0 w-full z-50 border-b border-[#1F1F1F] bg-[rgba(12,12,12,0.95)] backdrop-blur-sm px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-4 group">
           <div className="h-9 w-9 rounded-xl bg-red-600 flex items-center justify-center mr-4">
             <Bot className="h-5 w-5 text-slate-50" />
@@ -37,7 +37,7 @@ export default function PrivacyPage() {
           <span className="text-xl font-bold text-slate-50 font-display uppercase tracking-tighter">MidVox Engine</span>
         </Link>
         <Link href="/">
-          <Button variant="ghost" className="text-slate-400 hover:text-slate-50 gap-2">
+          <Button variant="ghost" className="text-neutral-400 hover:text-slate-50 gap-2">
             <ChevronLeft className="h-4 w-4" />
             Back to Home
           </Button>
@@ -55,45 +55,45 @@ export default function PrivacyPage() {
             Privacy <span className="text-red-500 not-italic">Policy.</span>
           </h1>
 
-          <div className="glass border-slate-200/70 rounded-[40px] p-10 md:p-16 space-y-12">
+          <div className="bg-[#131313] border-[#1F1F1F] rounded-[40px] p-10 md:p-16 space-y-12">
             <section className="space-y-6">
               <div className="flex items-center gap-4 text-slate-50">
-                <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
+                <div className="h-10 w-10 rounded-[6px] bg-[#1A1A1A] border border-[#1F1F1F] flex items-center justify-center text-red-500">
                    <Eye className="h-5 w-5" />
                 </div>
                 <h2 className="text-2xl font-bold font-display uppercase tracking-tight">Data Collection</h2>
               </div>
-              <p className="text-slate-400 leading-relaxed font-medium">
+              <p className="text-neutral-400 leading-relaxed font-medium">
                 The MidVox Engine collects only the minimum necessary data to function within Discord. This includes your Discord User ID, Server (Guild) ID, and configuration settings provided during setup. We do not store message content unless explicitly configured for logging purposes by server administrators.
               </p>
             </section>
 
             <section className="space-y-6">
               <div className="flex items-center gap-4 text-slate-50">
-                <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
+                <div className="h-10 w-10 rounded-[6px] bg-[#1A1A1A] border border-[#1F1F1F] flex items-center justify-center text-red-500">
                    <Lock className="h-5 w-5" />
                 </div>
                 <h2 className="text-2xl font-bold font-display uppercase tracking-tight">Data Integrity</h2>
               </div>
-              <p className="text-slate-400 leading-relaxed font-medium">
+              <p className="text-neutral-400 leading-relaxed font-medium">
                 All configuration data is AES-256 encrypted at rest. Our neural vaults are distributed across global edge nodes, ensuring that your server settings are both secure and instantly available. We never sell or distribute your data to third parties.
               </p>
             </section>
 
             <section className="space-y-6">
               <div className="flex items-center gap-4 text-slate-50">
-                <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
+                <div className="h-10 w-10 rounded-[6px] bg-[#1A1A1A] border border-[#1F1F1F] flex items-center justify-center text-red-500">
                    <FileText className="h-5 w-5" />
                 </div>
                 <h2 className="text-2xl font-bold font-display uppercase tracking-tight">User Rights</h2>
               </div>
-              <p className="text-slate-400 leading-relaxed font-medium">
+              <p className="text-neutral-400 leading-relaxed font-medium">
                 You have the right to request a full dump of your data or immediate deletion of all configurations associated with your Discord account or guild. These requests can be initialized through our support matrix or directly within the dashboard settings.
               </p>
             </section>
 
-            <div className="pt-12 border-t border-slate-200/70">
-              <p className="text-[10px] font-black uppercase text-slate-600 tracking-[0.4em]">
+            <div className="pt-12 border-t border-[#1F1F1F]">
+              <p className="text-[10px] font-black uppercase text-neutral-600 tracking-[0.4em]">
                 Last Modified: March 2026 // Neural Jurisdiction: Global Edge Network
               </p>
             </div>

@@ -32,7 +32,7 @@ export default async function LevelingPage({ params }: { params: { guildId: stri
             <BarChart4 className="h-6 w-6 text-primary" />
             Leveling System
           </h2>
-          <p className="text-slate-400 mt-1">Reward active members with XP and rank progressions.</p>
+          <p className="text-neutral-400 mt-1">Reward active members with XP and rank progressions.</p>
         </div>
       </div>
 

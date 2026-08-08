@@ -34,12 +34,12 @@ export default function DashboardError({
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center animate-in fade-in zoom-in-95 duration-500">
-      <div className="h-20 w-20 bg-red-500/10 rounded-3xl flex items-center justify-center mb-6">
+      <div className="h-20 w-20 bg-red-500/10 rounded-[6px] flex items-center justify-center mb-6">
         <AlertTriangle className="h-10 w-10 text-red-500" />
       </div>
       
       <h2 className="text-2xl font-black text-slate-50 mb-2 tracking-tight">System Fault Detected</h2>
-      <p className="text-slate-400 max-w-md mb-8">
+      <p className="text-neutral-400 max-w-md mb-8">
         The neural link experienced an unexpected interruption. This could be due to a connection timeout or an internal API failure.
       </p>
 
@@ -54,7 +54,7 @@ export default function DashboardError({
         <Link href="/dashboard" className="flex-1">
           <Button 
             variant="outline"
-            className="w-full gap-2 h-12 font-bold border-slate-800"
+            className="w-full gap-2 h-12 font-bold border-[#1A1A1A]"
           >
             <Home className="h-4 w-4" />
             Go Home
@@ -63,7 +63,7 @@ export default function DashboardError({
       </div>
       
       {process.env.NODE_ENV === 'development' && (
-        <pre className="mt-8 p-4 bg-slate-100 border border-slate-200 rounded-xl text-left text-xs text-red-600 overflow-auto max-w-full font-mono">
+        <pre className="mt-8 p-4 bg-[#1A1A1A] border border-[#1F1F1F] rounded-[6px] text-left text-xs text-red-400 overflow-auto max-w-full font-mono">
           {error.message}
         </pre>
       )}

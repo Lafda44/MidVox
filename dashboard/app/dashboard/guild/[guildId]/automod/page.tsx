@@ -20,7 +20,7 @@ import dynamic from "next/dynamic";
 import { api } from "@/lib/api";
 
 const AutomodForm = dynamic(() => import("@/components/dashboard/automod-form").then(mod => mod.AutomodForm), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-slate-800/20 rounded-3xl" />
+  loading: () => <div className="h-96 w-full animate-pulse bg-[#1A1A1A]/30 rounded-[6px]" />
 });
 
 export default async function AutomodPage({ params }: { params: { guildId: string } }) {
@@ -36,7 +36,7 @@ export default async function AutomodPage({ params }: { params: { guildId: strin
             <ShieldCheck className="h-6 w-6 text-primary" />
             Auto Moderation
           </h2>
-          <p className="text-slate-400 mt-1">Protect your community with automated filter systems.</p>
+          <p className="text-neutral-400 mt-1">Protect your community with automated filter systems.</p>
         </div>
       </div>
 

@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 export const revalidate = 0;
 
 const InstaDLForm = dynamic(() => import("@/components/dashboard/instadl-form").then(mod => mod.InstaDLForm), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-slate-800/20 rounded-xl" />
+  loading: () => <div className="h-96 w-full animate-pulse bg-[#1A1A1A]/30 rounded-xl" />
 });
 
 export default async function InstaDLPage({ params }: { params: { guildId: string } }) {
@@ -23,7 +23,7 @@ export default async function InstaDLPage({ params }: { params: { guildId: strin
             <Instagram className="h-6 w-6 text-primary" />
             Insta Downloader
           </h2>
-          <p className="text-slate-400 mt-1">
+          <p className="text-neutral-400 mt-1">
             Auto-download Instagram links & YouTube Shorts posted in specific channels and repost the media inline.
           </p>
         </div>

@@ -54,8 +54,8 @@ export default function GuildOverviewPage({ params }: { params: { guildId: strin
         <section>
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-base font-semibold text-white tracking-tight">Active Modules</h2>
-            <div className="h-px flex-1 bg-slate-800" />
-            <Plus className="h-4 w-4 text-slate-600 cursor-pointer hover:text-white transition-colors" />
+            <div className="h-px flex-1 bg-[#1A1A1A]" />
+            <Plus className="h-4 w-4 text-neutral-600 cursor-pointer hover:text-white transition-colors" />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -64,7 +64,7 @@ export default function GuildOverviewPage({ params }: { params: { guildId: strin
                 key={mod.title}
                 {...fadeUp}
                 transition={{ delay: i * 0.06, duration: 0.3 }}
-                className="bg-slate-900 border border-slate-800 p-5 rounded-xl group hover:border-slate-700 transition-all"
+                className="bg-[#111111] border border-[#1A1A1A] p-5 rounded-xl group hover:border-neutral-700 transition-all"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="h-9 w-9 bg-primary/10 border border-primary/20 rounded-lg flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -75,7 +75,7 @@ export default function GuildOverviewPage({ params }: { params: { guildId: strin
                   </span>
                 </div>
                 <h3 className="text-sm font-semibold text-white mb-1">{mod.title}</h3>
-                <p className="text-xs text-slate-500 leading-relaxed">{mod.desc}</p>
+                <p className="text-xs text-neutral-500 leading-relaxed">{mod.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -84,18 +84,18 @@ export default function GuildOverviewPage({ params }: { params: { guildId: strin
         <section>
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-base font-semibold text-white tracking-tight">System Console</h2>
-            <div className="h-px flex-1 bg-slate-800" />
+            <div className="h-px flex-1 bg-[#1A1A1A]" />
           </div>
-          <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-[11px]">
-            <div className="flex items-center gap-2 mb-3 border-b border-slate-800 pb-2">
+          <div className="bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl p-4 font-mono text-[11px]">
+            <div className="flex items-center gap-2 mb-3 border-b border-[#1A1A1A] pb-2">
               <Terminal className="h-3.5 w-3.5 text-primary" />
-              <span className="text-slate-500">guild_event_stream_{params.guildId}</span>
+              <span className="text-neutral-500">guild_event_stream_{params.guildId}</span>
             </div>
             <div className="space-y-1.5">
-              <p className="text-slate-600">[{new Date().toLocaleTimeString()}] <span className="text-emerald-500">INIT</span> Dashboard connected to WebSocket pool...</p>
-              <p className="text-slate-600">[{new Date().toLocaleTimeString()}] <span className="text-primary">INFO</span> Fetching guild config from primary database...</p>
-              <p className="text-slate-600">[{new Date().toLocaleTimeString()}] <span className="text-emerald-500">DONE</span> Cache synchronized successfully.</p>
-              <p className="text-slate-400 animate-pulse">_</p>
+              <p className="text-neutral-600">[{new Date().toLocaleTimeString()}] <span className="text-emerald-500">INIT</span> Dashboard connected to WebSocket pool...</p>
+              <p className="text-neutral-600">[{new Date().toLocaleTimeString()}] <span className="text-primary">INFO</span> Fetching guild config from primary database...</p>
+              <p className="text-neutral-600">[{new Date().toLocaleTimeString()}] <span className="text-emerald-500">DONE</span> Cache synchronized successfully.</p>
+              <p className="text-neutral-400 animate-pulse">_</p>
             </div>
           </div>
         </section>
@@ -106,7 +106,7 @@ export default function GuildOverviewPage({ params }: { params: { guildId: strin
         <motion.section
           {...fadeUp}
           transition={{ delay: 0.1, duration: 0.35 }}
-          className="bg-slate-900 border border-slate-800 rounded-xl p-6"
+          className="bg-[#111111] border border-[#1A1A1A] rounded-xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
             <div className="h-8 w-8 bg-primary/10 border border-primary/20 rounded-lg flex items-center justify-center">
@@ -114,7 +114,7 @@ export default function GuildOverviewPage({ params }: { params: { guildId: strin
             </div>
             <div>
               <h2 className="text-base font-semibold text-white">Database Status</h2>
-              <p className="text-xs text-slate-500">Guild configuration persistence</p>
+              <p className="text-xs text-neutral-500">Guild configuration persistence</p>
             </div>
           </div>
 
@@ -128,13 +128,13 @@ export default function GuildOverviewPage({ params }: { params: { guildId: strin
                 key={stat.label}
                 {...fadeUp}
                 transition={{ delay: 0.15 + i * 0.05, duration: 0.3 }}
-                className="flex items-center justify-between p-3.5 bg-slate-950 rounded-lg border border-slate-800"
+                className="flex items-center justify-between p-3.5 bg-[#0C0C0C] rounded-lg border border-[#1A1A1A]"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-7 w-7 bg-slate-900 border border-slate-800 rounded-md flex items-center justify-center text-primary">
+                  <div className="h-7 w-7 bg-[#111111] border border-[#1A1A1A] rounded-md flex items-center justify-center text-primary">
                     <stat.icon className="h-3.5 w-3.5" />
                   </div>
-                  <span className="text-xs font-medium text-slate-300">{stat.label}</span>
+                  <span className="text-xs font-medium text-neutral-300">{stat.label}</span>
                 </div>
                 <span className="text-xs font-semibold text-white font-mono">{stat.value}</span>
               </motion.div>
@@ -142,7 +142,7 @@ export default function GuildOverviewPage({ params }: { params: { guildId: strin
           </div>
         </motion.section>
 
-        <section className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+        <section className="bg-[#111111] border border-[#1A1A1A] rounded-xl p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="h-8 w-8 bg-primary/10 border border-primary/20 rounded-lg flex items-center justify-center">
               <Server className="h-4 w-4 text-primary" />
@@ -157,17 +157,17 @@ export default function GuildOverviewPage({ params }: { params: { guildId: strin
             </div>
             <div>
               <h3 className="text-sm font-semibold text-white mb-1">Trust Factor</h3>
-              <p className="text-xs text-slate-500">Bot is fully authenticated with administrator privileges.</p>
+              <p className="text-xs text-neutral-500">Bot is fully authenticated with administrator privileges.</p>
             </div>
           </div>
         </section>
 
-        <section className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex items-center justify-between">
+        <section className="bg-[#111111] border border-[#1A1A1A] rounded-xl p-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Clock className="h-4 w-4 text-slate-500" />
-            <span className="text-xs text-slate-400">Last configuration update</span>
+            <Clock className="h-4 w-4 text-neutral-500" />
+            <span className="text-xs text-neutral-400">Last configuration update</span>
           </div>
-          <span className="text-xs font-mono text-slate-300">—</span>
+          <span className="text-xs font-mono text-neutral-300">—</span>
         </section>
       </div>
     </div>

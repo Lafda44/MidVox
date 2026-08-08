@@ -73,7 +73,7 @@ export function GuildTabs({ guildId }: { guildId: string }) {
 
   return (
     <div className="w-full mb-8">
-      <div className="sticky top-16 z-20 -mx-4 px-4 pt-3 pb-1 bg-slate-950/90 backdrop-blur-md">
+      <div className="sticky top-16 z-20 -mx-4 px-4 pt-3 pb-1 bg-[#0C0C0C]/95 backdrop-blur-sm">
         <div
           ref={scrollContainerRef}
           className="flex gap-1.5 overflow-x-auto no-scrollbar py-1.5 px-1"
@@ -99,10 +99,10 @@ export function GuildTabs({ guildId }: { guildId: string }) {
                     "relative flex items-center gap-2 px-4 py-2 rounded-lg text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap transition-colors duration-200 border",
                     isActive
                       ? "text-white border-transparent"
-                      : "text-slate-500 border-slate-200 bg-white hover:text-slate-800 hover:border-slate-300"
+                      : "text-neutral-500 border-[#1F1F1F] bg-[#131313] hover:text-neutral-200 hover:border-[#2A2A2A]"
                   )}
                 >
-                  <tab.icon className={cn("h-3.5 w-3.5", isActive ? "text-white" : "text-slate-400")} />
+                  <tab.icon className={cn("h-3.5 w-3.5", isActive ? "text-white" : "text-neutral-400")} />
                   {tab.name}
                 </div>
               </Link>

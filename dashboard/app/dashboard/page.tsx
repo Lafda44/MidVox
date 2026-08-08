@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import React from "react";
 import {
   Users,
@@ -44,14 +46,14 @@ export default async function DashboardPage() {
           <h1 className="text-2xl font-bold text-slate-50 tracking-tight">
             Overview
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-neutral-500 mt-1">
             Status and live metrics for{" "}
             <span className="text-primary-light font-medium">{botInfo.name}</span>
           </p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-600 text-xs font-medium">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium">
             <ShieldAlert className="h-4 w-4" />
             <span>{error}</span>
           </div>
@@ -72,7 +74,7 @@ export default async function DashboardPage() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6">
+        <div className="lg:col-span-2 bg-[#111111] border border-[#1A1A1A] rounded-xl p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-base font-bold text-slate-50 tracking-tight">
               Quick Actions
@@ -87,7 +89,7 @@ export default async function DashboardPage() {
               <a
                 key={item.title}
                 href={item.href}
-                className="group flex items-center gap-4 p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-primary/40 transition-all duration-200 hover:-translate-y-0.5"
+                className="group flex items-center gap-4 p-4 rounded-xl bg-[#0C0C0C] border border-[#1A1A1A] hover:border-amber-500/40 transition-all duration-200 hover:-translate-y-0.5"
               >
                 <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:scale-105 transition-transform">
                   <item.icon className="h-5 w-5 text-primary" />
@@ -96,19 +98,19 @@ export default async function DashboardPage() {
                   <h4 className="text-sm font-semibold text-slate-50 group-hover:text-primary-light transition-colors">
                     {item.title}
                   </h4>
-                  <p className="text-[11px] text-slate-500 mt-0.5">{item.desc}</p>
+                  <p className="text-[11px] text-neutral-500 mt-0.5">{item.desc}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 text-slate-600 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                <ArrowRight className="h-4 w-4 text-neutral-600 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
               </a>
             ))}
           </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-xl p-6 flex flex-col">
           <h2 className="text-base font-bold text-slate-50 mb-1 tracking-tight">
             Module Status
           </h2>
-          <p className="text-xs text-slate-500 mb-5">
+          <p className="text-xs text-neutral-500 mb-5">
             Global operational health
           </p>
 
@@ -120,9 +122,9 @@ export default async function DashboardPage() {
             ].map((service) => (
               <div
                 key={service.name}
-                className="flex items-center justify-between p-3.5 rounded-lg bg-slate-950 border border-slate-800"
+                className="flex items-center justify-between p-3.5 rounded-lg bg-[#0C0C0C] border border-[#1A1A1A]"
               >
-                <span className="text-xs font-medium text-slate-300">
+                <span className="text-xs font-medium text-neutral-300">
                   {service.name}
                 </span>
                 <div className="flex items-center gap-2.5">
@@ -135,7 +137,7 @@ export default async function DashboardPage() {
             ))}
           </div>
 
-          <button className="mt-auto pt-5 w-full py-2.5 rounded-lg border border-slate-700 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-slate-50 hover:bg-slate-800/60 transition-colors">
+          <button className="mt-auto pt-5 w-full py-2.5 rounded-lg border border-neutral-700 text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-400 hover:text-slate-50 hover:bg-[#1A1A1A]/60 transition-colors">
             System Diagnostics
           </button>
         </div>

@@ -20,7 +20,7 @@ import dynamic from "next/dynamic";
 import { api } from "@/lib/api";
 
 const AntiNukeForm = dynamic(() => import("@/components/dashboard/antinuke-form").then(mod => mod.AntiNukeForm), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-slate-800/20 rounded-3xl" />
+  loading: () => <div className="h-96 w-full animate-pulse bg-[#1A1A1A]/30 rounded-[6px]" />
 });
 
 export default async function AntiNukePage({ params }: { params: { guildId: string } }) {
@@ -36,7 +36,7 @@ export default async function AntiNukePage({ params }: { params: { guildId: stri
             <ShieldAlert className="h-6 w-6 text-red-500" />
             Anti-Nuke Protection
           </h2>
-          <p className="text-slate-400 mt-1">Protect your server from malicious mass-deletion, mass-banning, and other destructive actions.</p>
+          <p className="text-neutral-400 mt-1">Protect your server from malicious mass-deletion, mass-banning, and other destructive actions.</p>
         </div>
       </div>
 

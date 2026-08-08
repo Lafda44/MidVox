@@ -61,13 +61,13 @@ export const MetricCard = ({
       animate={inView ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: 0.45, ease: "easeOut" }}
       className={cn(
-        "bg-slate-900 border border-slate-800 p-5 rounded-xl group hover:border-primary/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5",
+        "bg-[#111111] border border-[#1A1A1A] p-5 rounded-xl group hover:border-amber-500/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5",
         className
       )}
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[10px] font-semibold uppercase text-slate-500 tracking-widest">{name}</p>
+          <p className="text-[10px] font-semibold uppercase text-neutral-500 tracking-widest">{name}</p>
           <div className="flex items-baseline gap-2 mt-1.5">
             <p className="text-2xl font-bold text-slate-50 tracking-tight tabular-nums font-mono">
               {typeof value === "number" || numericValue > 0 ? (
@@ -79,14 +79,14 @@ export const MetricCard = ({
             {trend && (
               <span className={cn(
                 "text-[10px] font-semibold px-1.5 py-0.5 rounded-md",
-                trend.isUp ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-600"
+                trend.isUp ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-400"
               )}>
                 {trend.isUp ? "+" : ""}{trend.value}
               </span>
             )}
           </div>
           {description && (
-            <p className="text-[11px] text-slate-500 mt-1.5">{description}</p>
+            <p className="text-[11px] text-neutral-500 mt-1.5">{description}</p>
           )}
         </div>
         <motion.div

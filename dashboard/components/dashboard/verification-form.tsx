@@ -60,13 +60,13 @@ export function VerificationForm({ initialConfig, channels, roles, guildId }: Ve
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl p-8 space-y-8">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] shadow-xl p-8 space-y-8">
           
           {/* Main Toggle */}
-          <div className="flex items-center justify-between p-6 bg-slate-900/40 rounded-2xl border border-slate-800">
+          <div className="flex items-center justify-between p-6 bg-[#131313] rounded-[6px] border border-[#1A1A1A]">
             <div>
               <h3 className="text-lg font-black text-slate-50">Verification System</h3>
-              <p className="text-sm text-slate-400 mt-1">Enable or disable server verification.</p>
+              <p className="text-sm text-neutral-400 mt-1">Enable or disable server verification.</p>
             </div>
             <Switch 
               checked={config.enabled} 
@@ -80,51 +80,51 @@ export function VerificationForm({ initialConfig, channels, roles, guildId }: Ve
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               <div className="space-y-3">
-                <label className="text-sm font-bold text-slate-300 flex items-center gap-2">
-                  <Hash className="h-4 w-4 text-slate-400" />
+                <label className="text-sm font-bold text-neutral-300 flex items-center gap-2">
+                  <Hash className="h-4 w-4 text-neutral-400" />
                   Verification Channel
                 </label>
                 <Select
                   value={config.verification_channel_id || "none"}
                   onValueChange={(val) => setConfig({ ...config, verification_channel_id: val === "none" ? null : val })}
                 >
-                  <SelectTrigger className="w-full h-12 bg-slate-900 border-slate-800 font-medium">
+                  <SelectTrigger className="w-full h-12 bg-[#111111] border-[#1A1A1A] font-medium">
                     <SelectValue placeholder="Select a channel..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800">
-                    <SelectItem value="none" className="text-slate-400 focus:bg-slate-800">Not Set</SelectItem>
+                  <SelectContent className="bg-[#111111] border-[#1A1A1A]">
+                    <SelectItem value="none" className="text-neutral-400 focus:bg-[#1A1A1A]">Not Set</SelectItem>
                     {textChannels.map((c) => (
-                      <SelectItem key={c.id} value={c.id.toString()} className="focus:bg-slate-800">
+                      <SelectItem key={c.id} value={c.id.toString()} className="focus:bg-[#1A1A1A]">
                         # {c.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-slate-500">The channel where verifying users will use the command/buttons.</p>
+                <p className="text-xs text-neutral-500">The channel where verifying users will use the command/buttons.</p>
               </div>
 
               <div className="space-y-3">
-                <label className="text-sm font-bold text-slate-300 flex items-center gap-2">
-                  <Hash className="h-4 w-4 text-slate-400" />
+                <label className="text-sm font-bold text-neutral-300 flex items-center gap-2">
+                  <Hash className="h-4 w-4 text-neutral-400" />
                   Log Channel
                 </label>
                 <Select
                   value={config.log_channel_id || "none"}
                   onValueChange={(val) => setConfig({ ...config, log_channel_id: val === "none" ? null : val })}
                 >
-                  <SelectTrigger className="w-full h-12 bg-slate-900 border-slate-800 font-medium">
+                  <SelectTrigger className="w-full h-12 bg-[#111111] border-[#1A1A1A] font-medium">
                     <SelectValue placeholder="Select log channel..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800">
-                    <SelectItem value="none" className="text-slate-400 focus:bg-slate-800">Not Set</SelectItem>
+                  <SelectContent className="bg-[#111111] border-[#1A1A1A]">
+                    <SelectItem value="none" className="text-neutral-400 focus:bg-[#1A1A1A]">Not Set</SelectItem>
                     {textChannels.map((c) => (
-                      <SelectItem key={c.id} value={c.id.toString()} className="focus:bg-slate-800">
+                      <SelectItem key={c.id} value={c.id.toString()} className="focus:bg-[#1A1A1A]">
                         # {c.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-slate-500">Channel to send verification success/fail logs.</p>
+                <p className="text-xs text-neutral-500">Channel to send verification success/fail logs.</p>
               </div>
 
             </div>
@@ -133,21 +133,21 @@ export function VerificationForm({ initialConfig, channels, roles, guildId }: Ve
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
               <div className="space-y-3">
-                <label className="text-sm font-bold text-slate-300 flex items-center gap-2">
-                  <User className="h-4 w-4 text-slate-400" />
+                <label className="text-sm font-bold text-neutral-300 flex items-center gap-2">
+                  <User className="h-4 w-4 text-neutral-400" />
                   Verified Role
                 </label>
                 <Select
                   value={config.verified_role_id || "none"}
                   onValueChange={(val) => setConfig({ ...config, verified_role_id: val === "none" ? null : val })}
                 >
-                  <SelectTrigger className="w-full h-12 bg-slate-900 border-slate-800 font-medium">
+                  <SelectTrigger className="w-full h-12 bg-[#111111] border-[#1A1A1A] font-medium">
                     <SelectValue placeholder="Select verified role..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800">
-                    <SelectItem value="none" className="text-slate-400 focus:bg-slate-800">Not Set</SelectItem>
+                  <SelectContent className="bg-[#111111] border-[#1A1A1A]">
+                    <SelectItem value="none" className="text-neutral-400 focus:bg-[#1A1A1A]">Not Set</SelectItem>
                     {roles.map((r) => (
-                      <SelectItem key={r.id} value={r.id.toString()} className="focus:bg-slate-800">
+                      <SelectItem key={r.id} value={r.id.toString()} className="focus:bg-[#1A1A1A]">
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: `#${r.color.toString(16).padStart(6, '0')}` }} />
                           {r.name}
@@ -156,28 +156,28 @@ export function VerificationForm({ initialConfig, channels, roles, guildId }: Ve
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-slate-500">The role given upon successful verification.</p>
+                <p className="text-xs text-neutral-500">The role given upon successful verification.</p>
               </div>
 
               <div className="space-y-3">
-                <label className="text-sm font-bold text-slate-300 flex items-center gap-2">
-                  <Settings className="h-4 w-4 text-slate-400" />
+                <label className="text-sm font-bold text-neutral-300 flex items-center gap-2">
+                  <Settings className="h-4 w-4 text-neutral-400" />
                   Verification Method
                 </label>
                 <Select
                   value={config.verification_method || "both"}
                   onValueChange={(val) => setConfig({ ...config, verification_method: val })}
                 >
-                  <SelectTrigger className="w-full h-12 bg-slate-900 border-slate-800 font-medium">
+                  <SelectTrigger className="w-full h-12 bg-[#111111] border-[#1A1A1A] font-medium">
                     <SelectValue placeholder="Select method..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800">
-                    <SelectItem value="captcha" className="focus:bg-slate-800">CAPTCHA Only</SelectItem>
-                    <SelectItem value="button" className="focus:bg-slate-800">Button Click Only</SelectItem>
-                    <SelectItem value="both" className="focus:bg-slate-800">Both Choices Setup</SelectItem>
+                  <SelectContent className="bg-[#111111] border-[#1A1A1A]">
+                    <SelectItem value="captcha" className="focus:bg-[#1A1A1A]">CAPTCHA Only</SelectItem>
+                    <SelectItem value="button" className="focus:bg-[#1A1A1A]">Button Click Only</SelectItem>
+                    <SelectItem value="both" className="focus:bg-[#1A1A1A]">Both Choices Setup</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-slate-500">Select how users will be verified.</p>
+                <p className="text-xs text-neutral-500">Select how users will be verified.</p>
               </div>
 
             </div>
@@ -196,15 +196,15 @@ export function VerificationForm({ initialConfig, channels, roles, guildId }: Ve
       </div>
 
       <div className="space-y-6">
-        <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-[6px] p-6 relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
             <ShieldCheck className="h-32 w-32 text-primary" />
           </div>
           <h3 className="text-sm font-bold text-primary mb-2">How It Works</h3>
-          <p className="text-xs text-slate-400 leading-relaxed mb-4">
+          <p className="text-xs text-neutral-400 leading-relaxed mb-4">
             MidVox Verification ensures that no unauthorized bots or malicious users enter your server unverified.
           </p>
-          <ul className="text-xs text-slate-500 space-y-2">
+          <ul className="text-xs text-neutral-500 space-y-2">
              <li>â€¢ The bot will create a panel in your Verification Channel.</li>
              <li>â€¢ Unverified members must click &quot;Verify&quot;.</li>
              <li>â€¢ Captcha presents a unique image sequence.</li>

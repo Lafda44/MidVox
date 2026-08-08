@@ -122,47 +122,47 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-[32px] shadow-2xl p-8 space-y-10 relative">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[32px] shadow-2xl p-8 space-y-10 relative">
 
           {/* Message Deletion Toggle */}
-          <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-2xl border border-slate-800">
+          <div className="flex items-center justify-between p-4 bg-[#131313] rounded-[6px] border border-[#1A1A1A]">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-red-500/10 text-red-600"><MessageSquare className="h-5 w-5" /></div>
+              <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400"><MessageSquare className="h-5 w-5" /></div>
               <div>
                 <h4 className="font-bold text-slate-50 text-sm">Message Deletion</h4>
-                <p className="text-xs text-slate-400">Delete messages from target users or matching commands</p>
+                <p className="text-xs text-neutral-400">Delete messages from target users or matching commands</p>
               </div>
             </div>
             <Switch checked={config.delete_messages} onCheckedChange={toggleDeleteMessages} />
           </div>
 
           {config.delete_messages && (
-            <div className="space-y-8 pl-4 border-l-2 border-slate-800">
+            <div className="space-y-8 pl-4 border-l-2 border-[#1A1A1A]">
 
               {/* Delete Delay */}
               <div className="flex items-center gap-4">
-                <label className="text-xs font-bold text-slate-400 w-32">Delete Delay (s)</label>
-                <Input type="number" min={1} max={60} value={config.delete_delay} onChange={(e) => updateField("delete_delay", parseInt(e.target.value) || 8)} className="w-24 bg-slate-900/50 border-slate-800 h-10" />
+                <label className="text-xs font-bold text-neutral-400 w-32">Delete Delay (s)</label>
+                <Input type="number" min={1} max={60} value={config.delete_delay} onChange={(e) => updateField("delete_delay", parseInt(e.target.value) || 8)} className="w-24 bg-[#0F0F0F] border-[#1A1A1A] h-10" />
               </div>
 
               {/* Target Users */}
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-red-500/10 text-red-600"><UserX className="h-4 w-4" /></div>
+                  <div className="p-2 rounded-lg bg-red-500/10 text-red-400"><UserX className="h-4 w-4" /></div>
                   <h4 className="font-bold text-slate-50 text-sm">Target Users</h4>
                 </div>
                 <div className="flex gap-2">
-                  <Input placeholder="Discord User ID" value={newUserId} onChange={(e) => setNewUserId(e.target.value)} className="bg-slate-900/50 border-slate-800 h-10 flex-1" />
+                  <Input placeholder="Discord User ID" value={newUserId} onChange={(e) => setNewUserId(e.target.value)} className="bg-[#0F0F0F] border-[#1A1A1A] h-10 flex-1" />
                   <Button size="sm" onClick={addTargetUser} variant="secondary"><Plus className="h-4 w-4" /></Button>
                 </div>
-                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-slate-900/40 rounded-xl border border-slate-800/50">
+                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-[#131313] rounded-xl border border-[#1A1A1A]/50">
                   {config.target_users?.length === 0 ? (
-                    <span className="text-xs text-slate-600 italic">No target users</span>
+                    <span className="text-xs text-neutral-600 italic">No target users</span>
                   ) : (
                     config.target_users?.map((uid: string) => (
-                      <div key={uid} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
-                        <span className="text-slate-200 font-mono text-xs">{uid}</span>
-                        <button onClick={() => removeTargetUser(uid)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                      <div key={uid} className="flex items-center gap-2 bg-[#1A1A1A] border border-neutral-700/50 px-3 py-1.5 rounded-lg text-sm">
+                        <span className="text-neutral-200 font-mono text-xs">{uid}</span>
+                        <button onClick={() => removeTargetUser(uid)} className="text-neutral-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
                       </div>
                     ))
                   )}
@@ -176,17 +176,17 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
                   <h4 className="font-bold text-slate-50 text-sm">Blocked Commands</h4>
                 </div>
                 <div className="flex gap-2">
-                  <Input placeholder="e.g. !play" value={newCommand} onChange={(e) => setNewCommand(e.target.value)} className="bg-slate-900/50 border-slate-800 h-10 flex-1" />
+                  <Input placeholder="e.g. !play" value={newCommand} onChange={(e) => setNewCommand(e.target.value)} className="bg-[#0F0F0F] border-[#1A1A1A] h-10 flex-1" />
                   <Button size="sm" onClick={addBlockedCommand} variant="secondary"><Plus className="h-4 w-4" /></Button>
                 </div>
-                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-slate-900/40 rounded-xl border border-slate-800/50">
+                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-[#131313] rounded-xl border border-[#1A1A1A]/50">
                   {config.blocked_commands?.length === 0 ? (
-                    <span className="text-xs text-slate-600 italic">No blocked commands</span>
+                    <span className="text-xs text-neutral-600 italic">No blocked commands</span>
                   ) : (
                     config.blocked_commands?.map((cmd: string) => (
-                      <div key={cmd} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
-                        <span className="text-slate-200 font-mono text-xs">{cmd}</span>
-                        <button onClick={() => removeBlockedCommand(cmd)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                      <div key={cmd} className="flex items-center gap-2 bg-[#1A1A1A] border border-neutral-700/50 px-3 py-1.5 rounded-lg text-sm">
+                        <span className="text-neutral-200 font-mono text-xs">{cmd}</span>
+                        <button onClick={() => removeBlockedCommand(cmd)} className="text-neutral-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
                       </div>
                     ))
                   )}
@@ -196,29 +196,29 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
               {/* Excluded Channels */}
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-slate-500/10 text-slate-400"><Hash className="h-4 w-4" /></div>
+                  <div className="p-2 rounded-lg bg-neutral-500/10 text-neutral-400"><Hash className="h-4 w-4" /></div>
                   <h4 className="font-bold text-slate-50 text-sm">Excluded Channels</h4>
                 </div>
                 <Select value="" onValueChange={(val) => handleChannelToggle("excluded_channels", val, true)}>
-                  <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
+                  <SelectTrigger className="w-full h-10 bg-[#0F0F0F] border-[#1A1A1A]">
                     <SelectValue placeholder="Add channel to exclude..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
+                  <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[300px]">
                     {channels.filter((c: any) => !(config.excluded_channels || []).includes(c.id)).map((c: any) => (
-                      <SelectItem key={c.id} value={c.id} className="focus:bg-slate-800">#{c.name}</SelectItem>
+                      <SelectItem key={c.id} value={c.id} className="focus:bg-[#1A1A1A]">#{c.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-slate-900/40 rounded-xl border border-slate-800/50">
+                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-[#131313] rounded-xl border border-[#1A1A1A]/50">
                   {(config.excluded_channels || []).length === 0 ? (
-                    <span className="text-xs text-slate-600 italic">No excluded channels</span>
+                    <span className="text-xs text-neutral-600 italic">No excluded channels</span>
                   ) : (
                     config.excluded_channels?.map((chId: string) => {
                       const ch = channels.find((c: any) => c.id === chId);
                       return (
-                        <div key={chId} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
-                          <span className="text-slate-200">#{ch?.name || chId}</span>
-                          <button onClick={() => handleChannelToggle("excluded_channels", chId, false)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                        <div key={chId} className="flex items-center gap-2 bg-[#1A1A1A] border border-neutral-700/50 px-3 py-1.5 rounded-lg text-sm">
+                          <span className="text-neutral-200">#{ch?.name || chId}</span>
+                          <button onClick={() => handleChannelToggle("excluded_channels", chId, false)} className="text-neutral-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
                         </div>
                       );
                     })
@@ -229,7 +229,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
           )}
 
           {/* Divider */}
-          <div className="border-t border-slate-800" />
+          <div className="border-t border-[#1A1A1A]" />
 
           {/* Reaction Anti-Spam */}
           <div className="space-y-6">
@@ -237,22 +237,22 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
               <div className="p-2.5 rounded-xl bg-yellow-500/10 text-yellow-400"><SmilePlus className="h-5 w-5" /></div>
               <div>
                 <h4 className="font-bold text-slate-50 text-base">Reaction Anti-Spam</h4>
-                <p className="text-xs text-slate-400">Detect and punish rapid reaction spam in monitored channels</p>
+                <p className="text-xs text-neutral-400">Detect and punish rapid reaction spam in monitored channels</p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400">Limit (msgs)</label>
-                <Input type="number" min={1} max={50} value={config.re_limit} onChange={(e) => updateField("re_limit", parseInt(e.target.value) || 5)} className="bg-slate-900/50 border-slate-800 h-10" />
+                <label className="text-xs font-bold text-neutral-400">Limit (msgs)</label>
+                <Input type="number" min={1} max={50} value={config.re_limit} onChange={(e) => updateField("re_limit", parseInt(e.target.value) || 5)} className="bg-[#0F0F0F] border-[#1A1A1A] h-10" />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400">Window (s)</label>
-                <Input type="number" min={1} max={300} value={config.re_window} onChange={(e) => updateField("re_window", parseInt(e.target.value) || 30)} className="bg-slate-900/50 border-slate-800 h-10" />
+                <label className="text-xs font-bold text-neutral-400">Window (s)</label>
+                <Input type="number" min={1} max={300} value={config.re_window} onChange={(e) => updateField("re_window", parseInt(e.target.value) || 30)} className="bg-[#0F0F0F] border-[#1A1A1A] h-10" />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400">Cooldown (s)</label>
-                <Input type="number" min={1} max={300} value={config.re_cooldown} onChange={(e) => updateField("re_cooldown", parseInt(e.target.value) || 20)} className="bg-slate-900/50 border-slate-800 h-10" />
+                <label className="text-xs font-bold text-neutral-400">Cooldown (s)</label>
+                <Input type="number" min={1} max={300} value={config.re_cooldown} onChange={(e) => updateField("re_cooldown", parseInt(e.target.value) || 20)} className="bg-[#0F0F0F] border-[#1A1A1A] h-10" />
               </div>
             </div>
 
@@ -260,25 +260,25 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
             <div className="space-y-4">
               <h4 className="text-sm font-bold text-slate-50 flex items-center gap-2"><Users className="h-4 w-4 text-yellow-400" /> Monitored Channels</h4>
 <Select value="" onValueChange={(val) => handleChannelToggle("target_channels", val, true)}>
-                  <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
+                  <SelectTrigger className="w-full h-10 bg-[#0F0F0F] border-[#1A1A1A]">
                     <SelectValue placeholder="Add channel to monitor..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
+                  <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[300px]">
                     {channels.filter((c: any) => !(config.target_channels || []).includes(c.id)).map((c: any) => (
-                      <SelectItem key={c.id} value={c.id} className="focus:bg-slate-800">#{c.name}</SelectItem>
+                      <SelectItem key={c.id} value={c.id} className="focus:bg-[#1A1A1A]">#{c.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-slate-900/40 rounded-xl border border-slate-800/50">
+                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-[#131313] rounded-xl border border-[#1A1A1A]/50">
                   {(config.target_channels || []).length === 0 ? (
-                    <span className="text-xs text-slate-600 italic">No channels monitored</span>
+                    <span className="text-xs text-neutral-600 italic">No channels monitored</span>
                   ) : (
                     config.target_channels?.map((chId: string) => {
                       const ch = channels.find((c: any) => c.id === chId);
                     return (
-                      <div key={chId} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
-                        <span className="text-slate-200">#{ch?.name || chId}</span>
-                        <button onClick={() => handleChannelToggle("target_channels", chId, false)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                      <div key={chId} className="flex items-center gap-2 bg-[#1A1A1A] border border-neutral-700/50 px-3 py-1.5 rounded-lg text-sm">
+                        <span className="text-neutral-200">#{ch?.name || chId}</span>
+                        <button onClick={() => handleChannelToggle("target_channels", chId, false)} className="text-neutral-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
                       </div>
                     );
                   })
@@ -288,7 +288,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
           </div>
 
           {/* Save Button */}
-          <div className="pt-6 border-t border-slate-800">
+          <div className="pt-6 border-t border-[#1A1A1A]">
             <Button
               onClick={handleSave}
               disabled={saving}
@@ -304,7 +304,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
 
       {/* Sidebar */}
       <div className="space-y-6">
-        <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-[6px] p-6 relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
             <Ban className="h-32 w-32 text-primary" />
           </div>
@@ -312,7 +312,7 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
             <Info className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-bold text-slate-50">How It Works</h3>
           </div>
-          <ul className="text-xs text-slate-500 space-y-2">
+          <ul className="text-xs text-neutral-500 space-y-2">
             <li>â€¢ Messages from target users are auto-deleted.</li>
             <li>â€¢ Blocked commands are removed instantly.</li>
             <li>â€¢ Excluded channels are never affected.</li>
@@ -321,12 +321,12 @@ export function AntiSpamPlusForm({ initialConfig, channels, roles, guildId }: An
         </div>
 
         {/* Sync Emoji Button */}
-        <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6">
+        <div className="bg-[#131313] border border-[#1A1A1A] rounded-[6px] p-6">
           <div className="flex items-center gap-2 mb-3">
             <SmilePlus className="h-4 w-4 text-yellow-400" />
             <h3 className="text-sm font-bold text-slate-50">Emoji Sync</h3>
           </div>
-          <p className="text-xs text-slate-500 mb-4">Emojis are managed directly in emoji.py on GitHub.</p>
+          <p className="text-xs text-neutral-500 mb-4">Emojis are managed directly in emoji.py on GitHub.</p>
         </div>
       </div>
     </div>

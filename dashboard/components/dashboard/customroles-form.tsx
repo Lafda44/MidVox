@@ -66,16 +66,16 @@ export function CustomRolesForm({ initialConfig, roles, guildId }: CustomRolesFo
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl p-8 space-y-8">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] shadow-xl p-8 space-y-8">
           
-          <div className="flex items-center justify-between p-6 bg-slate-900/40 rounded-2xl border border-slate-800">
+          <div className="flex items-center justify-between p-6 bg-[#131313] rounded-[6px] border border-[#1A1A1A]">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-primary/20 text-primary rounded-xl">
                 <Settings className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-lg font-black text-slate-50">Required Permission Role</h3>
-                <p className="text-sm text-slate-400 mt-1">Users need this role to assign the custom roles below.</p>
+                <p className="text-sm text-neutral-400 mt-1">Users need this role to assign the custom roles below.</p>
               </div>
             </div>
             
@@ -84,13 +84,13 @@ export function CustomRolesForm({ initialConfig, roles, guildId }: CustomRolesFo
                 value={config.reqrole?.toString() || "none"}
                 onValueChange={(val) => setConfig({ ...config, reqrole: val === "none" ? null : parseInt(val) })}
               >
-                <SelectTrigger className="w-full h-12 bg-slate-900 border-slate-800 font-medium">
+                <SelectTrigger className="w-full h-12 bg-[#111111] border-[#1A1A1A] font-medium">
                   <SelectValue placeholder="Select required role..." />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
-                  <SelectItem value="none" className="text-slate-400 focus:bg-slate-800">None required / Admins only</SelectItem>
+                <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[300px]">
+                  <SelectItem value="none" className="text-neutral-400 focus:bg-[#1A1A1A]">None required / Admins only</SelectItem>
                   {filteredRoles.map((role) => (
-                    <SelectItem key={role.id} value={role.id.toString()} className="focus:bg-slate-800">
+                    <SelectItem key={role.id} value={role.id.toString()} className="focus:bg-[#1A1A1A]">
                       {role.name}
                     </SelectItem>
                   ))}
@@ -101,14 +101,14 @@ export function CustomRolesForm({ initialConfig, roles, guildId }: CustomRolesFo
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {ROLE_INPUTS.map((input) => (
-              <div key={input.key} className="p-6 bg-slate-900/40 border border-slate-800 rounded-2xl space-y-4 hover:border-slate-700 transition-all duration-300">
+              <div key={input.key} className="p-6 bg-[#131313] border border-[#1A1A1A] rounded-[6px] space-y-4 hover:border-neutral-700 transition-all duration-300">
                 <div className="flex items-center gap-3">
                   <div className={cn("p-3 rounded-xl", input.bg, input.color)}>
                     <input.icon className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-50">{input.label}</h4>
-                    <p className="text-xs text-slate-400 mt-1">Role assigned via .{input.key} command</p>
+                    <p className="text-xs text-neutral-400 mt-1">Role assigned via .{input.key} command</p>
                   </div>
                 </div>
                 
@@ -116,13 +116,13 @@ export function CustomRolesForm({ initialConfig, roles, guildId }: CustomRolesFo
                   value={config[input.key]?.toString() || "none"}
                   onValueChange={(val) => setConfig({ ...config, [input.key]: val === "none" ? null : parseInt(val) })}
                 >
-                  <SelectTrigger className="w-full h-12 bg-slate-900 border-slate-800 font-medium">
+                  <SelectTrigger className="w-full h-12 bg-[#111111] border-[#1A1A1A] font-medium">
                     <SelectValue placeholder="Select a role..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
-                    <SelectItem value="none" className="text-slate-400 focus:bg-slate-800">Not Set</SelectItem>
+                  <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[300px]">
+                    <SelectItem value="none" className="text-neutral-400 focus:bg-[#1A1A1A]">Not Set</SelectItem>
                     {filteredRoles.map((role) => (
-                      <SelectItem key={role.id} value={role.id.toString()} className="focus:bg-slate-800">
+                      <SelectItem key={role.id} value={role.id.toString()} className="focus:bg-[#1A1A1A]">
                         {role.name}
                       </SelectItem>
                     ))}
@@ -144,15 +144,15 @@ export function CustomRolesForm({ initialConfig, roles, guildId }: CustomRolesFo
       </div>
 
       <div className="space-y-6">
-        <div className="bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 rounded-3xl p-6 relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 rounded-[6px] p-6 relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
             <Crown className="h-32 w-32 text-blue-500" />
           </div>
           <h3 className="text-sm font-bold text-blue-400 mb-2">Command Usage</h3>
-          <p className="text-xs text-slate-400 leading-relaxed mb-4">
+          <p className="text-xs text-neutral-400 leading-relaxed mb-4">
             Allows your trusted server managers to grant specific preset roles with simple prefix commands.
           </p>
-          <ul className="text-xs text-slate-500 space-y-2">
+          <ul className="text-xs text-neutral-500 space-y-2">
              <li>â€¢ <code>.staff @user</code> - Assigns/Removes Staff role</li>
              <li>â€¢ <code>.girl @user</code> - Assigns/Removes Girl role</li>
              <li>â€¢ <code>.vip @user</code> - Assigns/Removes VIP role</li>

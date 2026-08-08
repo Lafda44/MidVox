@@ -72,10 +72,10 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div className="lg:col-span-2 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl p-8 space-y-6">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] shadow-xl p-8 space-y-6">
           <div className="space-y-4">
             <div>
-              <label className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Response Type</label>
+              <label className="text-xs font-black uppercase text-neutral-500 tracking-widest pl-1">Response Type</label>
               <Select 
                 value={config.welcome_type || "simple"}
                 onValueChange={(val) => setConfig({ ...config, welcome_type: val })}
@@ -85,7 +85,7 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
             </div>
 
             <div>
-              <label className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Welcome Channel</label>
+              <label className="text-xs font-black uppercase text-neutral-500 tracking-widest pl-1">Welcome Channel</label>
               <Select 
                 value={config.channel_id || ""}
                 onValueChange={(val) => setConfig({ ...config, channel_id: val })}
@@ -97,69 +97,69 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
 
             {config.welcome_type === "simple" && (
               <div>
-                <label className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Message Content</label>
+                <label className="text-xs font-black uppercase text-neutral-500 tracking-widest pl-1">Message Content</label>
                 <textarea 
                   value={config.welcome_message || ""}
                   onChange={(e) => setConfig({ ...config, welcome_message: e.target.value })}
                   placeholder="Welcome {user} to {server_name}!"
-                  className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50 min-h-[120px]"
+                  className="w-full mt-2 bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-slate-50 min-h-[120px]"
                 />
               </div>
             )}
 
             {config.welcome_type === "embed" && (
-              <div className="space-y-4 pt-4 border-t border-slate-800/50">
+              <div className="space-y-4 pt-4 border-t border-[#1A1A1A]/50">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Embed Title</label>
+                    <label className="text-xs font-black uppercase text-neutral-500 tracking-widest pl-1">Embed Title</label>
                     <input 
                       type="text"
                       value={config.embed_data?.title || ""}
                       onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, title: e.target.value }})}
-                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50"
+                      className="w-full mt-2 bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-slate-50"
                       placeholder="Welcome to the server!"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Embed Color (Hex)</label>
+                    <label className="text-xs font-black uppercase text-neutral-500 tracking-widest pl-1">Embed Color (Hex)</label>
                     <input 
                       type="text"
                       value={config.embed_data?.color || ""}
                       onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, color: e.target.value }})}
-                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50"
+                      className="w-full mt-2 bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-slate-50"
                       placeholder="#3498db"
                     />
                   </div>
                 </div>
                 
                 <div>
-                  <label className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Embed Description</label>
+                  <label className="text-xs font-black uppercase text-neutral-500 tracking-widest pl-1">Embed Description</label>
                   <textarea 
                     value={config.embed_data?.description || ""}
                     onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, description: e.target.value }})}
                     placeholder="We're glad to have you here, {user}!"
-                    className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50 min-h-[100px]"
+                    className="w-full mt-2 bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-slate-50 min-h-[100px]"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Thumbnail URL</label>
+                    <label className="text-xs font-black uppercase text-neutral-500 tracking-widest pl-1">Thumbnail URL</label>
                     <input 
                       type="text"
                       value={config.embed_data?.thumbnail || ""}
                       onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, thumbnail: e.target.value }})}
-                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50"
+                      className="w-full mt-2 bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-slate-50"
                       placeholder="{user_avatar} or https://..."
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-black uppercase text-slate-500 tracking-widest pl-1">Image URL</label>
+                    <label className="text-xs font-black uppercase text-neutral-500 tracking-widest pl-1">Image URL</label>
                     <input 
                       type="text"
                       value={config.embed_data?.image || ""}
                       onChange={(e) => setConfig({ ...config, embed_data: { ...config.embed_data, image: e.target.value }})}
-                      className="w-full mt-2 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-50"
+                      className="w-full mt-2 bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-slate-50"
                       placeholder="https://..."
                     />
                   </div>
@@ -180,21 +180,21 @@ export function WelcomeForm({ initialConfig, channels, guildId }: WelcomeFormPro
       </div>
 
       <div className="space-y-6">
-         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
-            <h3 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-4">Variables</h3>
-            <div className="space-y-2 text-xs text-slate-400 font-mono bg-slate-900/50 p-4 rounded-2xl border border-slate-200/70">
+         <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] p-6 shadow-xl">
+            <h3 className="text-sm font-black uppercase text-neutral-500 tracking-widest mb-4">Variables</h3>
+            <div className="space-y-2 text-xs text-neutral-400 font-mono bg-[#0F0F0F] p-4 rounded-[6px] border border-neutral-200/70">
                <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{user}'}</span> <span>@Username</span></p>
                <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{user_name}'}</span> <span>Username</span></p>
                <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{server_name}'}</span> <span>Server Name</span></p>
                <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{server_membercount}'}</span> <span>Total Members</span></p>
-               <p className="border-t border-slate-800 my-2 pt-2 flex justify-between hover:text-slate-50 transition-colors"><span>{'{user_avatar}'}</span> <span>Avatar Image</span></p>
+               <p className="border-t border-[#1A1A1A] my-2 pt-2 flex justify-between hover:text-slate-50 transition-colors"><span>{'{user_avatar}'}</span> <span>Avatar Image</span></p>
                <p className="flex justify-between hover:text-slate-50 transition-colors"><span>{'{server_icon}'}</span> <span>Server Logo</span></p>
             </div>
-            <p className="text-[10px] text-slate-500 italic text-center mt-4">You can use these variables in both message content and embeds to personalize welcomes.</p>
+            <p className="text-[10px] text-neutral-500 italic text-center mt-4">You can use these variables in both message content and embeds to personalize welcomes.</p>
          </div>
          
-         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
-            <h3 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-4">Auto Setup</h3>
+         <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] p-6 shadow-xl">
+            <h3 className="text-sm font-black uppercase text-neutral-500 tracking-widest mb-4">Auto Setup</h3>
             <Button onClick={() => setConfig({
                 ...config,
                 welcome_type: "embed",

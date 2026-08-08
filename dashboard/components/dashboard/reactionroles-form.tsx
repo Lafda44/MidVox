@@ -105,16 +105,16 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl p-8 space-y-8">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] shadow-xl p-8 space-y-8">
           
-          <div className="flex items-center justify-between p-6 bg-slate-900/40 rounded-2xl border border-slate-800">
+          <div className="flex items-center justify-between p-6 bg-[#131313] rounded-[6px] border border-[#1A1A1A]">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-primary/20 text-primary rounded-xl">
                 <BellRing className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-lg font-black text-slate-50">DM Notifications</h3>
-                <p className="text-sm text-slate-400 mt-1">Send a direct message when a user gets/loses a role.</p>
+                <p className="text-sm text-neutral-400 mt-1">Send a direct message when a user gets/loses a role.</p>
               </div>
             </div>
             <Switch 
@@ -124,7 +124,7 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
             />
           </div>
 
-          <div className="pt-6 border-t border-slate-800">
+          <div className="pt-6 border-t border-[#1A1A1A]">
             <h4 className="text-sm font-bold text-slate-50 mb-4 flex items-center gap-2">
               <Plus className="h-5 w-5 text-primary" />
               Create New Reaction Role
@@ -132,35 +132,35 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400">Message ID</label>
+                <label className="text-xs font-bold text-neutral-400">Message ID</label>
                 <Input 
                   placeholder="e.g. 1234567890" 
                   value={newRR.message_id}
                   onChange={(e) => setNewRR({ ...newRR, message_id: e.target.value })}
-                  className="bg-slate-900/50 h-10"
+                  className="bg-[#0F0F0F] h-10"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400">Emoji</label>
+                <label className="text-xs font-bold text-neutral-400">Emoji</label>
                 <Input 
                   placeholder="e.g. âœ…" 
                   value={newRR.emoji}
                   onChange={(e) => setNewRR({ ...newRR, emoji: e.target.value })}
-                  className="bg-slate-900/50 h-10"
+                  className="bg-[#0F0F0F] h-10"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400">Role to Assign</label>
+                <label className="text-xs font-bold text-neutral-400">Role to Assign</label>
                 <Select
                   value={newRR.role_id ? newRR.role_id.toString() : ""}
                   onValueChange={(val) => setNewRR({ ...newRR, role_id: val })}
                 >
-                  <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
+                  <SelectTrigger className="w-full h-10 bg-[#0F0F0F] border-[#1A1A1A]">
                     <SelectValue placeholder="Select a role..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800 max-h-[250px]">
+                  <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[250px]">
                     {filteredRoles.map((role) => (
-                      <SelectItem key={role.id} value={role.id.toString()} className="focus:bg-slate-800">
+                      <SelectItem key={role.id} value={role.id.toString()} className="focus:bg-[#1A1A1A]">
                         {role.name}
                       </SelectItem>
                     ))}
@@ -179,7 +179,7 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
             </Button>
           </div>
 
-          <div className="pt-6 border-t border-slate-800">
+          <div className="pt-6 border-t border-[#1A1A1A]">
             <h4 className="text-sm font-bold text-slate-50 mb-4 flex items-center gap-2">
               <MousePointer2 className="h-5 w-5 text-primary" />
               Active Reaction Roles
@@ -187,26 +187,26 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
 
             <div className="space-y-3">
               {config.roles.length === 0 ? (
-                <div className="text-center p-8 bg-slate-900/20 rounded-2xl border border-dashed border-slate-700">
-                  <p className="text-sm text-slate-500 italic">No reaction roles currently configured.</p>
+                <div className="text-center p-8 bg-[#0F0F0F]/60 rounded-[6px] border border-dashed border-neutral-700">
+                  <p className="text-sm text-neutral-500 italic">No reaction roles currently configured.</p>
                 </div>
               ) : (
                 config.roles.map((rr: any, idx: number) => {
                   const roleName = roles.find(r => r.id === rr.role_id.toString())?.name || "Unknown Role";
                   
                   return (
-                    <div key={idx} className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800">
+                    <div key={idx} className="flex items-center justify-between p-4 bg-[#131313] rounded-xl border border-[#1A1A1A]">
                       <div className="flex items-center gap-6">
                         <div className="flex flex-col">
-                          <span className="text-[10px] uppercase font-bold text-slate-500">Message ID</span>
-                          <span className="text-sm font-mono text-slate-300">{rr.message_id}</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-500">Message ID</span>
+                          <span className="text-sm font-mono text-neutral-300">{rr.message_id}</span>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] uppercase font-bold text-slate-500">Emoji</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-500">Emoji</span>
                           <span className="text-lg">{rr.emoji}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-[10px] uppercase font-bold text-slate-500">Role</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-500">Role</span>
                           <span className="text-sm font-medium text-primary">{roleName}</span>
                         </div>
                       </div>
@@ -215,7 +215,7 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
                         size="sm" 
                         onClick={() => handleDelete(rr.message_id, rr.emoji)}
                         disabled={loadingAction}
-                        className="text-red-600 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0"
+                        className="text-red-400 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -229,15 +229,15 @@ export function ReactionRolesForm({ initialConfig, roles, guildId }: ReactionRol
       </div>
 
       <div className="space-y-6">
-        <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-[6px] p-6 relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
             <MousePointer2 className="h-32 w-32 text-primary" />
           </div>
           <h3 className="text-sm font-bold text-primary mb-2">Usage Guide</h3>
-          <p className="text-xs text-slate-400 leading-relaxed mb-4">
+          <p className="text-xs text-neutral-400 leading-relaxed mb-4">
             Reaction Roles allow members to self-assign their own roles with a single click.
           </p>
-          <ul className="text-xs text-slate-500 space-y-2">
+          <ul className="text-xs text-neutral-500 space-y-2">
              <li>â€¢ The bot must have access to see the message you specify.</li>
              <li>â€¢ Make sure the bot role is HIGHER than the role you are attempting to assign.</li>
              <li>â€¢ The bot will automatically react to the message once you click &quot;Add to Active Listeners&quot;.</li>

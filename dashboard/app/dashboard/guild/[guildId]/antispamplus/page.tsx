@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 export const revalidate = 0;
 
 const AntiSpamPlusForm = dynamic(() => import("@/components/dashboard/antispamplus-form").then(mod => mod.AntiSpamPlusForm), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-slate-800/20 rounded-3xl" />
+  loading: () => <div className="h-96 w-full animate-pulse bg-[#1A1A1A]/30 rounded-[6px]" />
 });
 
 export default async function AntiSpamPlusPage({ params }: { params: { guildId: string } }) {
@@ -24,7 +24,7 @@ export default async function AntiSpamPlusPage({ params }: { params: { guildId: 
             <Ban className="h-6 w-6 text-primary" />
             Anti-Spam+
           </h2>
-          <p className="text-slate-400 mt-1">Delete target messages, block commands, and prevent reaction spam.</p>
+          <p className="text-neutral-400 mt-1">Delete target messages, block commands, and prevent reaction spam.</p>
         </div>
       </div>
 

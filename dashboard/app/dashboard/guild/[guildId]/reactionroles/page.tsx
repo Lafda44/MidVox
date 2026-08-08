@@ -127,21 +127,21 @@ export default function ReactionRolesPage({ params }: { params: { guildId: strin
             <MousePointer2 className="h-6 w-6 text-primary" />
             Reaction Roles
           </h2>
-          <p className="text-slate-400 mt-1">Allow members to self-assign roles by reacting to a message.</p>
+          <p className="text-neutral-400 mt-1">Allow members to self-assign roles by reacting to a message.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3 space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl p-8 space-y-8">
+          <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] overflow-hidden shadow-xl p-8 space-y-8">
             
             {/* DM Toggle */}
-            <div className="flex items-center justify-between p-6 bg-slate-900/40 rounded-2xl border border-slate-800">
+            <div className="flex items-center justify-between p-6 bg-[#131313] rounded-[6px] border border-[#1A1A1A]">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-primary/20 text-primary rounded-xl"><BellRing className="w-5 h-5" /></div>
                 <div>
                   <h3 className="text-lg font-black text-white">DM Notifications</h3>
-                  <p className="text-sm text-slate-400 mt-1">Send a DM when a user gets/loses a role.</p>
+                  <p className="text-sm text-neutral-400 mt-1">Send a DM when a user gets/loses a role.</p>
                 </div>
               </div>
               <Switch
@@ -152,7 +152,7 @@ export default function ReactionRolesPage({ params }: { params: { guildId: strin
             </div>
 
             {/* Add New */}
-            <div className="pt-6 border-t border-slate-800 space-y-4">
+            <div className="pt-6 border-t border-[#1A1A1A] space-y-4">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-primary/10 text-primary"><Plus className="h-5 w-5" /></div>
                 <h4 className="font-bold text-white text-base">Create New Reaction Role</h4>
@@ -160,35 +160,35 @@ export default function ReactionRolesPage({ params }: { params: { guildId: strin
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400">Message ID</label>
+                  <label className="text-xs font-bold text-neutral-400">Message ID</label>
                   <Input
                     placeholder="e.g. 1234567890"
                     value={newRR.message_id}
                     onChange={(e) => setNewRR({ ...newRR, message_id: e.target.value })}
-                    className="bg-slate-900/50 border-slate-800 h-12"
+                    className="bg-[#0F0F0F] border-[#1A1A1A] h-12"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400">Emoji</label>
+                  <label className="text-xs font-bold text-neutral-400">Emoji</label>
                   <Input
                     placeholder="e.g. ✅ or custom emoji"
                     value={newRR.emoji}
                     onChange={(e) => setNewRR({ ...newRR, emoji: e.target.value })}
-                    className="bg-slate-900/50 border-slate-800 h-12"
+                    className="bg-[#0F0F0F] border-[#1A1A1A] h-12"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400">Role to Assign</label>
+                  <label className="text-xs font-bold text-neutral-400">Role to Assign</label>
                   <Select
                     value={newRR.role_id || ""}
                     onValueChange={(val) => setNewRR({ ...newRR, role_id: val })}
                   >
-                    <SelectTrigger className="w-full h-12 bg-slate-900/50 border-slate-800">
+                    <SelectTrigger className="w-full h-12 bg-[#0F0F0F] border-[#1A1A1A]">
                       <SelectValue placeholder="Select a role..." />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-slate-800 max-h-[250px]">
+                    <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[250px]">
                       {filteredRoles.map((role) => (
-                        <SelectItem key={role.id} value={role.id} className="focus:bg-slate-800">
+                        <SelectItem key={role.id} value={role.id} className="focus:bg-[#1A1A1A]">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: formatColor(role.color) }} />
                             {role.name}
@@ -207,31 +207,31 @@ export default function ReactionRolesPage({ params }: { params: { guildId: strin
             </div>
 
             {/* Active roles */}
-            <div className="pt-6 border-t border-slate-800 space-y-3">
+            <div className="pt-6 border-t border-[#1A1A1A] space-y-3">
               <h4 className="text-sm font-bold text-white flex items-center gap-2">
                 <MousePointer2 className="h-5 w-5 text-primary" /> Active Reaction Roles
               </h4>
 
               {config.roles.length === 0 ? (
-                <div className="text-center p-8 bg-slate-900/20 rounded-2xl border border-dashed border-slate-700">
-                  <p className="text-sm text-slate-500 italic">No reaction roles configured.</p>
+                <div className="text-center p-8 bg-[#0F0F0F]/60 rounded-[6px] border border-dashed border-neutral-700">
+                  <p className="text-sm text-neutral-500 italic">No reaction roles configured.</p>
                 </div>
               ) : (
                 config.roles.map((rr: any, idx: number) => {
                   const roleName = filteredRoles.find(r => String(r.id) === String(rr.role_id))?.name || "Unknown Role";
                   return (
-                    <div key={idx} className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800">
+                    <div key={idx} className="flex items-center justify-between p-4 bg-[#131313] rounded-xl border border-[#1A1A1A]">
                       <div className="flex items-center gap-6">
                         <div className="flex flex-col">
-                          <span className="text-[10px] uppercase font-bold text-slate-500">Message ID</span>
-                          <span className="text-sm font-mono text-slate-300">{rr.message_id}</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-500">Message ID</span>
+                          <span className="text-sm font-mono text-neutral-300">{rr.message_id}</span>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] uppercase font-bold text-slate-500">Emoji</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-500">Emoji</span>
                           <span className="text-lg">{rr.emoji}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-[10px] uppercase font-bold text-slate-500">Role</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-500">Role</span>
                           <span className="text-sm font-medium text-primary">{roleName}</span>
                         </div>
                       </div>
@@ -240,7 +240,7 @@ export default function ReactionRolesPage({ params }: { params: { guildId: strin
                         size="sm"
                         onClick={() => handleDelete(String(rr.message_id), rr.emoji)}
                         disabled={loadingAction}
-                        className="text-red-600 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0"
+                        className="text-red-400 hover:text-red-500 hover:bg-red-400/10 h-8 w-8 p-0"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -254,7 +254,7 @@ export default function ReactionRolesPage({ params }: { params: { guildId: strin
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
+          <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-[6px] p-6 relative overflow-hidden group">
             <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
               <MousePointer2 className="h-32 w-32 text-primary" />
             </div>
@@ -262,7 +262,7 @@ export default function ReactionRolesPage({ params }: { params: { guildId: strin
               <Info className="h-4 w-4 text-primary" />
               <h3 className="text-sm font-bold text-white">Usage Guide</h3>
             </div>
-            <ul className="text-xs text-slate-500 space-y-2">
+            <ul className="text-xs text-neutral-500 space-y-2">
               <li>• The bot must have access to the message you specify.</li>
               <li>• The bot role must be above the role being assigned.</li>
               <li>• The bot auto-reacts to the message once added.</li>

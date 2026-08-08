@@ -63,7 +63,7 @@ export default function LeaderboardPage({ params }: { params: { guildId: string 
     return (
       <div className="flex flex-col items-center justify-center h-96 space-y-4">
         <RefreshCcw className="h-10 w-10 text-primary animate-spin" />
-        <p className="text-slate-400 animate-pulse font-medium tracking-tight">Syncing global rankings...</p>
+        <p className="text-neutral-400 animate-pulse font-medium tracking-tight">Syncing global rankings...</p>
       </div>
     );
   }
@@ -76,16 +76,16 @@ export default function LeaderboardPage({ params }: { params: { guildId: string 
             <Trophy className="h-8 w-8 text-amber-500 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
             Social Leaderboard
           </h2>
-          <p className="text-slate-400 mt-1 font-medium italic">Top contributors by experience and activity.</p>
+          <p className="text-neutral-400 mt-1 font-medium italic">Top contributors by experience and activity.</p>
         </div>
         
         <div className="relative w-full md:w-80 group">
-           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-primary transition-colors" />
+           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500 group-focus-within:text-primary transition-colors" />
            <Input 
               placeholder="Search members..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-12 bg-slate-900/50 border-slate-800 rounded-2xl h-12 focus:ring-primary/20 transition-all"
+              className="pl-12 bg-[#0F0F0F] border-[#1A1A1A] rounded-[6px] h-12 focus:ring-primary/20 transition-all"
            />
         </div>
       </div>
@@ -96,66 +96,66 @@ export default function LeaderboardPage({ params }: { params: { guildId: string 
             <div key={user.user_id} className={cn(
                "relative p-8 rounded-[40px] border flex flex-col items-center text-center overflow-hidden transition-all hover:scale-[1.02]",
                i === 0 ? "bg-gradient-to-b from-amber-500/20 to-transparent border-amber-500/30 md:-translate-y-4 order-1 md:order-2" : 
-               i === 1 ? "bg-gradient-to-b from-slate-300/10 to-transparent border-slate-500/20 order-2 md:order-1" : 
+               i === 1 ? "bg-gradient-to-b from-neutral-300/10 to-transparent border-neutral-500/20 order-2 md:order-1" : 
                "bg-gradient-to-b from-amber-800/20 to-transparent border-amber-900/20 order-3"
             )}>
                <div className="absolute top-0 right-0 p-4">
                    {i === 0 ? <Crown className="h-8 w-8 text-amber-500 fill-amber-500/20" /> : 
-                    i === 1 ? <Medal className="h-8 w-8 text-slate-300 fill-slate-300/20" /> : 
+                    i === 1 ? <Medal className="h-8 w-8 text-neutral-300 fill-neutral-300/20" /> : 
                     <Medal className="h-8 w-8 text-amber-800 fill-amber-800/10" />}
                </div>
                
-               <div className="h-20 w-20 rounded-full bg-slate-800 border-4 border-slate-700 mb-4 flex items-center justify-center relative shadow-2xl">
-                  <User className="h-10 w-10 text-slate-500" />
+               <div className="h-20 w-20 rounded-full bg-[#1A1A1A] border-4 border-neutral-700 mb-4 flex items-center justify-center relative shadow-2xl">
+                  <User className="h-10 w-10 text-neutral-500" />
                   <div className={cn(
-                    "absolute -bottom-1 -right-1 h-8 w-8 rounded-full border-4 border-slate-900 flex items-center justify-center text-[10px] font-black",
-                    i === 0 ? "bg-amber-500 text-black" : i === 1 ? "bg-slate-300 text-black" : "bg-amber-800 text-white"
+                    "absolute -bottom-1 -right-1 h-8 w-8 rounded-full border-4 border-[#111111] flex items-center justify-center text-[10px] font-black",
+                    i === 0 ? "bg-amber-500 text-black" : i === 1 ? "bg-neutral-300 text-black" : "bg-amber-800 text-white"
                   )}>
                     #{i + 1}
                   </div>
                </div>
                
                <h3 className="text-xl font-black text-white truncate max-w-full">{user.name}</h3>
-               <p className="text-sm font-bold text-slate-500 flex items-center gap-1 mt-1">
+               <p className="text-sm font-bold text-neutral-500 flex items-center gap-1 mt-1">
                  LEVEL {user.level}
                </p>
                
-               <div className="mt-6 flex items-center gap-2 px-4 py-2 bg-black/20 rounded-2xl border border-white/5">
+               <div className="mt-6 flex items-center gap-2 px-4 py-2 bg-black/20 rounded-[6px] border border-white/5">
                   <Zap className="h-3 w-3 text-primary" />
-                  <span className="text-sm font-black text-slate-200">{user.xp.toLocaleString()} XP</span>
+                  <span className="text-sm font-black text-neutral-200">{user.xp.toLocaleString()} XP</span>
                </div>
             </div>
          ))}
       </div>
 
       {/* Main Leaderboard Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-[40px] overflow-hidden shadow-2xl">
+      <div className="bg-[#111111] border border-[#1A1A1A] rounded-[40px] overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/30">
-                <th className="px-8 py-6 text-[10px] font-black uppercase text-slate-500 tracking-[0.2em]">Rank</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase text-slate-500 tracking-[0.2em]">User</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase text-slate-500 tracking-[0.2em]">Level</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase text-slate-500 tracking-[0.2em] text-right">Total XP</th>
+              <tr className="border-b border-[#1A1A1A] bg-[#111111]/30">
+                <th className="px-8 py-6 text-[10px] font-black uppercase text-neutral-500 tracking-[0.2em]">Rank</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase text-neutral-500 tracking-[0.2em]">User</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase text-neutral-500 tracking-[0.2em]">Level</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase text-neutral-500 tracking-[0.2em] text-right">Total XP</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/50">
+            <tbody className="divide-y divide-[#1A1A1A]">
               {filteredData.slice(3).map((entry, i) => (
                 <tr key={entry.user_id} className="group hover:bg-white/[0.02] transition-colors">
                   <td className="px-8 py-6">
-                    <span className="text-sm font-black text-slate-500 group-hover:text-white transition-colors">
+                    <span className="text-sm font-black text-neutral-500 group-hover:text-white transition-colors">
                        #{i + 4}
                     </span>
                   </td>
                   <td className="px-8 py-6">
                     <div className="flex items-center gap-4">
-                       <div className="h-10 w-10 rounded-xl bg-slate-800/50 border border-slate-700/50 flex items-center justify-center">
-                          <User className="h-5 w-5 text-slate-600" />
+                       <div className="h-10 w-10 rounded-xl bg-[#1A1A1A]/50 border border-neutral-700/50 flex items-center justify-center">
+                          <User className="h-5 w-5 text-neutral-600" />
                        </div>
                        <div className="flex flex-col">
-                          <span className="text-sm font-bold text-slate-200 group-hover:text-white transition-colors">{entry.name}</span>
-                          <span className="text-[10px] text-slate-600 font-mono tracking-tighter">{entry.user_id}</span>
+                          <span className="text-sm font-bold text-neutral-200 group-hover:text-white transition-colors">{entry.name}</span>
+                          <span className="text-[10px] text-neutral-600 font-mono tracking-tighter">{entry.user_id}</span>
                        </div>
                     </div>
                   </td>
@@ -169,7 +169,7 @@ export default function LeaderboardPage({ params }: { params: { guildId: string 
                   <td className="px-8 py-6 text-right">
                     <div className="flex items-center justify-end gap-2">
                        <TrendingUp className="h-3 w-3 text-emerald-500 opacity-50" />
-                       <span className="text-sm font-black text-slate-200 tabular-nums">{entry.xp.toLocaleString()}</span>
+                       <span className="text-sm font-black text-neutral-200 tabular-nums">{entry.xp.toLocaleString()}</span>
                     </div>
                   </td>
                 </tr>
@@ -178,7 +178,7 @@ export default function LeaderboardPage({ params }: { params: { guildId: string 
               {filteredData.length === 3 && (
                 <tr>
                    <td colSpan={4} className="px-8 py-20 text-center">
-                      <p className="text-slate-500 italic font-medium">No additional members ranked yet...</p>
+                      <p className="text-neutral-500 italic font-medium">No additional members ranked yet...</p>
                    </td>
                 </tr>
               )}
@@ -187,15 +187,15 @@ export default function LeaderboardPage({ params }: { params: { guildId: string 
         </div>
         
         {/* Pagination Overlay (Simulation) */}
-        <div className="p-6 border-t border-slate-800 bg-slate-900/20 flex items-center justify-between">
-           <p className="text-xs text-slate-500 font-medium">
+        <div className="p-6 border-t border-[#1A1A1A] bg-[#0F0F0F]/60 flex items-center justify-between">
+           <p className="text-xs text-neutral-500 font-medium">
              Showing <span className="text-white">{filteredData.length}</span> active competitors
            </p>
            <div className="flex items-center gap-2">
-              <Button size="icon" variant="outline" className="h-8 w-8 rounded-lg border-slate-800" disabled>
+              <Button size="icon" variant="outline" className="h-8 w-8 rounded-lg border-[#1A1A1A]" disabled>
                  <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Button size="icon" variant="outline" className="h-8 w-8 rounded-lg border-slate-800" disabled>
+              <Button size="icon" variant="outline" className="h-8 w-8 rounded-lg border-[#1A1A1A]" disabled>
                  <ChevronRight className="h-4 w-4" />
               </Button>
            </div>

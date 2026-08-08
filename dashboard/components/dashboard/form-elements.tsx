@@ -38,11 +38,11 @@ export const ToggleSwitch = ({
   disabled,
   className 
 }: ToggleSwitchProps) => (
-  <div className={cn("flex items-center justify-between gap-4 p-4 rounded-xl bg-slate-900 border border-slate-800", className)}>
+  <div className={cn("flex items-center justify-between gap-4 p-4 rounded-xl bg-[#111111] border border-[#1A1A1A]", className)}>
     {(label || description) && (
       <div className="flex flex-col">
-        {label && <span className="text-sm font-medium text-slate-200">{label}</span>}
-        {description && <span className="text-[11px] text-slate-500 mt-0.5">{description}</span>}
+        {label && <span className="text-sm font-medium text-neutral-200">{label}</span>}
+        {description && <span className="text-[11px] text-neutral-500 mt-0.5">{description}</span>}
       </div>
     )}
     <Switch checked={checked} onCheckedChange={onCheckedChange} disabled={disabled} />
@@ -70,7 +70,7 @@ export const DropdownSelect = ({
   className 
 }: DropdownSelectProps) => (
   <div className={cn("space-y-2", className)}>
-    {label && <label className="text-[10px] font-semibold uppercase text-slate-500 tracking-widest pl-1">{label}</label>}
+    {label && <label className="text-[10px] font-semibold uppercase text-neutral-500 tracking-widest pl-1">{label}</label>}
     <Select 
       value={value} 
       onValueChange={onValueChange} 
@@ -89,10 +89,10 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const FormInput = ({ label, icon: Icon, className, ...props }: FormInputProps) => (
   <div className="space-y-2 w-full">
-    {label && <label className="text-[10px] font-semibold uppercase text-slate-500 tracking-widest pl-1">{label}</label>}
+    {label && <label className="text-[10px] font-semibold uppercase text-neutral-500 tracking-widest pl-1">{label}</label>}
     <div className="relative group">
       {Icon && (
-        <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600 group-focus-within:text-primary transition-colors" />
+        <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-600 group-focus-within:text-primary transition-colors" />
       )}
       <Input 
         className={cn(

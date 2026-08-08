@@ -91,20 +91,20 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
           </div>
           <div>
             <h4 className="font-bold text-slate-50 text-base">{title}</h4>
-            <p className="text-xs text-slate-400">Roles given to newly joined {type}.</p>
+            <p className="text-xs text-neutral-400">Roles given to newly joined {type}.</p>
           </div>
         </div>
         
         <Select value="" onValueChange={(val) => addRole(type, val)}>
-          <SelectTrigger className="w-full h-12 bg-slate-900/50 border-slate-800 hover:border-slate-700 transition-all">
+          <SelectTrigger className="w-full h-12 bg-[#0F0F0F] border-[#1A1A1A] hover:border-neutral-700 transition-all">
             <SelectValue placeholder={`Add a ${type === "humans" ? "member" : "bot"} role...`} />
           </SelectTrigger>
-          <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
+          <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[300px]">
             {roles
               .filter(r => !config[type].includes(r.id))
               .sort((a, b) => (b.position || 0) - (a.position || 0))
               .map((r) => (
-                <SelectItem key={r.id} value={r.id} className="focus:bg-slate-800 group">
+                <SelectItem key={r.id} value={r.id} className="focus:bg-[#1A1A1A] group">
                   <div className="flex items-center gap-2">
                     <div 
                       className="w-2 h-2 rounded-full" 
@@ -117,7 +117,7 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
           </SelectContent>
         </Select>
 
-        <div className="grid grid-cols-1 gap-2 min-h-[100px] p-4 bg-slate-900/40 rounded-2xl border border-slate-800/50 relative overflow-hidden">
+        <div className="grid grid-cols-1 gap-2 min-h-[100px] p-4 bg-[#131313] rounded-[6px] border border-[#1A1A1A]/50 relative overflow-hidden">
           {config[type].length === 0 ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center opacity-20">
               <ShieldCheck className="h-8 w-8 mb-2" />
@@ -131,16 +131,16 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
                 return (
                   <div 
                     key={roleId} 
-                    className="flex items-center gap-2 bg-slate-800/80 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm group animate-in zoom-in-95 duration-200"
+                    className="flex items-center gap-2 bg-[#1A1A1A]/80 border border-neutral-700/50 px-3 py-1.5 rounded-lg text-sm group animate-in zoom-in-95 duration-200"
                   >
                     <div 
                       className="w-2 h-2 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)]" 
                       style={{ backgroundColor: color }}
                     />
-                    <span className="text-slate-200 font-medium">{role ? role.name : `Unknown (${roleId})`}</span>
+                    <span className="text-neutral-200 font-medium">{role ? role.name : `Unknown (${roleId})`}</span>
                     <button 
                       onClick={() => removeRole(type, roleId)}
-                      className="ml-1 text-slate-500 hover:text-red-600 transition-colors p-0.5 rounded-md hover:bg-red-400/10"
+                      className="ml-1 text-neutral-500 hover:text-red-400 transition-colors p-0.5 rounded-md hover:bg-red-400/10"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -157,14 +157,14 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-[32px] shadow-2xl p-8 space-y-10 relative">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[32px] shadow-2xl p-8 space-y-10 relative">
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {renderRoleList("humans")}
             {renderRoleList("bots")}
           </div>
 
-          <div className="pt-6 border-t border-slate-800">
+          <div className="pt-6 border-t border-[#1A1A1A]">
             <Button 
               onClick={handleSave}
               disabled={saving}
@@ -179,7 +179,7 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
       </div>
 
       <div className="space-y-6">
-        <div className="bg-gradient-to-br from-slate-900 to-slate-900 border border-slate-800 rounded-3xl p-6 relative overflow-hidden group">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[6px] p-6 relative overflow-hidden group">
           <div className="absolute -right-6 -top-6 opacity-[0.05] group-hover:scale-110 transition-transform duration-500">
             <UserPlus className="h-40 w-40 text-primary" />
           </div>
@@ -189,27 +189,27 @@ export function AutoRoleForm({ initialConfig, roles, guildId }: AutoRoleFormProp
             <h3 className="text-sm font-bold text-slate-50">Guidelines</h3>
           </div>
           
-          <p className="text-xs text-slate-400 leading-relaxed mb-6">
+          <p className="text-xs text-neutral-400 leading-relaxed mb-6">
             AutoRole ensures every new member is welcomed with the right sets of roles immediately upon joining.
           </p>
           
           <div className="space-y-4">
             <div className="flex gap-3">
               <div className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                <span className="text-slate-200 font-bold">Hierarchy Matter:</span> Ensure MidVox&apos;s top role is <span className="text-primary italic">higher</span> than any role you select here.
+              <p className="text-[11px] text-neutral-400 leading-relaxed">
+                <span className="text-neutral-200 font-bold">Hierarchy Matter:</span> Ensure MidVox&apos;s top role is <span className="text-primary italic">higher</span> than any role you select here.
               </p>
             </div>
             <div className="flex gap-3">
               <div className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                <span className="text-slate-200 font-bold">Bot Detection:</span> We automatically separate bots from human members for precise role assignment.
+              <p className="text-[11px] text-neutral-400 leading-relaxed">
+                <span className="text-neutral-200 font-bold">Bot Detection:</span> We automatically separate bots from human members for precise role assignment.
               </p>
             </div>
             <div className="flex gap-3">
               <div className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                <span className="text-slate-200 font-bold">Limits:</span> We has limits on roles. We support up to 10 roles per category for stability.
+              <p className="text-[11px] text-neutral-400 leading-relaxed">
+                <span className="text-neutral-200 font-bold">Limits:</span> We has limits on roles. We support up to 10 roles per category for stability.
               </p>
             </div>
           </div>

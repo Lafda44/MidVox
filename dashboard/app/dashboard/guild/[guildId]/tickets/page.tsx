@@ -21,7 +21,7 @@ import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
 const TicketsForm = dynamic(() => import("@/components/dashboard/tickets-form").then(mod => mod.TicketsForm), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-slate-800/20 rounded-3xl" />
+  loading: () => <div className="h-96 w-full animate-pulse bg-[#1A1A1A]/30 rounded-[6px]" />
 });
 
 export default async function TicketsPage({ params }: { params: { guildId: string } }) {
@@ -37,10 +37,10 @@ export default async function TicketsPage({ params }: { params: { guildId: strin
             <Ticket className="h-6 w-6 text-primary" />
             Ticket System
           </h2>
-          <p className="text-slate-400 mt-1">Manage private support channels and inquiry categories.</p>
+          <p className="text-neutral-400 mt-1">Manage private support channels and inquiry categories.</p>
         </div>
         <div className="flex items-center gap-4">
-          <div className="bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-2xl flex items-center gap-2">
+          <div className="bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-[6px] flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs font-bold text-emerald-500 uppercase">Live System</span>
           </div>

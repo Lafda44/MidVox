@@ -23,7 +23,7 @@ export const revalidate = 0; // Never cache this page
 
 
 const J2CForm = dynamic(() => import("@/components/dashboard/j2c-form").then(mod => mod.J2CForm), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-slate-800/20 rounded-3xl" />
+  loading: () => <div className="h-96 w-full animate-pulse bg-[#1A1A1A]/30 rounded-[6px]" />
 });
 
 export default async function J2CPage({ params }: { params: { guildId: string } }) {
@@ -42,7 +42,7 @@ export default async function J2CPage({ params }: { params: { guildId: string } 
             <Mic className="h-6 w-6 text-primary" />
             Join to Create
           </h2>
-          <p className="text-slate-400 mt-1">Set up temporary voice channels that are created automatically when a member joins a specific channel.</p>
+          <p className="text-neutral-400 mt-1">Set up temporary voice channels that are created automatically when a member joins a specific channel.</p>
         </div>
       </div>
 

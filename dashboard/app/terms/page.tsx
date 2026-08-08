@@ -23,13 +23,13 @@ import { Button } from "@/components/ui/button";
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans">
+    <div className="min-h-screen bg-[#0C0C0C] text-[#F5F5F5] font-sans">
       {/* Background Decor */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-red-600/[0.03] blur-[120px] rounded-full" />
       </div>
 
-      <nav className="fixed top-0 w-full z-50 border-b border-slate-200/70 bg-slate-950/80 backdrop-blur-3xl px-6 h-20 flex items-center justify-between">
+      <nav className="fixed top-0 w-full z-50 border-b border-[#1F1F1F] bg-[rgba(12,12,12,0.95)] backdrop-blur-sm px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-4 group">
           <div className="h-10 w-10 rounded-xl bg-red-600 flex items-center justify-center group-hover:rotate-12 transition-transform">
             <Bot className="h-5 w-5 text-slate-50" />
@@ -37,7 +37,7 @@ export default function TermsPage() {
           <span className="text-xl font-bold text-slate-50 font-display uppercase tracking-tighter">{process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox"} Engine</span>
         </Link>
         <Link href="/">
-          <Button variant="ghost" className="text-slate-400 hover:text-slate-50 gap-2">
+          <Button variant="ghost" className="text-neutral-400 hover:text-slate-50 gap-2">
             <ChevronLeft className="h-4 w-4" />
             Back to Home
           </Button>
@@ -55,45 +55,45 @@ export default function TermsPage() {
             Terms of <span className="text-red-500 not-italic">Service.</span>
           </h1>
 
-          <div className="glass border-slate-200/70 rounded-[40px] p-10 md:p-16 space-y-12 bg-gradient-to-br from-white/[0.01] to-transparent">
+          <div className="bg-[#131313] border-[#1F1F1F] rounded-[40px] p-10 md:p-16 space-y-12 bg-gradient-to-br from-white/[0.01] to-transparent">
             <section className="space-y-6">
               <div className="flex items-center gap-4 text-slate-50">
-                <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
+                <div className="h-10 w-10 rounded-[6px] bg-[#1A1A1A] border border-[#1F1F1F] flex items-center justify-center text-red-500">
                    <Terminal className="h-5 w-5" />
                 </div>
                 <h2 className="text-2xl font-bold font-display uppercase tracking-tight">Acceptance of Protocol</h2>
               </div>
-              <p className="text-slate-400 leading-relaxed font-medium">
+              <p className="text-neutral-400 leading-relaxed font-medium">
                 By integrating the {process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox"} Engine into your Discord server, you agree to abide by these terms. The engine is provided &quot;as is,&quot; and while we strive for 100% uptime through our neural edge clusters, we are not liable for any data loss resulting from third-party API disruptions.
               </p>
             </section>
 
             <section className="space-y-6">
               <div className="flex items-center gap-4 text-slate-50">
-                <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
+                <div className="h-10 w-10 rounded-[6px] bg-[#1A1A1A] border border-[#1F1F1F] flex items-center justify-center text-red-500">
                    <ShieldAlert className="h-5 w-5" />
                 </div>
                 <h2 className="text-2xl font-bold font-display uppercase tracking-tight">Usage Constraints</h2>
               </div>
-              <p className="text-slate-400 leading-relaxed font-medium">
+              <p className="text-neutral-400 leading-relaxed font-medium">
                 You may not use the {process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox"} Engine for any illicit activities, including but not limited to: automated harassment, token logging, or raid coordination. Violation of these constraints will result in immediate neural deauthorization and blacklisting from the global cluster network.
               </p>
             </section>
 
             <section className="space-y-6">
               <div className="flex items-center gap-4 text-slate-50">
-                <div className="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-red-500">
+                <div className="h-10 w-10 rounded-[6px] bg-[#1A1A1A] border border-[#1F1F1F] flex items-center justify-center text-red-500">
                    <Cpu className="h-5 w-5" />
                 </div>
                 <h2 className="text-2xl font-bold font-display uppercase tracking-tight">API & Scaling</h2>
               </div>
-              <p className="text-slate-400 leading-relaxed font-medium">
+              <p className="text-neutral-400 leading-relaxed font-medium">
                 We reserve the right to throttle or limit API access for guilds that exceed disproportionate resource allocations. High-scale enterprise clusters are available for communities requiring dedicated neural shards.
               </p>
             </section>
 
-            <div className="pt-12 border-t border-slate-200/70">
-              <p className="text-[10px] font-black uppercase text-slate-600 tracking-[0.4em]">
+            <div className="pt-12 border-t border-[#1F1F1F]">
+              <p className="text-[10px] font-black uppercase text-neutral-600 tracking-[0.4em]">
                 March 2026 // Distributed via {process.env.NEXT_PUBLIC_BRAND_NAME || "MidVox"} Neural Cloud
               </p>
             </div>

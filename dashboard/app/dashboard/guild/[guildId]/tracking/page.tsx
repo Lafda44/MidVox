@@ -85,7 +85,7 @@ export default function TrackingPage({ params }: { params: { guildId: string } }
         </p>
       </div>
 
-      <Card className="border-primary/20 bg-background/50 backdrop-blur-xl">
+      <Card className="border-[#1F1F1F] bg-[#131313]">
         <CardHeader>
           <div className="flex items-center gap-2">
             <Search className="w-5 h-5 text-primary" />

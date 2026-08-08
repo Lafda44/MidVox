@@ -20,7 +20,7 @@ import dynamic from "next/dynamic";
 import { api } from "@/lib/api";
 
 const CustomRolesForm = dynamic(() => import("@/components/dashboard/customroles-form").then(mod => mod.CustomRolesForm), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-slate-800/20 rounded-3xl" />
+  loading: () => <div className="h-96 w-full animate-pulse bg-[#1A1A1A]/30 rounded-[6px]" />
 });
 
 export default async function CustomRolesPage({ params }: { params: { guildId: string } }) {
@@ -39,7 +39,7 @@ export default async function CustomRolesPage({ params }: { params: { guildId: s
             <Ghost className="h-6 w-6 text-primary" />
             Custom Roles
           </h2>
-          <p className="text-slate-400 mt-1">Configure predefined roles that can be easily assigned using commands.</p>
+          <p className="text-neutral-400 mt-1">Configure predefined roles that can be easily assigned using commands.</p>
         </div>
       </div>
 

@@ -75,30 +75,30 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-[32px] shadow-2xl p-8 space-y-10 relative">
+        <div className="bg-[#111111] border border-[#1A1A1A] rounded-[32px] shadow-2xl p-8 space-y-10 relative">
 
           {/* Enabled Toggle */}
-          <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-2xl border border-slate-800">
+          <div className="flex items-center justify-between p-4 bg-[#131313] rounded-[6px] border border-[#1A1A1A]">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-primary/10 text-primary"><Download className="h-5 w-5" /></div>
               <div>
                 <h4 className="font-bold text-slate-50 text-sm">Enabled</h4>
-                <p className="text-xs text-slate-400">Watch selected channels for Instagram links &amp; YouTube Shorts</p>
+                <p className="text-xs text-neutral-400">Watch selected channels for Instagram links &amp; YouTube Shorts</p>
               </div>
             </div>
             <Switch checked={config.enabled} onCheckedChange={toggleEnabled} />
           </div>
 
           {config.enabled && (
-            <div className="space-y-8 pl-4 border-l-2 border-slate-800">
+            <div className="space-y-8 pl-4 border-l-2 border-[#1A1A1A]">
 
               {/* Auto-Delete Notice */}
-              <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-2xl border border-slate-800">
+              <div className="flex items-center justify-between p-4 bg-[#131313] rounded-[6px] border border-[#1A1A1A]">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-red-500/10 text-red-600"><Trash2 className="h-5 w-5" /></div>
+                  <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400"><Trash2 className="h-5 w-5" /></div>
                   <div>
                     <h4 className="font-bold text-slate-50 text-sm">Original Link Removed</h4>
-                    <p className="text-xs text-slate-400">The posted link (and its embed) is deleted automatically after the media is reposted</p>
+                    <p className="text-xs text-neutral-400">The posted link (and its embed) is deleted automatically after the media is reposted</p>
                   </div>
                 </div>
               </div>
@@ -110,25 +110,25 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
                   <h4 className="font-bold text-slate-50 text-sm">Monitored Channels</h4>
                 </div>
                 <Select value="" onValueChange={addChannel}>
-                  <SelectTrigger className="w-full h-10 bg-slate-900/50 border-slate-800">
+                  <SelectTrigger className="w-full h-10 bg-[#0F0F0F] border-[#1A1A1A]">
                     <SelectValue placeholder="Add channel to monitor..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800 max-h-[300px]">
+                  <SelectContent className="bg-[#111111] border-[#1A1A1A] max-h-[300px]">
                     {channels.filter((c: any) => !(config.channels || []).includes(c.id)).map((c: any) => (
-                      <SelectItem key={c.id} value={c.id} className="focus:bg-slate-800">#{c.name}</SelectItem>
+                      <SelectItem key={c.id} value={c.id} className="focus:bg-[#1A1A1A]">#{c.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-slate-900/40 rounded-xl border border-slate-800/50">
+                <div className="flex flex-wrap gap-2 min-h-[40px] p-3 bg-[#131313] rounded-xl border border-[#1A1A1A]/50">
                   {(config.channels || []).length === 0 ? (
-                    <span className="text-xs text-slate-600 italic">No channels monitored</span>
+                    <span className="text-xs text-neutral-600 italic">No channels monitored</span>
                   ) : (
                     config.channels?.map((chId: string) => {
                       const ch = channels.find((c: any) => c.id === chId);
                       return (
-                        <div key={chId} className="flex items-center gap-2 bg-slate-800 border border-slate-700/50 px-3 py-1.5 rounded-lg text-sm">
-                          <span className="text-slate-200">#{ch?.name || chId}</span>
-                          <button onClick={() => removeChannel(chId)} className="text-slate-500 hover:text-red-600 transition-colors"><Trash2 className="h-3 w-3" /></button>
+                        <div key={chId} className="flex items-center gap-2 bg-[#1A1A1A] border border-neutral-700/50 px-3 py-1.5 rounded-lg text-sm">
+                          <span className="text-neutral-200">#{ch?.name || chId}</span>
+                          <button onClick={() => removeChannel(chId)} className="text-neutral-500 hover:text-red-400 transition-colors"><Trash2 className="h-3 w-3" /></button>
                         </div>
                       );
                     })
@@ -139,7 +139,7 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
           )}
 
           {/* Save Button */}
-          <div className="pt-6 border-t border-slate-800">
+          <div className="pt-6 border-t border-[#1A1A1A]">
             <Button
               onClick={handleSave}
               disabled={saving}
@@ -155,7 +155,7 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
 
       {/* Sidebar */}
       <div className="space-y-6">
-        <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-3xl p-6 relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-[6px] p-6 relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform">
             <Instagram className="h-32 w-32 text-primary" />
           </div>
@@ -163,7 +163,7 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
             <Info className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-bold text-slate-50">How It Works</h3>
           </div>
-          <ul className="text-xs text-slate-500 space-y-2">
+          <ul className="text-xs text-neutral-500 space-y-2">
             <li>â€¢ Instagram reels, posts &amp; YouTube Shorts are downloaded automatically.</li>
             <li>â€¢ Media is reposted inline in the channel.</li>
             <li>â€¢ The original link message is deleted so no embed is left behind.</li>
@@ -172,12 +172,12 @@ export function InstaDLForm({ initialConfig, channels, guildId }: InstaDLFormPro
           </ul>
         </div>
 
-        <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6">
+        <div className="bg-[#131313] border border-[#1A1A1A] rounded-[6px] p-6">
           <div className="flex items-center gap-2 mb-3">
             <Plus className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-bold text-slate-50">Supported Links</h3>
           </div>
-          <p className="text-xs text-slate-500 mb-2">instagram.com reels, posts, stories, instagr.am short links &amp; youtube.com/shorts links.</p>
+          <p className="text-xs text-neutral-500 mb-2">instagram.com reels, posts, stories, instagr.am short links &amp; youtube.com/shorts links.</p>
         </div>
       </div>
     </div>
