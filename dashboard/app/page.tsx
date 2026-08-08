@@ -422,7 +422,7 @@ export default function HomePage() {
               onClick={() => signIn("discord")}
               className="inline-flex items-center gap-2 bg-[#F59E0B] text-black text-sm font-mono font-bold uppercase tracking-widest px-8 py-3.5 rounded-[4px] hover:bg-[#FBB024] hover:shadow-[0_0_32px_rgba(245,158,11,0.4)] transition-all duration-200"
             >
-              Add to Discord — it's free
+              Add to Discord — it&apos;s free
               <ArrowRight size={14} />
             </motion.button>
           </div>
