@@ -520,12 +520,14 @@ class InstaDownloader(commands.Cog):
             return None
 
     async def _download_and_send(self, message, url, config, source="instagram"):
-        """Delete the user's link message immediately, show an animated
-        "Downloading …" status, then download and repost the media."""
-        try:
-            await message.delete()
-        except Exception:
-            pass
+        """Optionally delete the user's link message immediately, show an
+        animated "Downloading …" status, then download and repost the media.
+        The original message is only deleted when `delete_original` is on."""
+        if config.get("delete_original"):
+            try:
+                await message.delete()
+            except Exception:
+                pass
 
         status = await self._send_status(
             message.channel, "Downloading ⏳", reference=None, auto_delete=0
@@ -666,10 +668,11 @@ class InstaDownloader(commands.Cog):
                 if source == "instagram":
                     try:
                         if await self._send_image_fallback(message, url):
-                            try:
-                                await message.delete()
-                            except Exception:
-                                pass
+                            if config.get("delete_original"):
+                                try:
+                                    await message.delete()
+                                except Exception:
+                                    pass
                             return
                     except Exception as fb:
                         print(f"[InstaDL] image fallback failed for {url}: {fb}")
@@ -737,12 +740,12 @@ class InstaDownloader(commands.Cog):
                 file=discord.File(file_path, filename=f"{source}_{int(time.time())}{ext}")
             )
 
-            # Always remove the original link message so neither the URL nor
-            # Discord's embed lingers in the channel.
-            try:
-                await message.delete()
-            except Exception:
-                pass
+            # Remove the original link message only when delete_original is on.
+            if config.get("delete_original"):
+                try:
+                    await message.delete()
+                except Exception:
+                    pass
         finally:
             if file_path and os.path.exists(file_path):
                 try:
