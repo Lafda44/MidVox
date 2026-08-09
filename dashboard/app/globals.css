@@ -43,6 +43,19 @@ body {
   min-height: 100dvh;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(rgba(17,24,39,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17,24,39,0.025) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
 html.theme-dark {
   color-scheme: dark;
   --bg:           #151515;
@@ -63,6 +76,10 @@ html.theme-dark .bg-white { background: var(--surface) !important; }
 html.theme-dark .hero-bg { background: linear-gradient(160deg, #1D1D1D 50%, #2A211D 100%) !important; }
 html.theme-dark .section-alt { background: linear-gradient(180deg, var(--bg), var(--surface)) !important; }
 html.theme-dark .cta-section { background: linear-gradient(135deg, #2A211D, #211E1C 60%, var(--surface)) !important; }
+html.theme-dark body::before {
+  opacity: 0.22;
+  background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+}
 
 .theme-toggle {
   width: 36px;
@@ -300,6 +317,18 @@ p, li { line-height: 1.65; }
   pointer-events: none;
   z-index: -1;
 }
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  left: -120px;
+  bottom: -150px;
+  border: 1px solid rgba(232,84,26,0.12);
+  border-radius: 42% 58% 65% 35%;
+  transform: rotate(24deg);
+  pointer-events: none;
+}
 .hero-bg > * { position: relative; z-index: 1; }
 
 /* ─── Subtle section bg ───────────────────────────────────────────────── */
@@ -307,11 +336,49 @@ p, li { line-height: 1.65; }
   background: linear-gradient(180deg, var(--bg) 0%, #FFFFFF 100%);
 }
 
+.stats-backdrop {
+  position: relative;
+  overflow: hidden;
+}
+.stats-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: radial-gradient(rgba(232,84,26,0.14) 1px, transparent 1px);
+  background-size: 18px 18px;
+  mask-image: linear-gradient(90deg, transparent, black 22%, black 78%, transparent);
+}
+.stats-backdrop > * { position: relative; }
+
 /* ─── Orange bottom border on CTA section ────────────────────────────── */
 .cta-section {
   background: linear-gradient(135deg, #FFF4F0 0%, #FFF8F5 60%, #FFFFFF 100%);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before,
+.cta-section::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 999px;
+  border: 1px solid rgba(232,84,26,0.12);
+}
+.cta-section::before {
+  width: 420px;
+  height: 420px;
+  left: -260px;
+  top: -180px;
+}
+.cta-section::after {
+  width: 300px;
+  height: 300px;
+  right: -170px;
+  bottom: -160px;
 }
 
 /* ─── Marquee ─────────────────────────────────────────────────────────── */

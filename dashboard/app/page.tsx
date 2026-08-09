@@ -382,7 +382,7 @@ export default function HomePage() {
         </section>
 
         {/* ── Stats ────────────────────────────────────────────────── */}
-        <section id="stats" className="py-16 px-5 bg-white">
+        <section id="stats" className="stats-backdrop py-16 px-5 bg-white">
           <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
             {STATS.map((s) => <Counter key={s.label} stat={s} />)}
           </div>
