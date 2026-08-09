@@ -43,6 +43,60 @@ const TERMINAL_LINES = [
 ];
 
 /* ─── Sub-components ─────────────────────────────────────────────────── */
+function AnimatedCounter({ value, label }: { value: string; label: string }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [displayValue, setDisplayValue] = useState("0");
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    // Extract number from value string (e.g., "12,400+" -> 12400)
+    const numMatch = value.match(/[\d,]+/);
+    if (!numMatch) {
+      setDisplayValue(value);
+      return;
+    }
+
+    const targetNum = parseInt(numMatch[0].replace(/,/g, ""), 10);
+    const suffix = value.replace(/[\d,]+/, "");
+    const duration = 1500;
+    const steps = 60;
+    const increment = targetNum / steps;
+    let current = 0;
+    let step = 0;
+
+    const timer = setInterval(() => {
+      step++;
+      current = Math.min(current + increment, targetNum);
+      const formatted = Math.floor(current).toLocaleString();
+      setDisplayValue(formatted + suffix);
+
+      if (step >= steps || current >= targetNum) {
+        setDisplayValue(value);
+        clearInterval(timer);
+      }
+    }, duration / steps);
+
+    return () => clearInterval(timer);
+  }, [isVisible, value]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      onViewportEnter={() => setIsVisible(true)}
+      transition={{ duration: 0.4 }}
+      className="text-center"
+    >
+      <div className="text-3xl md:text-4xl font-black text-[#F59E0B] mb-1 font-mono tracking-tight">
+        {displayValue}
+      </div>
+      <div className="text-xs font-semibold uppercase tracking-widest text-[#666]">{label}</div>
+    </motion.div>
+  );
+}
+
 function TypeWriter({ text, startDelay = 0 }: { text: string; startDelay?: number }) {
   const [shown, setShown] = useState("");
   useEffect(() => {
@@ -125,12 +179,16 @@ function FeatureCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.04, duration: 0.35 }}
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
       className="group rounded-[6px] border border-[#1A1A1A] bg-[#111] p-5 hover:border-[#333] hover:bg-[#161616] transition-all duration-200"
     >
       <div className="flex items-center gap-3 mb-3">
-        <div className="p-2 rounded-[4px] bg-[#1A1A1A] border border-[#252525] group-hover:border-[#F59E0B]/30 group-hover:bg-[rgba(245,158,11,0.06)] transition-all duration-200">
+        <motion.div
+          whileHover={{ rotate: [0, -10, 10, -10, 0], transition: { duration: 0.5 } }}
+          className="p-2 rounded-[4px] bg-[#1A1A1A] border border-[#252525] group-hover:border-[#F59E0B]/30 group-hover:bg-[rgba(245,158,11,0.06)] transition-all duration-200"
+        >
           <Icon size={15} className="text-[#888] group-hover:text-[#F59E0B] transition-colors duration-200" />
-        </div>
+        </motion.div>
         <span className="font-semibold text-sm text-[#E5E5E5] font-mono tracking-wide">{label}</span>
       </div>
       <p className="text-xs text-[#666] leading-relaxed">{desc}</p>
@@ -141,6 +199,13 @@ function FeatureCard({
 /* ─── Page ───────────────────────────────────────────────────────────── */
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0C0C0C] text-[#F5F5F5]">
@@ -161,6 +226,10 @@ export default function HomePage() {
               <a
                 key={l}
                 href={`#${l.toLowerCase()}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById(l.toLowerCase())?.scrollIntoView({ behavior: "smooth" });
+                }}
                 className="text-xs font-mono font-medium uppercase tracking-widest text-[#888] hover:text-[#F5F5F5] transition-colors"
               >
                 {l}
@@ -170,20 +239,24 @@ export default function HomePage() {
 
           {/* CTA */}
           <div className="flex items-center gap-3">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => signIn("discord")}
               className="hidden md:flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-widest text-[#888] hover:text-[#F5F5F5] transition-colors"
             >
               <Lock size={11} />
               Sign in
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(245,158,11,0.4)" }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => signIn("discord")}
-              className="flex items-center gap-1.5 bg-[#F59E0B] text-black text-xs font-mono font-bold uppercase tracking-widest px-4 py-2 rounded-[4px] hover:bg-[#FBB024] hover:shadow-[0_0_18px_rgba(245,158,11,0.3)] transition-all duration-200"
+              className="flex items-center gap-1.5 bg-[#F59E0B] text-black text-xs font-mono font-bold uppercase tracking-widest px-4 py-2 rounded-[4px] hover:bg-[#FBB024] transition-all duration-200"
             >
               Add to Discord
               <ArrowRight size={11} />
-            </button>
+            </motion.button>
           </div>
         </div>
       </header>
@@ -208,6 +281,34 @@ export default function HomePage() {
               width: "700px",
               height: "400px",
               background: "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(245,158,11,0.09) 0%, transparent 70%)",
+            }}
+          />
+          {/* Floating orbs */}
+          <motion.div
+            className="absolute top-20 left-[10%] w-32 h-32 rounded-full bg-[#F59E0B]/5 blur-3xl"
+            style={{ transform: `translateY(${scrollY * 0.15}px)` }}
+            animate={{
+              y: [0, 30, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute top-40 right-[15%] w-40 h-40 rounded-full bg-[#FBB024]/5 blur-3xl"
+            style={{ transform: `translateY(${scrollY * 0.2}px)` }}
+            animate={{
+              y: [0, -25, 0],
+              scale: [1, 1.15, 1],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
             }}
           />
 
@@ -266,19 +367,27 @@ export default function HomePage() {
                   transition={{ delay: 0.25 }}
                   className="flex flex-wrap items-center gap-3"
                 >
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.05, boxShadow: "0 0 32px rgba(245,158,11,0.4)" }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => signIn("discord")}
-                    className="flex items-center gap-2 bg-[#F59E0B] text-black text-sm font-mono font-bold uppercase tracking-widest px-6 py-3 rounded-[4px] hover:bg-[#FBB024] hover:shadow-[0_0_28px_rgba(245,158,11,0.35)] transition-all duration-200"
+                    className="flex items-center gap-2 bg-[#F59E0B] text-black text-sm font-mono font-bold uppercase tracking-widest px-6 py-3 rounded-[4px] hover:bg-[#FBB024] transition-all duration-200 animate-pulse-gold"
                   >
                     Get started free
                     <ArrowRight size={14} />
-                  </button>
-                  <a
+                  </motion.button>
+                  <motion.a
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     href="#features"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
+                    }}
                     className="flex items-center gap-2 text-sm font-mono font-semibold uppercase tracking-widest text-[#888] border border-[#252525] px-5 py-3 rounded-[4px] hover:border-[#333] hover:text-[#CCC] transition-all duration-200"
                   >
                     View features
-                  </a>
+                  </motion.a>
                 </motion.div>
 
                 {/* Trust row */}
@@ -326,17 +435,7 @@ export default function HomePage() {
         <section id="stats" className="border-y border-[#1A1A1A] bg-[#0F0F0F] py-10 px-4">
           <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
             {STATS.map((s, i) => (
-              <motion.div
-                key={s.label}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="text-center"
-              >
-                <p className="text-3xl font-bold font-mono text-[#F5F5F5] tracking-tight">{s.value}</p>
-                <p className="text-[11px] font-mono uppercase tracking-widest text-[#555] mt-1">{s.label}</p>
-              </motion.div>
+              <AnimatedCounter key={s.label} value={s.value} label={s.label} />
             ))}
           </div>
         </section>
@@ -417,10 +516,12 @@ export default function HomePage() {
             <motion.button
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(245,158,11,0.5)" }}
+              whileTap={{ scale: 0.95 }}
               viewport={{ once: true }}
               transition={{ delay: 0.15 }}
               onClick={() => signIn("discord")}
-              className="inline-flex items-center gap-2 bg-[#F59E0B] text-black text-sm font-mono font-bold uppercase tracking-widest px-8 py-3.5 rounded-[4px] hover:bg-[#FBB024] hover:shadow-[0_0_32px_rgba(245,158,11,0.4)] transition-all duration-200"
+              className="inline-flex items-center gap-2 bg-[#F59E0B] text-black text-sm font-mono font-bold uppercase tracking-widest px-8 py-3.5 rounded-[4px] hover:bg-[#FBB024] transition-all duration-200"
             >
               Add to Discord — it&apos;s free
               <ArrowRight size={14} />

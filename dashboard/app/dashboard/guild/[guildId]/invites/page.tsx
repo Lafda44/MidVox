@@ -40,7 +40,10 @@ export default function InvitesPage({ params }: { params: { guildId: string } })
     }
   };
 
-  useEffect(() => { fetchLeaderboard(); }, [params.guildId]);
+  useEffect(() => {
+    fetchLeaderboard();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.guildId]);
 
   if (loading) {
     return (

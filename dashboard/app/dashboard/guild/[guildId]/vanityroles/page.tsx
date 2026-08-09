@@ -52,7 +52,10 @@ export default function VanityRolesPage({ params }: { params: { guildId: string 
     }
   };
 
-  useEffect(() => { fetchData(); }, [params.guildId]);
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.guildId]);
 
   const textChannels = channels.filter(c => c.type === "0" || c.type === 0);
   const filteredRoles = roles.filter(r => r.name !== "@everyone");
