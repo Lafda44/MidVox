@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 import {
   Shield, Zap, BarChart4, Ticket, Trophy, MessageSquare,
   ArrowRight, Terminal, CheckCircle2, Activity,
-  Mail, Gavel, Bell, Users, Hash, Check, X,
+  Mail, Gavel, Bell, Users, Hash, Check, X, Moon, Sun,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -227,6 +227,16 @@ function CompareTable() {
 /* ─── Page ───────────────────────────────────────────────────────────── */
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    setDarkMode(window.localStorage.getItem("midvox-theme") === "dark");
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("theme-dark", darkMode);
+    window.localStorage.setItem("midvox-theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -246,7 +256,7 @@ export default function HomePage() {
       <header
         className="sticky top-0 z-50 transition-all duration-200"
         style={{
-          background: scrolled ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.80)",
+          background: scrolled ? "var(--nav-scrolled)" : "var(--nav-bg)",
           backdropFilter: "blur(16px)",
           borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
           boxShadow: scrolled ? "0 1px 8px rgba(0,0,0,0.06)" : "none",
@@ -277,6 +287,15 @@ export default function HomePage() {
 
           {/* cta */}
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              onClick={() => setDarkMode((value) => !value)}
+              className="theme-toggle"
+            >
+              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
             <button
               onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
               className="btn-outline hidden md:inline-flex text-sm px-5 py-2.5"

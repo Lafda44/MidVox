@@ -32,7 +32,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}>
-      <body className="antialiased font-sans bg-[#0C0C0C] text-[#F5F5F5]">
+      <body className="antialiased font-sans">
         {/* Subtle grid background */}
         <div
           aria-hidden

@@ -19,6 +19,9 @@
   --orange-mid:  #FDDFD3;
   --orange-dim:  rgba(232, 84, 26, 0.08);
 
+  --nav-bg:      rgba(255,255,255,0.80);
+  --nav-scrolled:rgba(255,255,255,0.95);
+
   --green:       #16A34A;
   --red:         #DC2626;
 
@@ -38,6 +41,45 @@ body {
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
   min-height: 100dvh;
+}
+
+html.theme-dark {
+  color-scheme: dark;
+  --bg:           #151515;
+  --surface:      #1D1D1D;
+  --surface-2:    #242424;
+  --ink:          #F5F2EF;
+  --ink-muted:    #B5AEA8;
+  --ink-faint:    #817A75;
+  --border:       #363331;
+  --border-mid:   #4A4541;
+  --orange-light: #3A241B;
+  --orange-mid:   #6D3928;
+  --nav-bg:       rgba(21,21,21,0.82);
+  --nav-scrolled: rgba(21,21,21,0.96);
+}
+
+html.theme-dark .bg-white { background: var(--surface) !important; }
+html.theme-dark .hero-bg { background: linear-gradient(160deg, #1D1D1D 50%, #2A211D 100%) !important; }
+html.theme-dark .section-alt { background: linear-gradient(180deg, var(--bg), var(--surface)) !important; }
+html.theme-dark .cta-section { background: linear-gradient(135deg, #2A211D, #211E1C 60%, var(--surface)) !important; }
+
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-mid);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-muted);
+  transition: color .18s, border-color .18s, background .18s, transform .18s;
+}
+.theme-toggle:hover {
+  color: var(--orange);
+  border-color: var(--orange);
+  transform: rotate(12deg);
 }
 
 /* ─── Cursor: pointer on ALL interactives ─────────────────────────────── */
