@@ -133,7 +133,7 @@ function FeatureCard({ icon: Icon, label, desc, index }: {
 /* ─── Discord mock ───────────────────────────────────────────────────── */
 function DiscordMock() {
   const feed = [
-    { icon: <Shield size={12} />, color: "#E8541A", text: "AutoMod blocked a raid · 47 accounts",  time: "now" },
+    { icon: <Shield size={12} />, color: "#8A9A5B", text: "AutoMod blocked a raid · 47 accounts",  time: "now" },
     { icon: <Trophy size={12} />, color: "#16A34A", text: "@Alex reached Level 25 🎉",              time: "2m"  },
     { icon: <Bell size={12} />,   color: "#7C3AED", text: "Ticket #142 opened by @Sara",            time: "5m"  },
     { icon: <Users size={12} />,  color: "#DC2626", text: "3 accounts flagged as fake invites",     time: "8m"  },
@@ -275,9 +275,9 @@ export default function HomePage() {
           {/* nav */}
           <nav className="hidden md:flex items-center gap-7">
             {[
-              { label: "Features", id: "features" },
-              { label: "How it works", id: "how-it-works" },
-              { label: "Compare", id: "compare" },
+              { label: "Explore", id: "features" },
+              { label: "Collections", id: "how-it-works" },
+              { label: "Pricing", id: "compare" },
             ].map((l) => (
               <a key={l.label} href={`#${l.id}`} onClick={scrollTo(l.id)} className="nav-link">
                 {l.label}
@@ -310,7 +310,7 @@ export default function HomePage() {
               whileTap={{ scale: 0.97 }}
               className="btn-orange text-sm px-5 py-2.5"
             >
-              Sign Up <ArrowRight size={13} />
+              Join for free <ArrowRight size={13} />
             </motion.a>
           </div>
         </div>
@@ -319,15 +319,15 @@ export default function HomePage() {
       <main className="flex-1">
 
         {/* ── Hero ─────────────────────────────────────────────────── */}
-        <section className="hero-bg pt-20 pb-24 px-5">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
+        <section className="hero-bg pt-24 pb-20 px-5">
+          <div className="max-w-5xl mx-auto flex flex-col items-center text-center gap-12">
             {/* left */}
-            <div>
+            <div className="max-w-4xl">
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
                 className="mb-6">
                 <span className="badge">
                   <span className="dot-green" />
-                  Now live — {BRAND} v2
+                  New · the Discord community operating system
                 </span>
               </motion.div>
 
@@ -336,10 +336,10 @@ export default function HomePage() {
                 className="font-extrabold leading-tight mb-5"
                 style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)", fontFamily: "var(--font-space-grotesk), sans-serif", color: "var(--ink)" }}
               >
-                Power Your Discord{" "}
+                Build a better Discord{" "}
                 <br className="hidden sm:block" />
-                with the Next-Gen{" "}
-                <span style={{ color: "var(--orange)" }}>Bot Platform</span>
+                community with a{" "}
+                <span style={{ color: "var(--orange)" }}>calmer control center</span>
               </motion.h1>
 
               <motion.p
@@ -347,7 +347,7 @@ export default function HomePage() {
                 className="text-base leading-relaxed mb-8 max-w-lg"
                 style={{ color: "var(--ink-muted)" }}
               >
-                {BRAND} delivers secure, scalable, and feature-rich Discord management, empowering communities to grow without limits.
+                {BRAND} brings security, automation, and insight into one beautifully simple workspace for the people running online communities.
               </motion.p>
 
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.26 }}
@@ -394,6 +394,7 @@ export default function HomePage() {
         <section id="features" className="py-24 px-5 bg-white">
           <div className="max-w-6xl mx-auto">
             <FadeUp className="text-center mb-14">
+              <span className="section-kicker mb-4">Everything you need</span>
               <h2 className="font-extrabold text-3xl md:text-4xl tracking-tight mb-4" style={{ color: "var(--ink)" }}>
                 All-in-One Features for Modern Communities
               </h2>
@@ -443,6 +444,7 @@ export default function HomePage() {
         <section id="compare" className="py-24 px-5 bg-white">
           <div className="max-w-3xl mx-auto">
             <FadeUp className="text-center mb-12">
+              <span className="section-kicker mb-4">Built different</span>
               <h2 className="font-extrabold text-3xl md:text-4xl tracking-tight mb-4" style={{ color: "var(--ink)" }}>
                 Why Choose {BRAND}?
               </h2>
