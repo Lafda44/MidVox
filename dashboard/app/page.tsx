@@ -222,6 +222,13 @@ export default function HomePage() {
 
   return (
     <div className="mob-shell">
+      <div className="mob-ambient-boxes" aria-hidden="true">
+        <i className="mob-ambient-box box-one" />
+        <i className="mob-ambient-box box-two" />
+        <i className="mob-ambient-box box-three" />
+        <i className="mob-ambient-box box-four" />
+        <i className="mob-ambient-box box-five" />
+      </div>
       <header className={`mob-header ${scrolled ? "scrolled" : ""}`}>
         <nav className="mob-nav">
           <a href="#top" className="mob-brand" aria-label={`${BRAND} home`}><span>m</span>{BRAND.toLowerCase()}</a>
