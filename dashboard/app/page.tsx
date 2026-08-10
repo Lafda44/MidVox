@@ -247,6 +247,11 @@ export default function HomePage() {
 
       <main id="top">
         <section className="mob-hero">
+          <div className="mob-hero-motion" aria-hidden="true">
+            <i className="mob-hero-box hero-box-one" />
+            <i className="mob-hero-box hero-box-two" />
+            <i className="mob-hero-box hero-box-three" />
+          </div>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mob-hero-copy">
             <span className="mob-announcement"><Sparkles size={13} /> A calmer way to run Discord</span>
             <h1>The space where great communities <em>come together.</em></h1>
