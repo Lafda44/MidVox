@@ -643,3 +643,105 @@ p, li { line-height: 1.65; }
 @media (max-width: 520px) {
   .mob-discovery-grid, .mob-quote-grid { grid-template-columns: 1fr; }.mob-stat-grid strong { font-size: 2rem; }.mob-stat-grid div { min-height: 119px; padding: 22px 12px; }.mob-final-cta .mob-actions { align-items: stretch; flex-direction: column; }.mob-final-cta .mob-actions > * { width: 100%; }.mob-footer { display: grid; }.mob-footer > div { gap: 12px; }
 }
+
+/* ─── Control panel: shared editorial dashboard theme ─────────────────── */
+.panel-shell {
+  --panel-page: #f7f7f2;
+  --panel-paper: #ffffff;
+  --panel-raised: #f1f3e8;
+  --panel-ink: #161713;
+  --panel-muted: #6e7167;
+  --panel-faint: #9b9e93;
+  --panel-line: #dedfd6;
+  --panel-accent: #a8bd6d;
+  --panel-accent-deep: #667744;
+  min-height: 100dvh;
+  color: var(--panel-ink);
+  background:
+    radial-gradient(circle at 94% 0%, rgba(168,189,109,.14), transparent 24rem),
+    var(--panel-page);
+  font-family: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+}
+.theme-dark .panel-shell {
+  --panel-page: #171813;
+  --panel-paper: #20211b;
+  --panel-raised: #293022;
+  --panel-ink: #f3f4ed;
+  --panel-muted: #acaea2;
+  --panel-faint: #73766b;
+  --panel-line: #383a31;
+  --panel-accent: #b2ca78;
+  --panel-accent-deep: #d9e9af;
+  background:
+    radial-gradient(circle at 94% 0%, rgba(178,202,120,.12), transparent 24rem),
+    var(--panel-page);
+}
+.panel-shell h1,
+.panel-shell h2,
+.panel-shell h3,
+.panel-shell h4 { font-family: var(--font-space-grotesk), var(--font-plus-jakarta), sans-serif; }
+.panel-sidebar { background: color-mix(in srgb, var(--panel-paper) 95%, var(--panel-raised)); border-right: 1px solid var(--panel-line); }
+.panel-sidebar-header { border-bottom: 1px solid var(--panel-line); }
+.panel-brand-mark { display: grid; width: 30px; height: 30px; flex: 0 0 auto; place-items: center; border-radius: 9px; background: var(--panel-ink); color: var(--panel-page); font-family: Georgia, serif; font-size: 1.18rem; font-style: italic; font-weight: 700; letter-spacing: -.14em; }
+.panel-brand-name { color: var(--panel-ink); font-family: var(--font-space-grotesk), sans-serif; letter-spacing: -.055em; }
+.panel-nav-label { color: var(--panel-faint); }
+.panel-nav-link { color: var(--panel-muted); }
+.panel-nav-link:hover { color: var(--panel-ink); background: color-mix(in srgb, var(--panel-raised) 75%, transparent); }
+.panel-nav-link.is-active { color: var(--panel-accent-deep); background: var(--panel-raised); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--panel-accent) 28%, transparent); }
+.panel-nav-link.is-active svg { color: var(--panel-accent-deep); }
+.panel-user-card { color: var(--panel-ink); border: 1px solid var(--panel-line); background: var(--panel-paper); box-shadow: 0 8px 24px rgba(25,27,20,.05); }
+.panel-topbar { border-bottom: 1px solid var(--panel-line); background: color-mix(in srgb, var(--panel-page) 88%, transparent); }
+.panel-main { background: transparent; }
+.panel-search { color: var(--panel-ink); border: 1px solid var(--panel-line); background: var(--panel-paper); box-shadow: 0 2px 8px rgba(25,27,20,.03); }
+.panel-search::placeholder { color: var(--panel-faint); }
+.panel-search:focus { border-color: color-mix(in srgb, var(--panel-accent) 70%, var(--panel-line)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--panel-accent) 14%, transparent); }
+.panel-icon-button { display: inline-grid; width: 34px; height: 34px; place-items: center; border: 1px solid transparent; border-radius: 999px; color: var(--panel-muted); transition: color .18s, border-color .18s, background .18s, transform .18s; }
+.panel-icon-button:hover { color: var(--panel-ink); border-color: var(--panel-line); background: var(--panel-paper); transform: translateY(-1px); }
+.panel-profile-button { color: var(--panel-muted); }
+.panel-profile-button:hover { background: var(--panel-paper); box-shadow: 0 0 0 1px var(--panel-line); }
+.panel-popover { color: var(--panel-ink); border: 1px solid var(--panel-line); background: var(--panel-paper); box-shadow: 0 18px 45px rgba(25,27,20,.13); }
+
+.panel-surface { color: var(--panel-ink); border: 1px solid var(--panel-line); background: var(--panel-paper); box-shadow: 0 12px 32px rgba(25,27,20,.055); }
+.panel-surface-soft { color: var(--panel-ink); border: 1px solid var(--panel-line); background: var(--panel-raised); }
+.panel-muted { color: var(--panel-muted); }
+.panel-faint { color: var(--panel-faint); }
+.panel-accent { color: var(--panel-accent-deep); }
+.panel-divider { border-color: var(--panel-line); }
+.panel-chart-grid { border-color: color-mix(in srgb, var(--panel-line) 70%, transparent); }
+.panel-status-pill { color: #54763d; background: rgba(113,140,85,.11); }
+.theme-dark .panel-status-pill { color: #b9d493; }
+
+/* Older module pages still use carbon utility classes. Keep their layout, but
+   remap those surfaces and type colors to the shared dashboard palette. */
+.panel-shell [class*="bg-[#0C0C0C]"],
+.panel-shell [class*="bg-[#0F0F0F]"] { background-color: var(--panel-page) !important; }
+.panel-shell [class*="bg-[#111111]"],
+.panel-shell [class*="bg-[#131313]"] { background-color: var(--panel-paper) !important; }
+.panel-shell [class*="bg-[#151515]"],
+.panel-shell [class*="bg-[#191919]"],
+.panel-shell [class*="bg-[#1A1A1A]"] { background-color: var(--panel-raised) !important; }
+.panel-shell [class*="border-[#1A1A1A]"],
+.panel-shell [class*="border-[#1F1F1F]"],
+.panel-shell [class*="border-[#222222]"],
+.panel-shell [class*="border-[#252525]"],
+.panel-shell [class*="border-[#292929]"],
+.panel-shell [class*="border-[#2A2A2A]"],
+.panel-shell [class*="border-white/"] { border-color: var(--panel-line) !important; }
+.panel-shell [class*="text-white"]:not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-primary"]),
+.panel-shell [class*="text-slate-50"],
+.panel-shell [class*="text-neutral-100"],
+.panel-shell [class*="text-neutral-200"],
+.panel-shell [class*="text-neutral-300"] { color: var(--panel-ink) !important; }
+.panel-shell [class*="text-neutral-400"],
+.panel-shell [class*="text-neutral-500"] { color: var(--panel-muted) !important; }
+.panel-shell [class*="text-neutral-600"],
+.panel-shell [class*="text-neutral-700"] { color: var(--panel-faint) !important; }
+.panel-shell [class*="shadow-xl"],
+.panel-shell [class*="shadow-2xl"] { box-shadow: 0 14px 36px rgba(25,27,20,.07) !important; }
+.panel-shell input,
+.panel-shell textarea,
+.panel-shell select { color: var(--panel-ink); }
+
+@media (max-width: 1023px) {
+  .panel-sidebar { box-shadow: 18px 0 45px rgba(25,27,20,.14); }
+}

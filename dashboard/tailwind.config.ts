@@ -9,18 +9,39 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg:    "#F8F7F5",
-        surface: "#FFFFFF",
-        ink:   "#111827",
-        muted: "#6B7280",
-        faint: "#9CA3AF",
-        border: "#E5E7EB",
-        "border-mid": "#D1D5DB",
+        bg: "#F7F7F2",
+        background: "#F7F7F2",
+        foreground: "#161713",
+        surface: {
+          DEFAULT: "#FFFFFF",
+          2: "#F3F4EE",
+          3: "#E8EBDD",
+        },
+        panel: {
+          DEFAULT: "#FFFFFF",
+          raise: "#F7F7F2",
+          hover: "#EDF1DF",
+        },
+        ink: "#161713",
+        muted: "#6E7167",
+        faint: "#9B9E93",
+        border: {
+          DEFAULT: "#DEDFD6",
+          mid: "#CDD0C3",
+          strong: "#B8BCAE",
+        },
+        primary: {
+          DEFAULT: "#8A9A5B",
+          hover: "#718043",
+          light: "#A8BD6D",
+          dark: "#667744",
+          dim: "rgba(138,154,91,0.10)",
+        },
         orange: {
-          DEFAULT: "#E8541A",
-          hover:   "#D04A14",
-          light:   "#FFF0EB",
-          mid:     "#FDDFD3",
+          DEFAULT: "#8A9A5B",
+          hover: "#718043",
+          light: "#F1F3E8",
+          mid: "#DCE3C9",
         },
       },
       fontFamily: {
@@ -40,7 +61,7 @@ const config: Config = {
         card:  "0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)",
         "card-hover": "0 8px 24px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06)",
         btn:   "0 1px 2px rgba(0,0,0,0.10)",
-        "btn-hover": "0 4px 14px rgba(232,84,26,0.30)",
+        "btn-hover": "0 4px 14px rgba(138,154,91,0.24)",
       },
       keyframes: {
         "fade-in-up": {

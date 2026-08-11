@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Server, ShieldCheck, Ticket, BarChart4, Settings,
   Menu, X, Bell, User, Search, ChevronRight, Sparkles, LogOut,
-  LifeBuoy, ChevronDown, Terminal, Shield, Download, Zap
+  LifeBuoy, ChevronDown, Shield, Download, Zap, Moon, Sun
 } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { cn, isAdmin } from "@/lib/utils";
@@ -21,11 +21,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [globalNotification, setGlobalNotification] = useState<string | null>(null);
+  const [darkMode, setDarkMode] = useState(false);
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const bellRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
   const authRedirectStarted = useRef(false);
+
+  useEffect(() => {
+    const isDark = window.localStorage.getItem("midvox-theme") === "dark";
+    setDarkMode(isDark);
+    document.documentElement.classList.toggle("theme-dark", isDark);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextMode = !darkMode;
+    setDarkMode(nextMode);
+    window.localStorage.setItem("midvox-theme", nextMode ? "dark" : "light");
+    document.documentElement.classList.toggle("theme-dark", nextMode);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -64,12 +78,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (status === "loading" || status === "unauthenticated") {
     return (
-      <div className="min-h-screen bg-[#0C0C0C] flex items-center justify-center">
+      <div className="panel-shell flex min-h-screen items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-11 w-11 rounded-[6px] bg-[#F59E0B] flex items-center justify-center shadow-[0_0_28px_rgba(245,158,11,0.35)]">
-            <Terminal className="h-5 w-5 text-black" />
-          </div>
-          <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#555] animate-pulse">
+          <div className="panel-brand-mark h-11 w-11 text-xl">m</div>
+          <p className="animate-pulse text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--panel-muted)]">
             Authenticating
           </p>
         </div>
@@ -145,15 +157,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Link
         href={item.href}
         className={cn(
-          "group relative flex items-center gap-2.5 px-3 py-2 rounded-[4px] text-[12.5px] font-medium font-mono transition-all duration-150",
-          isActive
-            ? "bg-[rgba(245,158,11,0.08)] text-[#F59E0B] border-l-2 border-[#F59E0B] pl-[10px]"
-            : "text-[#777] hover:bg-[#161616] hover:text-[#CCC] border-l-2 border-transparent pl-[10px]"
+          "panel-nav-link group relative flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[12px] font-semibold transition-all duration-150",
+          isActive && "is-active"
         )}
       >
-        <item.icon className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-[#F59E0B]" : "text-[#555] group-hover:text-[#999]")} />
+        <item.icon className="h-3.5 w-3.5 shrink-0" />
         {item.name}
-        {isActive && <ChevronRight className="ml-auto h-3 w-3 text-[#F59E0B]/50" />}
+        {isActive && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
       </Link>
     );
   };
@@ -161,22 +171,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const SidebarContent = () => (
     <>
       {/* Logo header */}
-      <div className="flex h-14 items-center px-4 border-b border-[#1A1A1A] shrink-0">
+      <div className="panel-sidebar-header flex h-16 shrink-0 items-center px-4">
         <div className="flex items-center gap-2.5">
-          <div className="h-7 w-7 rounded-[5px] bg-[#F59E0B] flex items-center justify-center shrink-0">
-            <Terminal className="h-3.5 w-3.5 text-black" />
-          </div>
+          <div className="panel-brand-mark">m</div>
           <div>
-            <p className="text-[13px] font-bold text-[#F5F5F5] leading-none tracking-tight font-mono">
-              {BRAND}
+            <p className="panel-brand-name text-[14px] font-extrabold leading-none">
+              {BRAND.toLowerCase()}
             </p>
-            <p className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#F59E0B]/60 mt-1">
-              Control Panel
+            <p className="mt-1 text-[8px] font-bold uppercase tracking-[0.2em] text-[var(--panel-accent-deep)]">
+              Control panel
             </p>
           </div>
         </div>
         <button
-          className="ml-auto p-1.5 lg:hidden text-[#555] hover:text-white rounded-[4px] hover:bg-[#1A1A1A] transition-colors"
+          className="panel-icon-button ml-auto lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         >
           <X className="h-4 w-4" />
@@ -184,12 +192,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto no-scrollbar p-3 space-y-4">
+      <nav className="no-scrollbar flex-1 space-y-4 overflow-y-auto p-3">
         {mainSidebarItems.map((item: any) => {
           if (item.items) {
             return (
               <div key={item.name}>
-                <p className="px-3 mb-1.5 text-[9px] font-mono font-semibold uppercase tracking-[0.25em] text-[#444]">
+                <p className="panel-nav-label mb-1.5 px-3 text-[9px] font-bold uppercase tracking-[0.18em]">
                   {item.name}
                 </p>
                 <div className="space-y-0.5">
@@ -202,12 +210,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         })}
 
         {backLinkItem && (
-          <div className="pt-3 border-t border-[#1A1A1A]">
+          <div className="border-t border-[var(--panel-line)] pt-3">
             <Link
               href={backLinkItem.href}
-              className="group flex items-center gap-2.5 px-3 py-2 rounded-[4px] text-[12.5px] font-mono font-medium text-[#666] hover:bg-[#161616] hover:text-[#CCC] transition-all"
+              className="panel-nav-link group flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[12px] font-semibold transition-all"
             >
-              <BackLinkIcon className="h-3.5 w-3.5 shrink-0 text-[#555] group-hover:text-[#999]" />
+              <BackLinkIcon className="h-3.5 w-3.5 shrink-0" />
               {backLinkItem.name}
             </Link>
           </div>
@@ -215,8 +223,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </nav>
 
       {/* User profile */}
-      <div className="shrink-0 p-3 border-t border-[#1A1A1A]">
-        <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-[5px] bg-[#131313] border border-[#1F1F1F]">
+      <div className="shrink-0 border-t border-[var(--panel-line)] p-3">
+        <div className="panel-user-card flex items-center gap-2.5 rounded-2xl px-3 py-2.5">
           <div className="relative h-8 w-8 rounded-[4px] overflow-hidden border border-[#2A2A2A] shrink-0">
             {session?.user?.image ? (
               <Image src={session.user.image!} alt="Avatar" fill className="object-cover" />
@@ -227,7 +235,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             )}
           </div>
           <div className="overflow-hidden">
-            <p className="text-xs font-semibold text-[#DDD] truncate leading-none">
+            <p className="truncate text-xs font-semibold leading-none text-[var(--panel-ink)]">
               {session?.user?.name || "Admin"}
             </p>
             <p className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#22C55E] mt-1 flex items-center gap-1">
@@ -237,7 +245,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="ml-auto p-1.5 rounded-[4px] text-[#555] hover:text-[#EF4444] hover:bg-[rgba(239,68,68,0.08)] transition-all"
+            className="ml-auto rounded-lg p-1.5 text-[var(--panel-muted)] transition-all hover:bg-red-500/10 hover:text-red-500"
             title="Sign out"
           >
             <LogOut className="h-3.5 w-3.5" />
@@ -248,7 +256,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   );
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C] text-[#DDD]">
+    <div className="panel-shell min-h-screen">
       {/* Mobile overlay */}
       <AnimatePresence>
         {isSidebarOpen && (
@@ -262,7 +270,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Sidebar */}
       <aside className={cn(
-        "fixed top-0 bottom-0 left-0 z-50 w-60 flex flex-col border-r border-[#1A1A1A] bg-[#0F0F0F] transition-transform duration-200 lg:translate-x-0",
+        "panel-sidebar fixed bottom-0 left-0 top-0 z-50 flex w-60 flex-col transition-transform duration-200 lg:translate-x-0",
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <SidebarContent />
@@ -271,9 +279,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main */}
       <div className="lg:pl-60 flex flex-col min-h-screen">
         {/* Topbar */}
-        <header className="sticky top-0 z-30 h-14 flex items-center px-4 lg:px-6 border-b border-[#1A1A1A] bg-[rgba(12,12,12,0.95)] backdrop-blur-sm">
+        <header className="panel-topbar sticky top-0 z-30 flex h-16 items-center px-4 backdrop-blur-xl lg:px-7">
           <button
-            className="p-2 lg:hidden text-[#555] hover:text-white rounded-[4px] hover:bg-[#1A1A1A] transition-colors mr-3"
+            className="panel-icon-button mr-3 lg:hidden"
             onClick={() => setIsSidebarOpen(true)}
           >
             <Menu className="h-4 w-4" />
@@ -285,20 +293,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <input
               type="text"
               placeholder="search..."
-              className="w-64 bg-[#131313] border border-[#1F1F1F] rounded-[4px] py-1.5 pl-9 pr-3 text-xs font-mono text-[#AAA] placeholder:text-[#444] focus:outline-none focus:border-[#F59E0B]/40 transition-all"
+              className="panel-search w-64 rounded-full py-2 pl-9 pr-3 text-xs transition-all focus:outline-none"
             />
           </div>
 
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <button onClick={toggleTheme} className="panel-icon-button" aria-label={darkMode ? "Use light theme" : "Use dark theme"}>
+              {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+
             {/* Bell */}
             <div className="relative" ref={bellRef}>
               <button
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                className="relative p-2 text-[#555] hover:text-white rounded-[4px] hover:bg-[#1A1A1A] transition-all"
+                className="panel-icon-button relative"
               >
                 <Bell className="h-4 w-4" />
                 {globalNotification && (
-                  <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-[#F59E0B] shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
+                  <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[var(--panel-accent)]" />
                 )}
               </button>
               <AnimatePresence>
@@ -306,7 +318,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <motion.div
                     initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 6 }} transition={{ duration: 0.12 }}
-                    className="absolute right-0 mt-2 w-72 bg-[#131313] border border-[#252525] rounded-[6px] shadow-2xl p-3 z-20"
+                    className="panel-popover absolute right-0 z-20 mt-2 w-72 rounded-2xl p-3"
                   >
                     <div className="flex items-center justify-between mb-2 pb-2 border-b border-[#1F1F1F]">
                       <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#555]">Broadcasts</p>
@@ -337,7 +349,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="relative" ref={profileRef}>
               <button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="flex items-center gap-2 p-1.5 rounded-[4px] hover:bg-[#1A1A1A] transition-all"
+                className="panel-profile-button flex items-center gap-2 rounded-full p-1.5 transition-all"
               >
                 <div className="relative h-7 w-7 rounded-[4px] overflow-hidden border border-[#2A2A2A]">
                   {session?.user?.image ? (
@@ -348,7 +360,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     </div>
                   )}
                 </div>
-                <span className="hidden sm:block text-xs font-mono font-semibold text-[#BBB]">
+                <span className="hidden text-xs font-semibold text-[var(--panel-ink)] sm:block">
                   {session?.user?.name?.split(" ")[0] || "Admin"}
                 </span>
                 <ChevronDown className={cn("h-3 w-3 text-[#555] hidden sm:block transition-transform", isProfileOpen && "rotate-180")} />
@@ -359,7 +371,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <motion.div
                     initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 6 }} transition={{ duration: 0.12 }}
-                    className="absolute right-0 mt-2 w-48 bg-[#131313] border border-[#252525] rounded-[6px] shadow-2xl p-1.5 z-20"
+                    className="panel-popover absolute right-0 z-20 mt-2 w-48 rounded-2xl p-1.5"
                   >
                     <div className="px-3 py-2 border-b border-[#1F1F1F] mb-1">
                       <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#555] mb-0.5">Signed in as</p>
@@ -384,7 +396,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 lg:p-6">
+        <main className="panel-main flex-1 p-4 lg:p-7">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}

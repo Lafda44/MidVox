@@ -32,26 +32,26 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}>
-      <body className="antialiased font-sans">
+      <body className="bg-[var(--bg)] font-sans text-[var(--ink)] antialiased">
         {/* Subtle grid background */}
         <div
           aria-hidden
           className="pointer-events-none fixed inset-0 -z-20 opacity-40"
           style={{
             backgroundImage:
-              "linear-gradient(#252525 1px, transparent 1px), linear-gradient(90deg, #252525 1px, transparent 1px)",
+              "linear-gradient(rgba(138,154,91,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(138,154,91,0.05) 1px, transparent 1px)",
             backgroundSize: "40px 40px",
             maskImage: "radial-gradient(ellipse 90% 70% at 50% 0%, black 20%, transparent 80%)",
           }}
         />
-        {/* Amber glow top center */}
+        {/* Soft dashboard accent glow */}
         <div
           aria-hidden
           className="pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 -z-10"
           style={{
             width: "900px",
             height: "500px",
-            background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,158,11,0.065) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(168,189,109,0.10) 0%, transparent 70%)",
           }}
         />
         <AuthProvider>

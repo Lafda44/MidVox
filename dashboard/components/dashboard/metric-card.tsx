@@ -61,15 +61,15 @@ export const MetricCard = ({
       animate={inView ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: 0.45, ease: "easeOut" }}
       className={cn(
-        "bg-[#111111] border border-[#1A1A1A] p-5 rounded-xl group hover:border-amber-500/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5",
+        "group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[0_12px_32px_rgba(25,27,20,0.055)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_16px_32px_rgba(25,27,20,0.08)]",
         className
       )}
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[10px] font-semibold uppercase text-neutral-500 tracking-widest">{name}</p>
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--ink-muted)]">{name}</p>
           <div className="flex items-baseline gap-2 mt-1.5">
-            <p className="text-2xl font-bold text-slate-50 tracking-tight tabular-nums font-mono">
+            <p className="font-display text-2xl font-bold tabular-nums tracking-tight text-[var(--ink)]">
               {typeof value === "number" || numericValue > 0 ? (
                 <span ref={displayRef}>0</span>
               ) : (
@@ -86,13 +86,13 @@ export const MetricCard = ({
             )}
           </div>
           {description && (
-            <p className="text-[11px] text-neutral-500 mt-1.5">{description}</p>
+            <p className="mt-1.5 text-[11px] text-[var(--ink-muted)]">{description}</p>
           )}
         </div>
         <motion.div
           whileHover={{ scale: 1.08, rotate: -3 }}
           transition={{ type: "spring", stiffness: 300, damping: 18 }}
-          className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10"
         >
           {icon}        </motion.div>
       </div>

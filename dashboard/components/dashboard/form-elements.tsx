@@ -38,11 +38,11 @@ export const ToggleSwitch = ({
   disabled,
   className 
 }: ToggleSwitchProps) => (
-  <div className={cn("flex items-center justify-between gap-4 p-4 rounded-xl bg-[#111111] border border-[#1A1A1A]", className)}>
+  <div className={cn("flex items-center justify-between gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm", className)}>
     {(label || description) && (
       <div className="flex flex-col">
-        {label && <span className="text-sm font-medium text-neutral-200">{label}</span>}
-        {description && <span className="text-[11px] text-neutral-500 mt-0.5">{description}</span>}
+        {label && <span className="text-sm font-medium text-[var(--ink)]">{label}</span>}
+        {description && <span className="mt-0.5 text-[11px] text-[var(--ink-muted)]">{description}</span>}
       </div>
     )}
     <Switch checked={checked} onCheckedChange={onCheckedChange} disabled={disabled} />
@@ -70,7 +70,7 @@ export const DropdownSelect = ({
   className 
 }: DropdownSelectProps) => (
   <div className={cn("space-y-2", className)}>
-    {label && <label className="text-[10px] font-semibold uppercase text-neutral-500 tracking-widest pl-1">{label}</label>}
+    {label && <label className="pl-1 text-[10px] font-semibold uppercase tracking-widest text-[var(--ink-muted)]">{label}</label>}
     <Select 
       value={value} 
       onValueChange={onValueChange} 
@@ -88,15 +88,15 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const FormInput = ({ label, icon: Icon, className, ...props }: FormInputProps) => (
-  <div className="space-y-2 w-full">
-    {label && <label className="text-[10px] font-semibold uppercase text-neutral-500 tracking-widest pl-1">{label}</label>}
-    <div className="relative group">
+  <div className="w-full space-y-2">
+    {label && <label className="pl-1 text-[10px] font-semibold uppercase tracking-widest text-[var(--ink-muted)]">{label}</label>}
+    <div className="group relative">
       {Icon && (
-        <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-600 group-focus-within:text-primary transition-colors" />
+        <Icon className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-faint)] transition-colors group-focus-within:text-primary" />
       )}
       <Input 
         className={cn(
-          "rounded-lg focus:ring-primary/20",
+          "rounded-xl focus:ring-primary/15",
           Icon && "pl-10",
           className
         )} 

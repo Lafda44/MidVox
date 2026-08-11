@@ -35,7 +35,7 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("[&_tr]:border-b border-[#1A1A1A]", className)} {...props} />
+  <thead ref={ref} className={cn("border-[var(--border)] [&_tr]:border-b", className)} {...props} />
 ))
 TableHeader.displayName = "TableHeader"
 
@@ -58,7 +58,7 @@ const TableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      "border-t border-[#1A1A1A] bg-[#0F0F0F] font-medium [&>tr]:last:border-b-0",
+      "border-t border-[var(--border)] bg-[var(--surface-2)] font-medium [&>tr]:last:border-b-0",
       className
     )}
     {...props}
@@ -73,7 +73,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-[#1A1A1A] transition-colors hover:bg-[#1A1A1A]/50 data-[state=selected]:bg-[#1A1A1A]",
+      "border-b border-[var(--border)] transition-colors hover:bg-primary/5 data-[state=selected]:bg-primary/10",
       className
     )}
     {...props}
@@ -88,7 +88,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left align-middle font-bold text-neutral-400 [&:has([role=checkbox])]:pr-0",
+      "h-12 px-4 text-left align-middle font-bold text-[var(--ink-muted)] [&:has([role=checkbox])]:pr-0",
       className
     )}
     {...props}
@@ -102,7 +102,7 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0 text-neutral-300", className)}
+    className={cn("p-4 align-middle text-[var(--ink)] [&:has([role=checkbox])]:pr-0", className)}
     {...props}
   />
 ))
@@ -114,7 +114,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-4 text-sm text-neutral-500", className)}
+    className={cn("mt-4 text-sm text-[var(--ink-muted)]", className)}
     {...props}
   />
 ))

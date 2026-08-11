@@ -68,8 +68,8 @@ const Select = ({ children, value, onValueChange, options, placeholder, classNam
           disabled={disabled}
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "flex h-10 w-full items-center justify-between rounded-lg border border-neutral-700/70 bg-[#111111] px-4 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-500/30 disabled:cursor-not-allowed disabled:opacity-50",
-            isOpen && "ring-2 ring-amber-500/30 border-neutral-700"
+            "flex h-10 w-full items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm text-[var(--ink)] shadow-sm transition-all focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-50",
+            isOpen && "border-primary/50 ring-2 ring-primary/15"
           )}
         >
           <span className={cn("truncate", !selectedOption && "text-neutral-500")}>
@@ -79,7 +79,7 @@ const Select = ({ children, value, onValueChange, options, placeholder, classNam
         </button>
 
         {isOpen && (
-          <div className="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-lg border border-[#1A1A1A] bg-[#111111] p-1 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-1.5 shadow-[0_16px_36px_rgba(25,27,20,0.12)] animate-in fade-in zoom-in-95 duration-200">
             <div className="max-h-60 overflow-y-auto overflow-x-hidden no-scrollbar">
               {options.map((option) => (
                 <button
@@ -90,8 +90,8 @@ const Select = ({ children, value, onValueChange, options, placeholder, classNam
                     setIsOpen(false)
                   }}
                   className={cn(
-                    "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors hover:bg-[#1A1A1A]/80",
-                    value === option.value ? "bg-primary text-white" : "text-neutral-300"
+                    "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm text-[var(--ink)] transition-colors hover:bg-primary/10",
+                    value === option.value ? "bg-primary/15 text-primary-dark" : ""
                   )}
                 >
                   <span className="truncate">{option.label}</span>
@@ -128,8 +128,8 @@ const SelectTrigger = React.forwardRef<
       type="button"
       onClick={() => context.setIsOpen(!context.isOpen)}
       className={cn(
-        "flex h-10 w-full items-center justify-between rounded-lg border border-neutral-700/70 bg-[#111111] px-4 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-500/30 disabled:cursor-not-allowed disabled:opacity-50",
-        context.isOpen && "ring-2 ring-amber-500/30 border-neutral-700",
+        "flex h-10 w-full items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm text-[var(--ink)] shadow-sm transition-all focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-50",
+        context.isOpen && "border-primary/50 ring-2 ring-primary/15",
         className
       )}
       {...props}
@@ -152,7 +152,7 @@ const SelectContent = ({ children, className }: { children: React.ReactNode, cla
   if (!context || !context.isOpen) return null
 
   return (
-    <div className={cn("absolute top-full z-50 mt-2 w-full overflow-hidden rounded-lg border border-[#1A1A1A] bg-[#111111] p-1 shadow-2xl animate-in fade-in zoom-in-95 duration-200", className)}>
+    <div className={cn("absolute top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-1.5 shadow-[0_16px_36px_rgba(25,27,20,0.12)] animate-in fade-in zoom-in-95 duration-200", className)}>
       <div className="max-h-60 overflow-y-auto overflow-x-hidden no-scrollbar">
         {children}
       </div>
@@ -178,8 +178,8 @@ const SelectItem = React.forwardRef<
         context.setIsOpen(false)
       }}
       className={cn(
-        "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors hover:bg-[#1A1A1A]/80",
-        isSelected ? "bg-primary text-white" : "text-neutral-300",
+        "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm text-[var(--ink)] transition-colors hover:bg-primary/10",
+        isSelected ? "bg-primary/15 text-primary-dark" : "",
         className
       )}
       {...props}
