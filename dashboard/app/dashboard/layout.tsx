@@ -25,6 +25,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { data: session, status } = useSession();
   const bellRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+  const authRedirectStarted = useRef(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,7 +43,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [pathname]);
 
   useEffect(() => {
-    if (status === "unauthenticated") signIn("discord");
+    if (status !== "unauthenticated" || authRedirectStarted.current) return;
+
+    authRedirectStarted.current = true;
+    const callbackUrl = pathname === "/dashboard" ? "/dashboard/guilds" : pathname;
+    void signIn("discord", { callbackUrl });
+  }, [pathname, status]);
+
+  useEffect(() => {
+    if (status !== "authenticated") return;
+
     const fetchNotification = async () => {
       try {
         const config = await api.getAdminConfig();

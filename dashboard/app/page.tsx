@@ -204,6 +204,14 @@ function WorkspaceVisual() {
 export default function HomePage() {
   const [darkMode, setDarkMode] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
+
+  const openPanel = async () => {
+    if (isSigningIn) return;
+    setIsSigningIn(true);
+    await signIn("discord", { callbackUrl: "/dashboard/guilds" });
+    setIsSigningIn(false);
+  };
 
   useEffect(() => {
     setDarkMode(window.localStorage.getItem("midvox-theme") === "dark");
@@ -239,7 +247,7 @@ export default function HomePage() {
           </div>
           <div className="mob-nav-actions">
             <ThemeToggle darkMode={darkMode} onToggle={() => setDarkMode((value) => !value)} />
-            <button type="button" className="mob-login" onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}>Log in</button>
+            <button type="button" className="mob-login" onClick={openPanel} disabled={isSigningIn}>{isSigningIn ? "Connecting…" : "Log in"}</button>
             <a href={BOT_INVITE} target="_blank" rel="noopener noreferrer" className="mob-button small">Join for free</a>
           </div>
         </nav>
@@ -258,7 +266,7 @@ export default function HomePage() {
             <p>Security, onboarding, support, and insight—one thoughtful platform for the people building Discord communities that matter.</p>
             <div className="mob-actions">
               <a href={BOT_INVITE} target="_blank" rel="noopener noreferrer" className="mob-button">Add to Discord <ArrowRight size={16} /></a>
-              <button type="button" className="mob-secondary-button" onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}>Open dashboard</button>
+              <button type="button" className="mob-secondary-button" onClick={openPanel} disabled={isSigningIn}>{isSigningIn ? "Connecting…" : "Open dashboard"}</button>
             </div>
           </motion.div>
           <PreviewGallery />
@@ -297,7 +305,7 @@ export default function HomePage() {
 
         <section className="mob-final-cta">
           <div><span className="mob-overline">Ready when you are</span><h2>Build the community you&apos;d want to join.</h2><p>Start with the essentials. Add the depth when you need it. Keep your team in sync along the way.</p></div>
-          <div className="mob-actions"><a href={BOT_INVITE} target="_blank" rel="noopener noreferrer" className="mob-button">Join for free <ArrowRight size={16} /></a><button type="button" className="mob-secondary-button" onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}>Log in</button></div>
+          <div className="mob-actions"><a href={BOT_INVITE} target="_blank" rel="noopener noreferrer" className="mob-button">Join for free <ArrowRight size={16} /></a><button type="button" className="mob-secondary-button" onClick={openPanel} disabled={isSigningIn}>{isSigningIn ? "Connecting…" : "Log in"}</button></div>
         </section>
       </main>
 

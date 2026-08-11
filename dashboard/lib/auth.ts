@@ -18,6 +18,9 @@ import DiscordProvider from "next-auth/providers/discord";
 import { AuthOptions } from "next-auth";
 
 export const authOptions: AuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
+  session: { strategy: "jwt" },
+  useSecureCookies: process.env.NODE_ENV === "production",
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID || "",
