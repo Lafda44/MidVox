@@ -34,12 +34,12 @@ DATABASE_PATH ='db/verification.db'
 
 
 DISCORD_COLORS ={
-'primary':0xFF0000 ,
-'success':0xFF0000 ,
-'warning':0xFF0000 ,
-'error':0xFF0000 ,
-'secondary':0xFF0000 ,
-'neutral':0xFF0000 
+'primary':0x8A9A5B ,
+'success':0x8A9A5B ,
+'warning':0x8A9A5B ,
+'error':0x8A9A5B ,
+'secondary':0x8A9A5B ,
+'neutral':0x8A9A5B
 }
 
 

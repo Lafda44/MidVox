@@ -25,7 +25,7 @@ from utils.emoji import TICK, MENTION, SEED, TIME
 from utils.config import *
 
 DB_PATH = "db/afk.db"
-THEME_COLOR = 0xFF0000
+THEME_COLOR = 0x8A9A5B
 FOOTER_TEXT = f"Developed by {BRAND_NAME}"
 
 class AfkTypeView(LayoutView):

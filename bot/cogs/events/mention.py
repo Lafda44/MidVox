@@ -107,7 +107,7 @@ class MentionSelectView(LayoutView):
 class Mention(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.color = 0xFF0000
+        self.color = 0x8A9A5B
         self.bot_name = BotName
 
     async def is_blacklisted(self, message):

@@ -43,7 +43,7 @@ class BlacklistWordSource(menus.ListPageSource):
         embed = discord.Embed(
             title="Blacklist Word [7]",
             description="< > Duty | [ ] Optional",
-            color=0xFF0000
+            color=0x8A9A5B
         )
         for entry in entries:
             embed.add_field(name="",value=entry, inline=False)

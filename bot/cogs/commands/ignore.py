@@ -22,7 +22,7 @@ from utils.Tools import *
 from typing import Optional
 import aiosqlite
 
-color = 0xFF0000
+color = 0x8A9A5B
 
 
 class SuccessView(LayoutView):
@@ -99,7 +99,7 @@ class Ignore(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.db_path = "db/ignore.db"
-        self.color = 0xFF0000
+        self.color = 0x8A9A5B
         bot.loop.create_task(self.initialize_db())
 
     async def initialize_db(self):

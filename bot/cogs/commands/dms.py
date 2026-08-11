@@ -93,7 +93,7 @@ class StaffDMCog(commands.Cog):
             embed = discord.Embed(
                 title="📢 A Message from the Staff Team",
                 description=message,
-                color=0xFF0000,
+                color=0x8A9A5B,
             )
             embed.set_footer(text=f"This message was sent by {ctx.author.name}.")
 

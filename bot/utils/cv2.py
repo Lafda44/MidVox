@@ -23,8 +23,11 @@ import discord
 from discord.ui import LayoutView, TextDisplay, Separator, Container
 
 
-def build_container(*items, accent_color=None):
-    """Build a Container and add items to it via .add_item()."""
+BOT_THEME_COLOR = 0x8A9A5B
+
+
+def build_container(*items, accent_color=BOT_THEME_COLOR):
+    """Build a dark-friendly Container with the MidVox olive accent."""
     container = Container(accent_color=accent_color)
     for item in items:
         container.add_item(item)
@@ -67,7 +70,7 @@ class CV2Embed(CV2):
         self._fields = []
         self._footer = None
         super().__init__(title, self._description)
-        self.color = kwargs.get("color", 0xFF0000)
+        self.color = kwargs.get("color", BOT_THEME_COLOR)
     
     def _rebuild(self):
         self.clear_items()
@@ -80,7 +83,8 @@ class CV2Embed(CV2):
             
         container = build_container(
             TextDisplay(f"**{self._title}**"),
-            *[item for s in sections for item in (Separator(visible=True), TextDisplay(str(s)))]
+            *[item for s in sections for item in (Separator(visible=True), TextDisplay(str(s)))],
+            accent_color=self.color,
         )
         self.add_item(container)
 

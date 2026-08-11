@@ -751,7 +751,7 @@ Support server: https://discord.gg/codexdev"""
                         embed =discord .Embed (
                         title ="💻 Generated Code",
                         description =f"**Language:** {self.language}\n**Task:** {self.description}\n\n{content}",
-                        color =0xFF0000 ,
+                        color =0x8A9A5B ,
                         timestamp =datetime .now (timezone .utc )
                         )
                         maximum =self .get_max_pages ()

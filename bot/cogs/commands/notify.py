@@ -182,7 +182,7 @@ class NotifCommands(commands.Cog):
                                 embed = discord.Embed(
                                     title=f"{after.display_name} is now live!",
                                     description=f"{after.mention} is now streaming on {stream_type.capitalize()}.",
-                                    color=0xFF0000,
+                                    color=0x8A9A5B,
                                 )
                                 embed.add_field(
                                     name="Stream Title",

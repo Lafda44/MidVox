@@ -13,10 +13,9 @@
 # ╚══════════════════════════════════════════════════════════════════╝
 
 import discord
+from discord.ui import LayoutView, TextDisplay, Separator, ActionRow
 from utils.Tools import *
 from utils.cv2 import build_container
-from utils.emoji import REWIND, PREVIOUS, NEXT, FORWARD, DELETE, HOME
-from discord.ui import LayoutView, TextDisplay, Separator, ActionRow
 
 
 class Dropdown(discord.ui.Select):
@@ -74,11 +73,11 @@ class View(LayoutView):
         is_first = self.index == 0
         is_last = self.index >= len(self.pages) - 1
 
-        homeB = discord.ui.Button(label="", emoji=REWIND, style=discord.ButtonStyle.secondary, disabled=is_first)
-        backB = discord.ui.Button(label="", emoji=PREVIOUS, style=discord.ButtonStyle.secondary, disabled=is_first)
-        quitB = discord.ui.Button(label="", emoji=DELETE, style=discord.ButtonStyle.danger)
-        nextB = discord.ui.Button(label="", emoji=NEXT, style=discord.ButtonStyle.secondary, disabled=is_last)
-        lastB = discord.ui.Button(label="", emoji=FORWARD, style=discord.ButtonStyle.secondary, disabled=is_last)
+        homeB = discord.ui.Button(label="", emoji="⏮️", style=discord.ButtonStyle.secondary, disabled=is_first)
+        backB = discord.ui.Button(label="", emoji="◀️", style=discord.ButtonStyle.secondary, disabled=is_first)
+        quitB = discord.ui.Button(label="", emoji="✕", style=discord.ButtonStyle.danger)
+        nextB = discord.ui.Button(label="", emoji="▶️", style=discord.ButtonStyle.secondary, disabled=is_last)
+        lastB = discord.ui.Button(label="", emoji="⏭️", style=discord.ButtonStyle.secondary, disabled=is_last)
 
         homeB.callback = self._home_cb
         backB.callback = self._back_cb
@@ -164,7 +163,7 @@ class View(LayoutView):
         total_pages = 0
         used_labels = set()
 
-        options.append(discord.SelectOption(label="Home", emoji=HOME, description=""))
+        options.append(discord.SelectOption(label="Home", description="Return to the overview"))
 
         # Convert homeembed (CV2Embed) to page data
         if hasattr(homeembed, '_title'):
@@ -197,7 +196,7 @@ class View(LayoutView):
                     label = f"{original_label} {counter}"
                     counter += 1
                 used_labels.add(label)
-                options.append(discord.SelectOption(label=label, emoji=emoji, description=description))
+                options.append(discord.SelectOption(label=label, description=description))
 
                 fields = []
                 for command in cog.get_commands():
@@ -211,7 +210,7 @@ class View(LayoutView):
                     fields.append((f"{command.name}{params}", f"{help_text}\n•"))
 
                 pages.append({
-                    'title': f"{emoji} {original_label}",
+                    'title': original_label,
                     'description': '',
                     'fields': fields,
                     'footer': None

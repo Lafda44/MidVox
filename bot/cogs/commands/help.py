@@ -13,7 +13,6 @@
 # ╚══════════════════════════════════════════════════════════════════╝
 
 import discord
-from utils.emoji import ARROWRED, BOOST, CAST, GAMES, LEVEL_UP, LOADINGRED, LOCK, MESSAGE, MINECRAFT, MUSIC, NEW, PIN, SEED, STAR, SWORD, SYSTEM, THUNDER, TICKET, WIFI, ZAI, ZARROW, ZBAN, ZBOT, ZCIRCLE, ZCIRCLE_ALT1, ZCLOUD, ZCOUNTING, ZMODULE, ZPEOPLE, ZROCKET, ZSAFE, ZTADA, ZUNMUTE, ZWRENCH
 from discord.ext import commands
 from discord import app_commands, Interaction
 from difflib import get_close_matches
@@ -32,7 +31,7 @@ from utils.Tools import *
 from utils.cv2 import CV2, CV2Embed
 from utils.config import *
 
-color = 0xFF0000
+color = 0x8A9A5B
 client = midvox()
 
 from utils.config import BotName
@@ -78,7 +77,7 @@ class HelpCommand(commands.HelpCommand):
     embed = CV2Embed(
         title=f"{BotName} Helper",
         description=f">>> **Ops! Command not found with the name** `{string}`.",
-        color=0xFF0000
+        color=color
     )
 
     await ctx.reply(view=embed, mention_author=True)
@@ -95,70 +94,68 @@ class HelpCommand(commands.HelpCommand):
       await self.send_ignore_message(ctx, "command")
       return
 
-    # Show loading message
-    loading_embed = CV2(f"{LOADINGRED} Loading help Menu...")
+    loading_embed = CV2("◌ Loading help menu…")
     loading_msg = await ctx.reply(view=loading_embed)
 
-    # Wait 2 seconds
     await asyncio.sleep(2)
 
-    # Delete loading message
     with suppress(discord.NotFound):
       await loading_msg.delete()
 
     data = await getConfig(self.context.guild.id)
     prefix = data["prefix"]
-    filtered = await self.filter_commands(self.context.bot.walk_commands(), sort=True)
 
     embed = CV2Embed(
+        title=f"{BotName} control center",
         description=(
-         f"**{ARROWRED} __Start {BotName} Today__**\n"        
-         f"**{ZARROW} Type {prefix}antinuke enable**\n"
-         f"**{ZARROW} Server Prefix:** `{prefix}`\n"
-         f"**{ZARROW} Total Commands:** `{len(set(self.context.bot.walk_commands()))}`\n"),         
-        color=0xFF0000)
-    
-    embed.add_field(
-        name=f"{ZCLOUD} Main Features",
-        value=f">>> \n {ZSAFE} `»` Security\n" 
-              f" {ZBOT} `»` Automoderation\n"
-              f" {ZWRENCH} `»` Utility\n" 
-              f" {MUSIC} `»` Music\n"
-              f" {WIFI} `»` Autoreact & responder\n"
-              f" {SWORD} `»` Moderation\n"
-              f" {ZPEOPLE} `»` Autorole & Invc\n"
-              f" {ZROCKET} `»` Fun\n"
-              f" {GAMES} `»` Games\n" 
-              f" {ZBAN} `»` Ignore Channels\n"
-              f" {WIFI} `»` Server\n"
-              f" {ZUNMUTE} `»` Voice\n"
-              f" {SEED} `»` Welcomer\n"  
-              f" {ZTADA} `»` Giveaway\n"
-              f" {TICKET} `»` Ticket {NEW}\n"
-              f" {ZPEOPLE} `»` Invite Tracker {NEW}\n"
-    )
-    
-    embed.add_field(
-        name=f" {ZMODULE} Extra Features",
-        value=f">>> \n {CAST} `»` Advance Logging\n"
-              f" {STAR} `»` Vanityroles\n"
-              f" {ZCOUNTING} `»` Counting {NEW}\n"
-              f" {SYSTEM} `»` J2C {NEW}\n"
-              f" {ZAI} `»` AI {NEW}\n"
-              f" {BOOST} `»` Boost {NEW}\n"
-              f" {LEVEL_UP} `»` Leveling {NEW}\n"
-              f" {PIN} `»` Sticky {NEW}\n"
-              f" {THUNDER} `»` Verification {NEW}\n"
-              f" {LOCK} `»` Encryption {NEW}\n" 
-              f" {MINECRAFT} `»` Minecraft {NEW}\n"
-              f" {MESSAGE} `»` Joindm {NEW}\n"
-              f" {ZCIRCLE} `»` Birthday {NEW}\n"
-              f" {ZCIRCLE_ALT1} `»` Customrole\n"           
+            "**Start protecting your server today**\n"
+            f"`{prefix}antinuke enable`\n\n"
+            f"Prefix  `{prefix}`   •   Commands  `{len(set(self.context.bot.walk_commands()))}`"
+        ),
+        color=color,
     )
 
-    embed.set_footer(
-      text=f"Requested By {self.context.author} | [Support](https://discord.gg/codexdev)",
+    embed.add_field(
+        name="◆  Main features",
+        value=(
+            "▸ Security\n"
+            "▸ Automoderation\n"
+            "▸ Utility\n"
+            "▸ Music\n"
+            "▸ Autoreact & responder\n"
+            "▸ Moderation\n"
+            "▸ Autorole & voice roles\n"
+            "▸ Fun & games\n"
+            "▸ Ignore channels\n"
+            "▸ Server & voice\n"
+            "▸ Welcomer\n"
+            "▸ Giveaways\n"
+            "▸ Tickets  `new`\n"
+            "▸ Invite tracker  `new`"
+        ),
     )
+
+    embed.add_field(
+        name="◇  Extra features",
+        value=(
+            "▸ Advanced logging\n"
+            "▸ Vanity roles\n"
+            "▸ Counting  `new`\n"
+            "▸ Join to create  `new`\n"
+            "▸ AI assistant  `new`\n"
+            "▸ Boost rewards  `new`\n"
+            "▸ Leveling  `new`\n"
+            "▸ Sticky messages  `new`\n"
+            "▸ Verification  `new`\n"
+            "▸ Encryption  `new`\n"
+            "▸ Minecraft  `new`\n"
+            "▸ Join DM  `new`\n"
+            "▸ Birthdays  `new`\n"
+            "▸ Custom roles"
+        ),
+    )
+
+    embed.set_footer(text=f"MidVox • Requested by {self.context.author}")
     
     view = vhelp.View(mapping=mapping, ctx=self.context, homeembed=embed, ui=2)
     await ctx.reply(view=view)
@@ -262,7 +259,7 @@ class HelpCommand(commands.HelpCommand):
       entries=entries,
       title=f"{BRAND_NAME}'s {cog.qualified_name.title()} ({len(cog.get_commands())})",
       description="`<..> Required | [..] Optional`\n\n",
-      color=0xFF0000,
+      color=color,
       per_page=4),
                           ctx=self.context)
     await paginator.paginate()

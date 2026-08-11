@@ -178,7 +178,7 @@ async def on_command_completion(context: commands.Context) -> None:
     async with aiohttp.ClientSession() as session:
         webhook = discord.Webhook.from_url(webhook_url, session=session)
 
-        embed_color = 0xFF0000
+        embed_color = 0x8A9A5B
         embed = discord.Embed(color=embed_color)
         avatar_url = context.author.display_avatar.url
 
@@ -265,7 +265,7 @@ async def create_hook(ctx: Context, *, name: str = None):
         embed = discord.Embed(
             title=f"{SUCCESS} Webhook Created",
             description=f"A webhook named **{webhook.name}** was created.",
-            color=0xFF0000
+            color=0x8A9A5B
         )
         await ctx.author.send(f"Webhook URL for **{webhook.name}** in **{ctx.channel.name}**:\n||{webhook.url}||", embed=embed)
         await ctx.send("Webhook created. I've sent the URL to your DMs.")
@@ -300,7 +300,7 @@ async def list_hooks(ctx: Context):
         if not webhooks:
             return await ctx.send("No webhooks found in this channel.")
 
-        embed = discord.Embed(title=f"Webhooks in #{ctx.channel.name}", color=0xFF0000)
+        embed = discord.Embed(title=f"Webhooks in #{ctx.channel.name}", color=0x8A9A5B)
         description = "\n".join([f"**Name:** {wh.name} | **ID:** `{wh.id}`" for wh in webhooks])
         embed.description = description
         await ctx.send(embed=embed)
@@ -319,7 +319,7 @@ async def reaction(ctx: Context):
     embed = discord.Embed(
         title="Reaction Test",
         description="I will show an emoji in a few seconds. Get ready to click it!",
-        color=0xFF0000
+        color=0x8A9A5B
     )
     message = await ctx.send(embed=embed)
     
