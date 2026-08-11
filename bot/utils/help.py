@@ -75,7 +75,7 @@ class View(LayoutView):
 
         homeB = discord.ui.Button(label="", emoji="⏮️", style=discord.ButtonStyle.secondary, disabled=is_first)
         backB = discord.ui.Button(label="", emoji="◀️", style=discord.ButtonStyle.secondary, disabled=is_first)
-        quitB = discord.ui.Button(label="", emoji="✕", style=discord.ButtonStyle.danger)
+        quitB = discord.ui.Button(label="", emoji="🗑️", style=discord.ButtonStyle.danger)
         nextB = discord.ui.Button(label="", emoji="▶️", style=discord.ButtonStyle.secondary, disabled=is_last)
         lastB = discord.ui.Button(label="", emoji="⏭️", style=discord.ButtonStyle.secondary, disabled=is_last)
 
